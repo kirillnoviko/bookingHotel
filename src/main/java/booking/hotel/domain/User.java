@@ -39,7 +39,6 @@ public class User {
 
     private Long ratingAverage;
 
-
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
