@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.sql.Date;
-
+import java.sql.Timestamp;
 
 
 @Data
@@ -21,7 +21,7 @@ public class User {
 
     private String surname;
 
-    private Date birthDate= new Date(System.currentTimeMillis());
+    private Date birthDate;
 
     private String gmail;
 
