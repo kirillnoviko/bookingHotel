@@ -36,7 +36,7 @@ public class UserRestController {
             @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header",
                     value = "Secret header for secret functionality!! Hoho")
     })
-    @GetMapping("/hello")
+    @GetMapping("/secret")
     public List<User> securedFindAll(HttpServletRequest request) {
         String secretKey = request.getHeader("Secret-Key");
         if (StringUtils.isNotBlank(secretKey) && secretKey.equals(securityConfig.getSecretKey())) {

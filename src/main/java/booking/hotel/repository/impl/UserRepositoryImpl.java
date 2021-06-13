@@ -4,7 +4,6 @@ import booking.hotel.domain.User;
 import booking.hotel.repository.UserColumn;
 import booking.hotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -51,9 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void save(List<User> entities) {
-
-    }
+    public void save(List<User> entities) {}
 
     @Override
     public User save(User entity) {
@@ -118,6 +115,7 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
     private MapSqlParameterSource generateUserParamsMap(User entity) {
+
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", entity.getName());
         params.addValue("surname", entity.getSurname());
