@@ -2,6 +2,7 @@ package booking.hotel.repository.impl;
 
 import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
+import booking.hotel.domain.criteria.Criteria;
 import booking.hotel.repository.RoomColumn;
 import booking.hotel.repository.RoomRepository;
 import booking.hotel.repository.UserColumn;
@@ -16,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.naming.Name;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Repository
 
@@ -106,8 +105,34 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public List<Room> findCriteriaRoom( Room entity){
-        return null;
+    public <E> List<Room> findCriteriaRoom( Criteria<E> searchRoom){
+
+        List<String> result = new ArrayList<String>();
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        for (Map.Entry<E, Object> entry : searchRoom.getCriteria()) {
+            if(entry.getValue()!=null ){
+                String temp=entry.getKey().toString().toLowerCase() + " = :" + entry.getKey().toString().toLowerCase();
+                result.add(temp);
+                params.addValue(entry.getKey().toString().toLowerCase(),entry.getValue());
+            }
+        }
+
+        String query="select * from room where ";
+        for(int i=0;i<result.size();i++){
+
+            query += result.get(i);
+            if( i!=result.size()-1){
+                query+=" and ";
+            }
+            if(i==result.size()-1){
+                query+=" ; ";
+            }
+
+        }
+
+        return namedParameterJdbcTemplate.query(query, params, this::getRoomRowMapper);
+
     }
     private Room getRoomRowMapper(ResultSet rs, int i) throws SQLException {
         Room room = new Room();

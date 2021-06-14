@@ -8,9 +8,9 @@ public interface RoomColumn {
 
     String PRICE = "price";
 
-    String PRINCIPLE_OF_PLACEMENT = "principleOfPlacement";
+    String PRINCIPLE_OF_PLACEMENT = "principle_of_placement";
 
-    String NUMBER_ROOM = "numberRoom";
+    String NUMBER_ROOM = "number_room";
 
-    String RATING_AVERAGE = "ratingAverage";
+    String RATING_AVERAGE = "rating_average";
 }

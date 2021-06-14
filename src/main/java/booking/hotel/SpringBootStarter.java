@@ -1,6 +1,7 @@
 package booking.hotel;
 
 
+import booking.hotel.beans.SwaggerConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -12,12 +13,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableWebMvc
 @EnableSwagger2
-/*
+
 @Import({
-        ApplicationBeans.class,
-        SwaggerConfig.class,
-        SecurityConfig.class})
-*/
+
+        SwaggerConfig.class})
+
 public class SpringBootStarter {
 
     public static void main(String[] args) {

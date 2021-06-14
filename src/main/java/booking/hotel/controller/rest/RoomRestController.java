@@ -4,6 +4,8 @@ package booking.hotel.controller.rest;
 import booking.hotel.controller.request.RoomSearchRequest;
 import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
+import booking.hotel.domain.criteria.Criteria;
+import booking.hotel.domain.criteria.SearchCriteria;
 import booking.hotel.repository.RoomRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 
+import booking.hotel.domain.criteria.SearchCriteria.*;
 @RestController
 @RequestMapping("/rest/rooms")
 @RequiredArgsConstructor
@@ -33,11 +36,14 @@ public class RoomRestController {
     @ApiOperation(value = "Search criteria")
     @PostMapping("/search")
     public List<Room> createUser(@RequestBody RoomSearchRequest createRequest) {
-        Room room=new Room();
-        room.setPrice(createRequest.getPrice());
-        room.setPrincipleOfPlacement(createRequest.getPrincipleOfPlacement());
-        room.setRatingAverage(createRequest.getRatingAverage());
-        return roomRepository.findCriteriaRoom(room);
+
+        Criteria<SearchCriteria.Room> criteriaRoom= new Criteria<SearchCriteria.Room>();
+
+        criteriaRoom.add(SearchCriteria.Room.PRICE,createRequest.getPrice());
+        criteriaRoom.add(SearchCriteria.Room.PRINCIPLE_OF_PLACEMENT,createRequest.getPrincipleOfPlacement());
+        criteriaRoom.add(SearchCriteria.Room.RATING_AVERAGE,createRequest.getRatingAverage());
+
+        return roomRepository.findCriteriaRoom(criteriaRoom);
     }
 
 

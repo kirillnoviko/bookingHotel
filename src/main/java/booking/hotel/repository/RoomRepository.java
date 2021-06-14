@@ -1,11 +1,12 @@
 package booking.hotel.repository;
 
 import booking.hotel.domain.Room;
+import booking.hotel.domain.criteria.Criteria;
 
 import java.util.List;
 
 public interface RoomRepository extends CrudOperations<Long,Room>{
 
-    List<Room> findCriteriaRoom(Room entity);
+    <E> List<Room> findCriteriaRoom(Criteria<E> searchRoom);
 
 }
