@@ -7,26 +7,34 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room {
+public class Booking {
 
     private Long id;
 
-    private String name;
+    private Long idRoom;
 
-    private Long price;
+    private Date dataCheckIn;
 
-    private String principleOfPlacement;
+    private Date dataCheckOut;
 
-    private String comfortLevel;
+    private String status;
 
-    private String numberRoom;
+    private Long idUser;
 
-    private Long ratingAverage;
+    private Date created;
+
+    private Date changed;
+
+    private Long generalPrice;
+
+    private Long ratingForClient;
+
+    private Long ratingForRoom;
 
     @Override
     public String toString() {

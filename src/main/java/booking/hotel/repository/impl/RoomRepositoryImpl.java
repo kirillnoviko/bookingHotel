@@ -25,6 +25,10 @@ import java.util.*;
 public class RoomRepositoryImpl implements RoomRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    //    @Autowired
+    //    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    //        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    //    }
 
     @Override
     public List<Room> findAll() {
