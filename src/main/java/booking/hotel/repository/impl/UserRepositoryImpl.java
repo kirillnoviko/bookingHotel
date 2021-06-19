@@ -1,5 +1,6 @@
 package booking.hotel.repository.impl;
 
+import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
 import booking.hotel.repository.UserColumn;
 import booking.hotel.repository.UserRepository;
@@ -101,6 +102,37 @@ public class UserRepositoryImpl implements UserRepository {
 
         namedParameterJdbcTemplate.batchUpdate(createQuery, batchParams.toArray(new MapSqlParameterSource[0]));
 
+    }
+
+
+    @Override
+    public void saveUserRoles(User user, List<Role> userRoles) {
+        final String createQuery = "insert into user_roles (role_id, user_id) " +
+                "values (:roleId, :userId);";
+
+        List<MapSqlParameterSource> batchParams = new ArrayList<>();
+
+        for (Role role : userRoles) {
+
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("roleId", role.getId());
+            params.addValue("userId", user.getId());
+
+            batchParams.add(params);
+        }
+
+        namedParameterJdbcTemplate.batchUpdate(createQuery, batchParams.toArray(new MapSqlParameterSource[0]));
+    }
+
+    @Override
+    public User findByLoginAndPassword(String login, String password) {
+        final String searchQuery = "select * from users where gmail = :gmail and password = :password";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("password", password);
+        params.addValue("gmail", login);
+
+        return namedParameterJdbcTemplate.queryForObject(searchQuery, params, this::getUserRowMapper);
     }
 
 

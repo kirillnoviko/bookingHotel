@@ -153,7 +153,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     private MapSqlParameterSource generateRoomParamsMap(Room entity) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id",entity.getId());
-        params.addValue("name", entity.getName());
+        params.addValue("role_name", entity.getName());
         params.addValue("price", entity.getPrice());
         params.addValue("principleOfPlacement", entity.getPrincipleOfPlacement());
         params.addValue("numberRoom", entity.getNumberRoom());
