@@ -136,6 +136,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
 
+    @Override
+    public User findByLogin(String login) {
+        final String searchQuery = "select * from users where login = :login";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("login", login);
+
+        return namedParameterJdbcTemplate.queryForObject(searchQuery, params, this::getUserRowMapper);
+    }
+
     private User getUserRowMapper(ResultSet rs, int i) throws SQLException {
         User user = new User();
         user.setId(rs.getLong(UserColumn.ID));

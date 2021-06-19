@@ -15,3 +15,6 @@ security:
   secretKey: top_secret_key_hoho!
 
 ---
+jwtconfig:
+  secret: secret
+  expiration: 60000

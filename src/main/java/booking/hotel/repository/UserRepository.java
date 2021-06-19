@@ -18,5 +18,7 @@ public interface UserRepository extends CrudOperations<Long, User>{
 
     User findByLoginAndPassword(String login, String password);
 
+    User findByLogin(String login);
+
 
 }

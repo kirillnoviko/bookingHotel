@@ -3,14 +3,17 @@ package booking.hotel.controller.rest;
 import booking.hotel.beans.SecurityConfig;
 import booking.hotel.domain.User;
 import booking.hotel.repository.UserRepository;
+import booking.hotel.util.PrincipalUtils;
 import io.swagger.annotations.*;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.security.Principal;
 import java.util.List;
 
 
@@ -21,6 +24,8 @@ public class UserRestController {
 
     private final UserRepository userRepository;
     private final SecurityConfig securityConfig;
+    private final PrincipalUtils principalUtils;
+    private final SecurityConfig config;
 
 
 
@@ -47,6 +52,28 @@ public class UserRestController {
         }
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header",
+
+            value = "Secret header for secret functionality!! Hoho"),
+    @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+})
+@GetMapping("/hello")
+
+public List<User> securedFindAll(HttpServletRequest request,
+@ApiIgnore Principal principal) {
+
+        String username = principalUtils.getUsername(principal);
+        String secretKey = request.getHeader("Secret-Key");
+
+        if (StringUtils.isNotBlank(secretKey) && secretKey.equals(config.getSecretKey())) {
+
+        return Collections.singletonList(userRepository.findByLogin(username));
+        } else {
+        //throw new UnauthorizedException();
+        return Collections.emptyList();
+        }
+        }
 
 
     @ApiImplicitParams({
