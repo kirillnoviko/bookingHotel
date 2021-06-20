@@ -55,8 +55,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User entity) {
-        final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average) " +
-                "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage);";
+        final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average,id_role) " +
+                "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage, 1);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -91,8 +91,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void batchInsert(List<User> users) {
-        final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average) " +
-                "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage);";
+        final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average, id_role) " +
+                "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage, 1);";
 
         List<MapSqlParameterSource> batchParams = new ArrayList<>();
 
@@ -107,8 +107,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void saveUserRoles(User user, List<Role> userRoles) {
-        final String createQuery = "insert into user_roles (role_id, user_id) " +
-                "values (:roleId, :userId);";
+        final String createQuery = "insert into user_roles (id,role_id, user_id) " +
+                "values (1,:roleId, :userId);";
 
         List<MapSqlParameterSource> batchParams = new ArrayList<>();
 
@@ -125,23 +125,23 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findByLoginAndPassword(String login, String password) {
+    public User findByLoginAndPassword(String gmail, String password) {
         final String searchQuery = "select * from users where gmail = :gmail and password = :password";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("password", password);
-        params.addValue("gmail", login);
+        params.addValue("gmail", gmail);
 
         return namedParameterJdbcTemplate.queryForObject(searchQuery, params, this::getUserRowMapper);
     }
 
 
     @Override
-    public User findByLogin(String login) {
-        final String searchQuery = "select * from users where login = :login";
+    public User findByLogin(String gmail) {
+        final String searchQuery = "select * from users where gmail = :gmail";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("login", login);
+        params.addValue("gmail", gmail);
 
         return namedParameterJdbcTemplate.queryForObject(searchQuery, params, this::getUserRowMapper);
     }
@@ -161,14 +161,14 @@ public class UserRepositoryImpl implements UserRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", entity.getName());
         params.addValue("surname", entity.getSurname());
-        params.addValue("birthDate", entity.getBirthDate());
+        params.addValue("birthDate", new Date());
         params.addValue("gmail", entity.getGmail());
         params.addValue("password", entity.getPassword());
         params.addValue("isDeleted", false);
         params.addValue("isBanned", false);
         params.addValue("created", new Date());
         params.addValue("changed", new Date());
-        params.addValue("ratingAverage", entity.getRatingAverage());
+        params.addValue("ratingAverage", 1l);
 
         return params;
     }

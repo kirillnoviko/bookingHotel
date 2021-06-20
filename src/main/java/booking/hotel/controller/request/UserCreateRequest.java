@@ -15,7 +15,7 @@ public class UserCreateRequest {
 
     private String surname;
 
-    private String login;
+    private String gmail;
 
-    private float weight;
+    private String password;
 }

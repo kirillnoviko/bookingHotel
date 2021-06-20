@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class AuthRequest {
 
-    private String login;
+    private String gmail;
 
     private String password;
 }

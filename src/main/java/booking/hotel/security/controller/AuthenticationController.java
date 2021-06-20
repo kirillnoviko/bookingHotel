@@ -41,7 +41,7 @@ public class AuthenticationController {
         /*Check login and password*/
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getLogin(),
+                        request.getGmail(),
                         request.getPassword()
                 )
         );
@@ -51,8 +51,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(
                 AuthResponse
                         .builder()
-                        .login(request.getLogin())
-                        .token(tokenUtils.generateToken(userProvider.loadUserByUsername(request.getLogin())))
+                        .login(request.getGmail())
+                        .token(tokenUtils.generateToken(userProvider.loadUserByUsername(request.getGmail())))
                         .build()
         );
     }

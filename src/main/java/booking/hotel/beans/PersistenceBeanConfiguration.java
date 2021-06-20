@@ -18,7 +18,7 @@ public class PersistenceBeanConfiguration {
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
 
         // Package contain entity classes
-        factoryBean.setPackagesToScan("com.noirix");
+        factoryBean.setPackagesToScan("booking.hotel");
         factoryBean.setDataSource(dataSource);
         factoryBean.setHibernateProperties(getAdditionalProperties());
         factoryBean.afterPropertiesSet();
