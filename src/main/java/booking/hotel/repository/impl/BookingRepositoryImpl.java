@@ -1,14 +1,10 @@
 package booking.hotel.repository.impl;
 
 import booking.hotel.domain.Booking;
-import booking.hotel.domain.Room;
-import booking.hotel.domain.User;
-import booking.hotel.repository.BookingColumn;
+import booking.hotel.repository.column.BookingColumn;
 import booking.hotel.repository.BookingRepository;
-import booking.hotel.repository.RoomColumn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;

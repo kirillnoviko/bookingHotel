@@ -2,7 +2,7 @@ package booking.hotel.repository.impl;
 
 import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
-import booking.hotel.repository.UserColumn;
+import booking.hotel.repository.column.UserColumn;
 import booking.hotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -85,11 +85,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Double getUserExpensiveCarPrice(Integer userId) {
-        return null;
-    }
-
-    @Override
     public void batchInsert(List<User> users) {
         final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average, id_role) " +
                 "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage, 1);";
@@ -153,9 +148,11 @@ public class UserRepositoryImpl implements UserRepository {
         user.setSurname(rs.getString(UserColumn.SURNAME));
         user.setBirthDate(rs.getDate(UserColumn.BIRTH_DATE));
         user.setGmail(rs.getString(UserColumn.GMAIL));
+        user.setPassword(rs.getString(UserColumn.PASSWORD));
         user.setRatingAverage(rs.getLong(UserColumn.RATING_AVERAGE));
         return user;
     }
+
     private MapSqlParameterSource generateUserParamsMap(User entity) {
 
         MapSqlParameterSource params = new MapSqlParameterSource();

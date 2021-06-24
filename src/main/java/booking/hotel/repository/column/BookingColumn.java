@@ -1,4 +1,4 @@
-package booking.hotel.repository;
+package booking.hotel.repository.column;
 
 import java.util.Date;
 

@@ -1,20 +1,19 @@
 package booking.hotel.repository.impl;
 
+import booking.hotel.domain.AdditionalComfort;
+import booking.hotel.domain.Role;
 import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
 import booking.hotel.domain.criteria.Criteria;
-import booking.hotel.repository.RoomColumn;
+import booking.hotel.repository.column.RoomColumn;
 import booking.hotel.repository.RoomRepository;
-import booking.hotel.repository.UserColumn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.naming.Name;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -138,6 +137,27 @@ public class RoomRepositoryImpl implements RoomRepository {
         return namedParameterJdbcTemplate.query(query, params, this::getRoomRowMapper);
 
     }
+
+    @Override
+    public void saveRoomAdditionalComfort(Room room, List<AdditionalComfort> roomAdditionalComfort) {
+        final String createQuery = "insert into additional_in_section (id,id_section_hotel_room, id_additional_comfort) " +
+                "values (:additionalComfortId, :roomId);";
+
+        List<MapSqlParameterSource> batchParams = new ArrayList<>();
+
+        for (AdditionalComfort additional : roomAdditionalComfort) {
+
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("additionalComfortId", additional.getId());
+            params.addValue("roomId", room.getId());
+            batchParams.add(params);
+
+        }
+
+        namedParameterJdbcTemplate.batchUpdate(createQuery, batchParams.toArray(new MapSqlParameterSource[0]));
+
+    }
+
     private Room getRoomRowMapper(ResultSet rs, int i) throws SQLException {
         Room room = new Room();
         room.setId(rs.getLong(RoomColumn.ID));

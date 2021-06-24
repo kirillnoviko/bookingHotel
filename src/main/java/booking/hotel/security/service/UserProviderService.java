@@ -31,7 +31,7 @@ public class UserProviderService implements UserDetailsService {
                 return new org.springframework.security.core.userdetails.User(
                         user.getGmail(),
                         user.getPassword(),
-//                        ["ROLE_USER", "ROLE_ADMIN"]
+//                      ["ROLE_USER", "ROLE_ADMIN"]
                         AuthorityUtils.commaSeparatedStringToAuthorityList(roleRepository.getUserRoles(user).stream().map(Role::getRoleName).collect(Collectors.joining(",")))
                 );
             } else {

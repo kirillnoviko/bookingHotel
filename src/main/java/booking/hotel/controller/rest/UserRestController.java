@@ -53,10 +53,8 @@ public class UserRestController {
     }
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header",
-
-            value = "Secret header for secret functionality!! Hoho"),
-    @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header", value = "Secret header for secret functionality!! Hoho"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
 })
 @GetMapping("/hello")
 
