@@ -35,7 +35,7 @@ public class RoomRestController {
 
     @ApiOperation(value = "Search criteria")
     @PostMapping("/search")
-    public List<Room> createUser(@RequestBody RoomSearchRequest createRequest) {
+    public List<Room> searchRoom(@RequestBody RoomSearchRequest createRequest) {
 
         Criteria<SearchCriteria.Room> criteriaRoom= new Criteria<SearchCriteria.Room>();
 

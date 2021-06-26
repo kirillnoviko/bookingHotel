@@ -1,6 +1,7 @@
 package booking.hotel.repository.impl;
 
 import booking.hotel.domain.Role;
+import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
 import booking.hotel.repository.column.UserColumn;
 import booking.hotel.repository.UserRepository;
@@ -51,7 +52,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void save(List<User> entities) {}
+    public void save(List<User> entities) {
+        for (User entity : entities) {
+            addOne(entity);
+        }
+    }
 
     @Override
     public User save(User entity) {
@@ -71,11 +76,32 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User update(User entity) {
-        return null;
+        final String createQuery = "update users set name = :name, surname= :price, gmail = :gmail," +
+                " password = :password, rating_average = :ratingAverage, id_role = :idRole, birth_date = :birthDate  where id= :id ";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        MapSqlParameterSource params = generateUserParamsMap(entity);
+
+        namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{"id"});
+
+        long createdUserId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+
+        return findOne(createdUserId);
     }
 
     @Override
     public void delete(Long id) {
+
+
+        final String findOneWithNameParam = "delete from user_roles ur where ur.user_id = :idUser;" +
+                "delete from users u where u.id = :idUser";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUser", id);
+
+        namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getUserRowMapper);
+
 
     }
 
@@ -103,7 +129,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void saveUserRoles(User user, List<Role> userRoles) {
         final String createQuery = "insert into user_roles (id,role_id, user_id) " +
-                "values (1,:roleId, :userId);";
+                "values (:roleId, :userId);";
 
         List<MapSqlParameterSource> batchParams = new ArrayList<>();
 

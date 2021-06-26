@@ -36,6 +36,16 @@ public class UserRestController {
     }
 
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
+    @GetMapping("/search/user")
+    public User findUser(@ApiIgnore Principal principal){
+        String username = principalUtils.getUsername(principal);
+        return userRepository.findByLogin(username);
+    }
+
+
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header",
@@ -55,30 +65,29 @@ public class UserRestController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header", value = "Secret header for secret functionality!! Hoho"),
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
-})
-@GetMapping("/hello")
+    })
 
-public List<User> securedFindAll(HttpServletRequest request,
-@ApiIgnore Principal principal) {
+    @GetMapping("/hello")
+    public List<User> securedFindAll(HttpServletRequest request,
+                                     @ApiIgnore Principal principal) {
 
         String username = principalUtils.getUsername(principal);
         String secretKey = request.getHeader("Secret-Key");
 
         if (StringUtils.isNotBlank(secretKey) && secretKey.equals(config.getSecretKey())) {
-
-        return Collections.singletonList(userRepository.findByLogin(username));
+            return Collections.singletonList(userRepository.findByLogin(username));
         } else {
-        //throw new UnauthorizedException();
-        return Collections.emptyList();
+            //throw new UnauthorizedException();
+            return Collections.emptyList();
         }
-        }
+    }
 
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "limit", dataType = "string", paramType = "query", value = "Limit users in result list"),
             @ApiImplicitParam(name = "query", dataType = "string", paramType = "query", value = "Search query"),
     })
-    @GetMapping("/search")
+    @GetMapping("/search/limit")
     public List<User> userSearch(@RequestParam Integer limit, @RequestParam String query) {
         return userRepository.findUsersByQuery(limit, query);
     }

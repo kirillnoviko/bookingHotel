@@ -8,5 +8,5 @@ import booking.hotel.domain.User;
 import java.util.List;
 
 public interface AdditionalComfortRepository extends CrudOperations<Long, AdditionalComfort>{
-    List<Role> getRoomAdditionalComfort(Room room);
+    List<AdditionalComfort> getRoomAdditionalComfort(Room room);
 }

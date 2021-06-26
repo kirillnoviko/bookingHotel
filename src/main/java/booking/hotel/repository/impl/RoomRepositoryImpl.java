@@ -88,9 +88,9 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{"id"});
 
-        long createdUserId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+        long createdRoomId = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-        return findOne(createdUserId);
+        return findOne(createdRoomId);
     }
 
     @Override
