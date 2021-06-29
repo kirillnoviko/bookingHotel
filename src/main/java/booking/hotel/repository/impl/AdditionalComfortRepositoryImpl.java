@@ -25,7 +25,6 @@ import java.util.Objects;
 public class AdditionalComfortRepositoryImpl implements AdditionalComfortRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public static final String ID = "id";
@@ -57,10 +56,7 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
 
     }
 
-    @Override
-    public void addOne(AdditionalComfort entity) {
 
-    }
 
     @Override
     public AdditionalComfort save(AdditionalComfort entity) {
@@ -80,7 +76,7 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
     }
 
     @Override
-    public void save(List<AdditionalComfort> entities) {
+    public void batchInsert(List<AdditionalComfort> entities) {
 
     }
 

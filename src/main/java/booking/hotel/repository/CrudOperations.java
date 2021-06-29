@@ -10,11 +10,9 @@ public interface CrudOperations<K, T> {
 
     T findOne(K id);
 
-    void addOne(T entity);
-
     T save(T entity);
 
-    void save(List<T> entities);
+    void batchInsert(List<T> entities);
 
     T update(T entity);
 

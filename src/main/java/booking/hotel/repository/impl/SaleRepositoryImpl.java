@@ -17,17 +17,12 @@ public class SaleRepositoryImpl implements SaleRepository {
     }
 
     @Override
-    public void addOne(Sale entity) {
-
-    }
-
-    @Override
     public Sale save(Sale entity) {
         return null;
     }
 
     @Override
-    public void save(List<Sale> entities) {
+    public void batchInsert(List<Sale> entities) {
 
     }
 

@@ -71,14 +71,10 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public void addOne(Role entity) {
+    public void batchInsert(List<Role> entities) {
 
     }
 
-    @Override
-    public void save(List<Role> entities) {
-
-    }
 
     @Override
     public Role update(Role entity) {

@@ -48,10 +48,6 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     }
 
-    @Override
-    public void addOne(Room entity) {
-
-    }
 
     @Override
     public Room save(Room entity) {
@@ -69,13 +65,21 @@ public class RoomRepositoryImpl implements RoomRepository {
         return findOne(createdUserId);
     }
 
-
     @Override
-    public void save(List<Room> entities) {
-        for (Room entity : entities) {
-            addOne(entity);
+    public void batchInsert(List<Room> entities) {
+        final String createQuery = "insert into room (name, price, principle_of_placement, comfort_level, number_room, rating_average) " +
+                "values (:name, :price, :principleOfPlacement,:comfortLevel, :numberRoom, :ratingAverage);";
+
+        List<MapSqlParameterSource> batchParams = new ArrayList<>();
+
+        for (Room room : entities) {
+            batchParams.add(generateRoomParamsMap(room));
         }
+
+        namedParameterJdbcTemplate.batchUpdate(createQuery, batchParams.toArray(new MapSqlParameterSource[0]));
+
     }
+
 
     @Override
     public Room update(Room entity) {
@@ -173,7 +177,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     private MapSqlParameterSource generateRoomParamsMap(Room entity) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id",entity.getId());
-        params.addValue("role_name", entity.getName());
+        params.addValue("name", entity.getName());
         params.addValue("price", entity.getPrice());
         params.addValue("principleOfPlacement", entity.getPrincipleOfPlacement());
         params.addValue("numberRoom", entity.getNumberRoom());

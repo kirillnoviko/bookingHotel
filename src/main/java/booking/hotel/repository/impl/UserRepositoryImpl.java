@@ -47,18 +47,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void addOne(User entity) {
-
-    }
-
-    @Override
-    public void save(List<User> entities) {
-        for (User entity : entities) {
-            addOne(entity);
-        }
-    }
-
-    @Override
     public User save(User entity) {
         final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average,id_role) " +
                 "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage, 1);";
@@ -80,7 +68,6 @@ public class UserRepositoryImpl implements UserRepository {
                 " password = :password, rating_average = :ratingAverage, id_role = :idRole, birth_date = :birthDate  where id= :id ";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
         MapSqlParameterSource params = generateUserParamsMap(entity);
 
         namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{"id"});
@@ -93,7 +80,6 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void delete(Long id) {
 
-
         final String findOneWithNameParam = "delete from user_roles ur where ur.user_id = :idUser;" +
                 "delete from users u where u.id = :idUser";
 
@@ -101,7 +87,6 @@ public class UserRepositoryImpl implements UserRepository {
         params.addValue("idUser", id);
 
         namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getUserRowMapper);
-
 
     }
 
