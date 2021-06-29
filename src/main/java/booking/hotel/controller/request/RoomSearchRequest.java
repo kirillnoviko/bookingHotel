@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 
 @Data
 @AllArgsConstructor
@@ -16,6 +18,10 @@ public class RoomSearchRequest {
     private String principleOfPlacement;
 
     private Long ratingAverage;
+
+    private Date dataOut;
+
+    private Date dataIn;
 
 
 

@@ -6,12 +6,15 @@ import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
 import booking.hotel.domain.criteria.Criteria;
 
+import java.util.Date;
 import java.util.List;
 
 public interface RoomRepository extends CrudOperations<Long,Room>{
 
-    <E> List<Room> findCriteriaRoom(Criteria<E> searchRoom);
+    <E,M> List<Room> findCriteriaRoom(Criteria<E> searchRoom, Criteria<M> searchData);
 
-    void saveRoomAdditionalComfort(Room room, List<AdditionalComfort> userRoles);
+    public void saveRoomAdditionalComfort(Room room, List<AdditionalComfort> userRoles);
+
+    public List<Room> searchForFreeRoomByDate(Date DataIn, Date DateOut);
 
 }

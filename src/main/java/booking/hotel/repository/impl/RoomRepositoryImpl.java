@@ -112,7 +112,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public <E> List<Room> findCriteriaRoom( Criteria<E> searchRoom){
+    public <E,M> List<Room> findCriteriaRoom( Criteria<E> searchRoom,Criteria<M> searchData){
 
         List<String> result = new ArrayList<String>();
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -125,19 +125,28 @@ public class RoomRepositoryImpl implements RoomRepository {
             }
         }
 
-        String query="select * from room where ";
+        String queryPartOne="select room.id,room.name,room.price from room where ";
         for(int i=0;i<result.size();i++){
 
-            query += result.get(i);
+            queryPartOne += result.get(i);
             if( i!=result.size()-1){
-                query+=" and ";
+                queryPartOne+=" and ";
             }
             if(i==result.size()-1){
-                query+=" ; ";
+                queryPartOne+=" except ";
             }
 
         }
 
+        String queryPartTwo=" select r.id,r.name,r.price  from room r inner join booking b on (r.id=b.id) " +
+                "where (b.data_check_in < :data_in and b.data_check_out > :data_in) " +
+                "or ( b.data_check_in < :data_out and b.data_check_out > :data_out);";
+        for (Map.Entry<M, Object> entry : searchData.getCriteria()) {
+            if(entry.getValue()!=null ){
+                params.addValue(entry.getKey().toString().toLowerCase(),entry.getValue());
+            }
+        }
+        String query= queryPartOne + queryPartTwo;
         return namedParameterJdbcTemplate.query(query, params, this::getRoomRowMapper);
 
     }
@@ -160,6 +169,11 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         namedParameterJdbcTemplate.batchUpdate(createQuery, batchParams.toArray(new MapSqlParameterSource[0]));
 
+    }
+
+    @Override
+    public List<Room> searchForFreeRoomByDate(Date dataIn, Date dateOut) {
+  return null;
     }
 
     private Room getRoomRowMapper(ResultSet rs, int i) throws SQLException {
