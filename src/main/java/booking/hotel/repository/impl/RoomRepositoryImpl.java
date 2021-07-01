@@ -125,7 +125,9 @@ public class RoomRepositoryImpl implements RoomRepository {
             }
         }
 
-        String queryPartOne="select room.id,room.name,room.price from room where ";
+        String queryPartOne="select rm.id,rm.name,rm.price,rm.principle_of_placement,rm.number_room,rm.rating_average " +
+                "from room rm where ";
+
         for(int i=0;i<result.size();i++){
 
             queryPartOne += result.get(i);
@@ -138,14 +140,17 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         }
 
-        String queryPartTwo=" select r.id,r.name,r.price  from room r inner join booking b on (r.id=b.id) " +
-                "where (b.data_check_in < :data_in and b.data_check_out > :data_in) " +
-                "or ( b.data_check_in < :data_out and b.data_check_out > :data_out);";
+        String queryPartTwo=" select r.id,r.name,r.price,r.principle_of_placement,r.number_room,r.rating_average " +
+                "from room r inner join booking b on (r.id=b.id_room) " +
+                "where  (:data_in between data_check_in and data_check_out) or (:data_out between data_check_in and data_check_out) ;";
+
+
         for (Map.Entry<M, Object> entry : searchData.getCriteria()) {
             if(entry.getValue()!=null ){
                 params.addValue(entry.getKey().toString().toLowerCase(),entry.getValue());
             }
         }
+
         String query= queryPartOne + queryPartTwo;
         return namedParameterJdbcTemplate.query(query, params, this::getRoomRowMapper);
 
