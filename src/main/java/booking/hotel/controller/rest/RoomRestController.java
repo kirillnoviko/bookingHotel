@@ -6,7 +6,7 @@ import booking.hotel.domain.Room;
 import booking.hotel.domain.criteria.Criteria;
 import booking.hotel.domain.criteria.SearchCriteria;
 import booking.hotel.repository.RoomRepository;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +27,14 @@ public class RoomRestController {
     }
 
 
-    @ApiOperation(value = "Search criteria")
+    @ApiOperation(value = "Search by criteria for the Room")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Search was successfully!"),
+            @ApiResponse(code = 500, message = "Internal server error ")
+    })
+  /*  @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })*/
     @PostMapping("/search")
     public List<Room> searchRoom(@RequestBody RoomSearchRequest createRequest) {
 
@@ -40,7 +47,7 @@ public class RoomRestController {
 
         criteriaData.add(SearchCriteria.DataInAndOut.DATA_IN,createRequest.getDataIn());
         criteriaData.add(SearchCriteria.DataInAndOut.DATA_OUT,createRequest.getDataOut());
-        return roomRepository.findCriteriaRoom(criteriaRoom,criteriaData);
+        return roomRepository.findCriteriaRoom(criteriaRoom,criteriaData,createRequest.getAdditionalComfort());
     }
 
 

@@ -39,7 +39,7 @@ public class UserRestController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
-    @GetMapping("/search/user")
+    @GetMapping("/search")
     public User findUser(@ApiIgnore Principal principal){
         String username = principalUtils.getUsername(principal);
         return userRepository.findByLogin(username);

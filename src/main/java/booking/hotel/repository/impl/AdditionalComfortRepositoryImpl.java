@@ -100,4 +100,6 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
         return namedParameterJdbcTemplate.query(findOneWithNameParam, params, this::getAdditionalComfortRowMapper);
 
     }
+
+
 }

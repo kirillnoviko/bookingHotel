@@ -5,6 +5,7 @@ import booking.hotel.domain.Role;
 import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
 import booking.hotel.domain.criteria.Criteria;
+import booking.hotel.repository.AdditionalComfortRepository;
 import booking.hotel.repository.column.RoomColumn;
 import booking.hotel.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Repository
-
 @RequiredArgsConstructor
 public class RoomRepositoryImpl implements RoomRepository {
 
+    private final AdditionalComfortRepository additionalComfortRepository;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     //    @Autowired
     //    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -112,7 +113,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public <E,M> List<Room> findCriteriaRoom( Criteria<E> searchRoom,Criteria<M> searchData){
+    public <E,M> List<Room> findCriteriaRoom( Criteria<E> searchRoom,Criteria<M> searchData, List<String> additionalComfort){
 
         List<String> result = new ArrayList<String>();
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -152,8 +153,28 @@ public class RoomRepositoryImpl implements RoomRepository {
         }
 
         String query= queryPartOne + queryPartTwo;
-        return namedParameterJdbcTemplate.query(query, params, this::getRoomRowMapper);
+        return searchByAdditionalComfortForRoom(namedParameterJdbcTemplate.query(query, params, this::getRoomRowMapper),additionalComfort);
 
+
+    }
+
+    private <T> List<T> searchByAdditionalComfortForRoom(List<T> rooms,List<String> additionalComforts) {
+        int fl=0;
+        List<T> resultRooms= new ArrayList<>();
+        for( T room : rooms){
+            fl=0;
+            for(AdditionalComfort additional : additionalComfortRepository.getRoomAdditionalComfort((Room)room)){
+                boolean result =additionalComforts.stream().anyMatch(additionalComfort->additionalComfort.equals(additional.getNameAdditional()));
+                if(!result){
+                    fl=1;
+                    break;
+                }
+            }
+            if(fl==0){
+                resultRooms.add(room);
+            }
+        }
+        return resultRooms;
     }
 
     @Override
@@ -176,10 +197,6 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     }
 
-    @Override
-    public List<Room> searchForFreeRoomByDate(Date dataIn, Date dateOut) {
-  return null;
-    }
 
     private Room getRoomRowMapper(ResultSet rs, int i) throws SQLException {
         Room room = new Room();

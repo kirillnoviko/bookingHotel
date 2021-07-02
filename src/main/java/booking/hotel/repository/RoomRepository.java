@@ -11,10 +11,10 @@ import java.util.List;
 
 public interface RoomRepository extends CrudOperations<Long,Room>{
 
-    <E,M> List<Room> findCriteriaRoom(Criteria<E> searchRoom, Criteria<M> searchData);
+    <E,M> List<Room> findCriteriaRoom(Criteria<E> searchRoom, Criteria<M> searchData, List<String> additionalComfort);
 
     public void saveRoomAdditionalComfort(Room room, List<AdditionalComfort> userRoles);
 
-    public List<Room> searchForFreeRoomByDate(Date DataIn, Date DateOut);
+
 
 }
