@@ -8,6 +8,7 @@ import booking.hotel.domain.criteria.Criteria;
 import booking.hotel.repository.AdditionalComfortRepository;
 import booking.hotel.repository.column.RoomColumn;
 import booking.hotel.repository.RoomRepository;
+import booking.hotel.util.UtilsForQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -23,6 +24,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class RoomRepositoryImpl implements RoomRepository {
 
+    private final UtilsForQuery utilsForQuery;
     private final AdditionalComfortRepository additionalComfortRepository;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     //    @Autowired
@@ -112,69 +114,52 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     }
 
+
+
     @Override
     public <E,M> List<Room> findCriteriaRoom( Criteria<E> searchRoom,Criteria<M> searchData, List<String> additionalComfort){
-
-        List<String> result = new ArrayList<String>();
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         for (Map.Entry<E, Object> entry : searchRoom.getCriteria()) {
             if(entry.getValue()!=null ){
-                String temp=entry.getKey().toString().toLowerCase() + " = :" + entry.getKey().toString().toLowerCase();
-                result.add(temp);
+
                 params.addValue(entry.getKey().toString().toLowerCase(),entry.getValue());
             }
         }
-
-        String queryPartOne="select rm.id,rm.name,rm.price,rm.principle_of_placement,rm.number_room,rm.rating_average " +
-                "from room rm where ";
-
-        for(int i=0;i<result.size();i++){
-
-            queryPartOne += result.get(i);
-            if( i!=result.size()-1){
-                queryPartOne+=" and ";
-            }
-            if(i==result.size()-1){
-                queryPartOne+=" except ";
-            }
-
-        }
-
-        String queryPartTwo=" select r.id,r.name,r.price,r.principle_of_placement,r.number_room,r.rating_average " +
-                "from room r inner join booking b on (r.id=b.id_room) " +
-                "where  (:data_in between data_check_in and data_check_out) or (:data_out between data_check_in and data_check_out) ;";
-
-
         for (Map.Entry<M, Object> entry : searchData.getCriteria()) {
             if(entry.getValue()!=null ){
                 params.addValue(entry.getKey().toString().toLowerCase(),entry.getValue());
             }
         }
+        String query= utilsForQuery.createStringForSearchByParams(searchRoom)+ utilsForQuery.createStringForSearchByDate(searchData);
 
-        String query= queryPartOne + queryPartTwo;
         return searchByAdditionalComfortForRoom(namedParameterJdbcTemplate.query(query, params, this::getRoomRowMapper),additionalComfort);
 
 
     }
 
-    private <T> List<T> searchByAdditionalComfortForRoom(List<T> rooms,List<String> additionalComforts) {
+    public <T> List<T> searchByAdditionalComfortForRoom(List<T> rooms,List<String> additionalComforts) {
         int fl=0;
-        List<T> resultRooms= new ArrayList<>();
+        List<T> RoomsWithFilterAdditional= new ArrayList<>();
+        if(additionalComforts==null || additionalComforts.isEmpty()){
+            return rooms;
+        }
         for( T room : rooms){
             fl=0;
-            for(AdditionalComfort additional : additionalComfortRepository.getRoomAdditionalComfort((Room)room)){
-                boolean result =additionalComforts.stream().anyMatch(additionalComfort->additionalComfort.equals(additional.getNameAdditional()));
+            List<AdditionalComfort> roomWithAdditionals=additionalComfortRepository.getRoomAdditionalComfort((Room)room);
+            for(String additional : additionalComforts){
+                boolean result =roomWithAdditionals.stream().anyMatch(roomWithAdditional->roomWithAdditional.getNameAdditional().equals(additional));
                 if(!result){
                     fl=1;
                     break;
                 }
             }
             if(fl==0){
-                resultRooms.add(room);
+                RoomsWithFilterAdditional.add(room);
             }
         }
-        return resultRooms;
+
+        return RoomsWithFilterAdditional;
     }
 
     @Override

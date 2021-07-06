@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Criteria<E> {// new Criteria<SC.Oven>()
+public class Criteria<E> {
 
-    //Class searchType;
+
     private Map<E, Object> criteria = new HashMap<E, Object>();
 
     public void add(E searchCriteria, Object value) {
@@ -18,6 +18,6 @@ public class Criteria<E> {// new Criteria<SC.Oven>()
 
         return criteria.entrySet();
     }
-    // you may add your own code here
+
 
 }
