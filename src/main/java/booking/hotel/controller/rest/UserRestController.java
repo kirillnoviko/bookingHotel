@@ -85,11 +85,11 @@ public class UserRestController {
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "limit", dataType = "string", paramType = "query", value = "Limit users in result list"),
-            @ApiImplicitParam(name = "query", dataType = "string", paramType = "query", value = "Search query"),
+
     })
-    @GetMapping("/search/limit")
-    public List<User> userSearch(@RequestParam Integer limit, @RequestParam String query) {
-        return userRepository.findUsersByQuery(limit, query);
+    @GetMapping("/findOneTest")
+    public User userSearch(@RequestParam Long limit) {
+        return userRepository.findOne(limit);
     }
 
 /*    @ApiOperation(value = "Creating one user")

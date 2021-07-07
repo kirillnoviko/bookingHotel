@@ -4,6 +4,10 @@ import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
 import booking.hotel.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -29,6 +33,11 @@ public class RoleRepositoryImpl implements RoleRepository {
     public static final String ROLE_ID = "id";
     public static final String ROLE_NAME = "role_name";
 
+    @Autowired
+    @Qualifier("sessionFactory")
+    private SessionFactory sessionFactory;
+
+
     private Role getRoleRowMapper(ResultSet resultSet, int i) throws SQLException {
         Role role = new Role();
 
@@ -45,12 +54,18 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role findOne(Long id) {
-        final String findOneWithNameParam = "select * from roles where id = :roleId";
+  /*      final String findOneWithNameParam = "select * from roles where id = :roleId";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("roleId", id);
 
         return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getRoleRowMapper);
+   */
+
+        try (Session session = sessionFactory.openSession()) {
+            return session.find(Role.class, id);
+
+        }
     }
 
     @Override
