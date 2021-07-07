@@ -6,37 +6,49 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.sql.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 
-
+@Entity
+@Table(name = "users")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
+    @Id
     private Long id;
 
+    @Column
     private String name;
 
+    @Column
     private String surname;
 
-    private Date birthDate;
+    @Column (name = "birth_date")
+    private Timestamp birthDate;
 
+    @Column
     private String gmail;
 
+    @Column
     private String password;
 
+    @Column (name = "is_deleted")
     private boolean isDeleted;
 
+    @Column (name = "is_banned")
     private boolean isBanned;
 
-    private Date created;
+    @Column
+    private Timestamp created;
 
-    private Date changed;
+    @Column
+    private Timestamp changed;
 
-    private Long idSystem;
-
+    @Column(name = "rating_average")
     private Long ratingAverage;
 
     @Override

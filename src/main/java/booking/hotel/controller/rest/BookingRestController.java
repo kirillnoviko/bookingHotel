@@ -13,7 +13,9 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -25,10 +27,10 @@ public class BookingRestController {
 
     @ApiOperation(value = "Search orders user")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "id user for search orders")
+             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PostMapping("/search")
-    public List<Booking> createUser(@RequestParam Long idUser) {
-        return bookingRepository.findAllOrdersUser(idUser);
+    public List<Booking> createUser(@ApiIgnore Principal principal) {
+        return bookingRepository.findAllOrdersUser(principal.getName());
     }
 }

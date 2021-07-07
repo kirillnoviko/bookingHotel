@@ -47,6 +47,7 @@ public class RoomRestController {
 
         criteriaData.add(SearchCriteria.DataInAndOut.DATA_IN,createRequest.getDataIn());
         criteriaData.add(SearchCriteria.DataInAndOut.DATA_OUT,createRequest.getDataOut());
+
         return roomRepository.findCriteriaRoom(criteriaRoom,criteriaData,createRequest.getAdditionalComfort());
     }
 

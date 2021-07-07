@@ -6,6 +6,10 @@ import booking.hotel.domain.User;
 import booking.hotel.repository.column.UserColumn;
 import booking.hotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,10 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Repository
 //@Primary
@@ -27,9 +28,19 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+
+    @Autowired
+    @Qualifier("sessionFactory")
+    private SessionFactory sessionFactory;
+
+
     @Override
     public List<User> findAll() {
-        return namedParameterJdbcTemplate.query("select * from users order by id desc", this::getUserRowMapper);
+        //return namedParameterJdbcTemplate.query("select * from users order by id desc", this::getUserRowMapper);
+
+        try (Session session = sessionFactory.openSession()) {
+            return (List<User>)session.createQuery("FROM User");
+        }
     }
 
 
@@ -37,19 +48,22 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findOne(Long id) {
 
-        final String findOneWithNameParam = "select * from users where id = :idUser ";
+      /*  final String findOneWithNameParam = "select * from users where id = :idUser ";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idUser", id);
 
-        return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getUserRowMapper);
+        return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getUserRowMapper);*/
 
+        try (Session session = sessionFactory.openSession()) {
+            return session.find(User.class,id);
+        }
     }
 
     @Override
     public User save(User entity) {
-        final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average,id_role) " +
-                "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage, 1);";
+        final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average) " +
+                "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -65,7 +79,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User update(User entity) {
         final String createQuery = "update users set name = :name, surname= :price, gmail = :gmail," +
-                " password = :password, rating_average = :ratingAverage, id_role = :idRole, birth_date = :birthDate  where id= :id ";
+                " password = :password, rating_average = :ratingAverage = :idRole, birth_date = :birthDate  where id= :id ";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource params = generateUserParamsMap(entity);
@@ -97,7 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void batchInsert(List<User> users) {
-        final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average, id_role) " +
+        final String createQuery = "insert into users (name, surname, birth_date, gmail, password, is_deleted, is_banned, created, changed, rating_average) " +
                 "values (:name, :surname, :birthDate, :gmail, :password, :isDeleted, :isBanned, :created, :changed, :ratingAverage, 1);";
 
         List<MapSqlParameterSource> batchParams = new ArrayList<>();
@@ -157,7 +171,7 @@ public class UserRepositoryImpl implements UserRepository {
         user.setId(rs.getLong(UserColumn.ID));
         user.setName(rs.getString(UserColumn.NAME));
         user.setSurname(rs.getString(UserColumn.SURNAME));
-        user.setBirthDate(rs.getDate(UserColumn.BIRTH_DATE));
+        user.setBirthDate(rs.getTimestamp(UserColumn.BIRTH_DATE));
         user.setGmail(rs.getString(UserColumn.GMAIL));
         user.setPassword(rs.getString(UserColumn.PASSWORD));
         user.setRatingAverage(rs.getLong(UserColumn.RATING_AVERAGE));

@@ -47,34 +47,23 @@ public class UtilsForQuery {
 
     public <M> String createStringForSearchByDate(Criteria<M> searchData){
 
-        MapSqlParameterSource params = new MapSqlParameterSource();
+
         String query=" except select r.id,r.name,r.price,r.principle_of_placement,r.number_room,r.rating_average " +
                 "from room r inner join booking b on (r.id=b.id_room)";
 
         int count=0;
         for (Map.Entry<M, Object> entry : searchData.getCriteria()) {
             if(entry.getValue()!=null ){
-                params.addValue(entry.getKey().toString().toLowerCase(),entry.getValue());
+                if(count ==0){
+                    query+=" where  (:" +  entry.getKey().toString().toLowerCase() + " between data_check_in and data_check_out)";
+                }else{
+                    query+=" or  (:" +  entry.getKey().toString().toLowerCase() + " between data_check_in and data_check_out)";
+                }
                 count++;
             }
         }
-        switch (count){
-            case 0:
-                query+=" ;";
-                break;
-            case 1:
-                if(params.getValue("data_check_in")!=null){
-                    query+= "where  (:data_in between data_check_in and data_check_out)";
-                }else{
-                    query+= "where  (:data_out between data_check_in and data_check_out)";
-                }
-                break;
-            case 2:
-                query+= "where  (:data_in between data_check_in and data_check_out) or (:data_out between data_check_in and data_check_out)";
-                break;
-            default:
-                new RuntimeException();
-        }
+
+
         return query;
     }
 

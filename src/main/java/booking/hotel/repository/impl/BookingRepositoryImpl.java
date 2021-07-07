@@ -32,9 +32,9 @@ public class BookingRepositoryImpl implements BookingRepository {
     //    }
 
     @Override
-    public List<Booking> findAllOrdersUser(Long idUser) {
-        final String findOrdersUser = "select * from booking where id_user = ? ";
-        return jdbcTemplate.query(findOrdersUser,new Object[] {idUser},this::getBookingRowMapper);
+    public List<Booking> findAllOrdersUser(String gmail) {
+        final String findOrdersUser = "select * from booking join users u on u.id = booking.id_user where u.gmail = ? ";
+        return jdbcTemplate.query(findOrdersUser, new String[]{gmail},this::getBookingRowMapper);
 
     }
 
