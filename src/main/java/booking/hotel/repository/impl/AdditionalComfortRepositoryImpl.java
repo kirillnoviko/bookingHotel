@@ -5,6 +5,10 @@ import booking.hotel.domain.Role;
 import booking.hotel.domain.Room;
 import booking.hotel.repository.AdditionalComfortRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -30,6 +34,10 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
     public static final String ID = "id";
     public static final String NAME_ADDITIONAL = "name_additional";
 
+    @Autowired
+    @Qualifier("sessionFactory")
+    private SessionFactory sessionFactory;
+
 
     private AdditionalComfort getAdditionalComfortRowMapper(ResultSet resultSet, int i) throws SQLException {
         AdditionalComfort additional = new AdditionalComfort();
@@ -47,13 +55,17 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
 
     @Override
     public AdditionalComfort findOne(Long id) {
-        final String findOneWithNameParam = "select * from additional_comfort where id = :additionalId";
+      /*  final String findOneWithNameParam = "select * from additional_comfort where id = :additionalId";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("additionalId", id);
 
         return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getAdditionalComfortRowMapper);
+*/
+        try (Session session = sessionFactory.openSession()) {
+            return session.find(AdditionalComfort.class, id);
 
+        }
     }
 
 

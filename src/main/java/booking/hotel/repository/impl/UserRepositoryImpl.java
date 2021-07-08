@@ -39,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository {
         //return namedParameterJdbcTemplate.query("select * from users order by id desc", this::getUserRowMapper);
 
         try (Session session = sessionFactory.openSession()) {
-            return (List<User>)session.createQuery("FROM User");
+            return  session.createQuery("FROM User where isDeleted = true and isBanned = true").list();
         }
     }
 
