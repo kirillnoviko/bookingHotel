@@ -33,4 +33,9 @@ public class BookingRestController {
     public List<Booking> createUser(@ApiIgnore Principal principal) {
         return bookingRepository.findAllOrdersUser(principal.getName());
     }
+
+    @GetMapping()
+    public List<Booking> findAll(){
+        return bookingRepository.findAll();
+    }
 }

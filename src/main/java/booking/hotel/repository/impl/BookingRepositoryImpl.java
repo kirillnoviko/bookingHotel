@@ -5,6 +5,10 @@ import booking.hotel.domain.User;
 import booking.hotel.repository.column.BookingColumn;
 import booking.hotel.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -26,6 +30,10 @@ public class BookingRepositoryImpl implements BookingRepository {
     private  final  JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    @Autowired
+    @Qualifier("sessionFactory")
+    private SessionFactory sessionFactory;
+
     // @Autowired
     //    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
     //        this.jdbcTemplate = jdbcTemplate;
@@ -40,7 +48,9 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public List<Booking> findAll() {
-        return jdbcTemplate.query("select * from  booking order by id desc", this::getBookingRowMapper);
+        try (Session session = sessionFactory.openSession()) {
+            return  session.createQuery("FROM Booking ").list();
+        }
     }
 
     @Override

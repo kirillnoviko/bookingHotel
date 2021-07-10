@@ -10,6 +10,10 @@ import booking.hotel.repository.column.RoomColumn;
 import booking.hotel.repository.RoomRepository;
 import booking.hotel.util.UtilsForQuery;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -32,9 +36,15 @@ public class RoomRepositoryImpl implements RoomRepository {
     //        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     //    }
 
+    @Autowired
+    @Qualifier("sessionFactory")
+    private SessionFactory sessionFactory;
+
     @Override
     public List<Room> findAll() {
-        return namedParameterJdbcTemplate.query("select * from room order by id desc",this::getRoomRowMapper);
+        try (Session session = sessionFactory.openSession()) {
+            return  session.createQuery("FROM Room ").list();
+        }
     }
 
 
@@ -42,10 +52,10 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Override
     public Room findOne(Long id) {
 
-        final String findOneWithNameParam = "select * from users where id = :idUser ";
+        final String findOneWithNameParam = "select * from room where id = :idRoom ";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("idUser", id);
+        params.addValue("idRoom", id);
 
         return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getRoomRowMapper);
 
