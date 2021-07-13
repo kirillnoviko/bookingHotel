@@ -1,12 +1,7 @@
 package booking.hotel.util;
 
-import booking.hotel.domain.AdditionalComfort;
-import booking.hotel.domain.Room;
 import booking.hotel.domain.criteria.Criteria;
-import booking.hotel.repository.AdditionalComfortRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
 

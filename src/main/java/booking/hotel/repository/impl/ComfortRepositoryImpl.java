@@ -1,9 +1,8 @@
 package booking.hotel.repository.impl;
 
-import booking.hotel.domain.AdditionalComfort;
-import booking.hotel.domain.Role;
+import booking.hotel.domain.Comfort;
 import booking.hotel.domain.Room;
-import booking.hotel.repository.AdditionalComfortRepository;
+import booking.hotel.repository.ComfortRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,35 +25,35 @@ import java.util.Objects;
 @Repository
 @Primary
 @RequiredArgsConstructor
-public class AdditionalComfortRepositoryImpl implements AdditionalComfortRepository {
+public class ComfortRepositoryImpl implements ComfortRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public static final String ID = "id";
-    public static final String NAME_ADDITIONAL = "name_additional";
+    public static final String NAME_COMFORT = "name_comfort";
 
     @Autowired
     @Qualifier("sessionFactory")
     private SessionFactory sessionFactory;
 
 
-    private AdditionalComfort getAdditionalComfortRowMapper(ResultSet resultSet, int i) throws SQLException {
-        AdditionalComfort additional = new AdditionalComfort();
+    private Comfort getAdditionalComfortRowMapper(ResultSet resultSet, int i) throws SQLException {
+        Comfort additional = new Comfort();
 
         additional.setId(resultSet.getLong(ID));
-        additional.setNameAdditional(resultSet.getString(NAME_ADDITIONAL));
+        additional.setNameComfort(resultSet.getString(NAME_COMFORT));
 
         return additional;
     }
 
     @Override
-    public List<AdditionalComfort> findAll() {
-        return jdbcTemplate.query("select * from additional_comfort order by id desc", this::getAdditionalComfortRowMapper);
+    public List<Comfort> findAll() {
+        return jdbcTemplate.query("select * from comforts order by id desc", this::getAdditionalComfortRowMapper);
     }
 
     @Override
-    public AdditionalComfort findOne(Long id) {
+    public Comfort findOne(Long id) {
       /*  final String findOneWithNameParam = "select * from additional_comfort where id = :additionalId";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -63,7 +62,7 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
         return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getAdditionalComfortRowMapper);
 */
         try (Session session = sessionFactory.openSession()) {
-            return session.find(AdditionalComfort.class, id);
+            return session.find(Comfort.class, id);
 
         }
     }
@@ -71,14 +70,14 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
 
 
     @Override
-    public AdditionalComfort save(AdditionalComfort entity) {
-        final String createQuery = "insert into additional_comfort (name_additional) " +
-                "values (:additionalName);";
+    public Comfort save(Comfort entity) {
+        final String createQuery = "insert into comforts (name_comfort) " +
+                "values (:comfortName);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("additionalName", entity.getNameAdditional());
+        params.addValue("comfortName", entity.getNameComfort());
 
         namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{"id"});
 
@@ -88,12 +87,12 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
     }
 
     @Override
-    public void batchInsert(List<AdditionalComfort> entities) {
+    public void batchInsert(List<Comfort> entities) {
 
     }
 
     @Override
-    public AdditionalComfort update(AdditionalComfort entity) {
+    public Comfort update(Comfort entity) {
         return null;
     }
 
@@ -103,8 +102,8 @@ public class AdditionalComfortRepositoryImpl implements AdditionalComfortReposit
     }
 
     @Override
-    public List<AdditionalComfort> getRoomAdditionalComfort(Room room) {
-        final String findOneWithNameParam = "select ad.id as id, ad.name_additional as name_additional from additional_in_section inner join additional_comfort ad on ad.id = additional_in_section.id_additional_comfort where additional_in_section.id_section_hotel_room = :roomId";
+    public List<Comfort> getRoomAdditionalComfort(Room room) {
+        final String findOneWithNameParam = "select ad.id as id, ad.name_comfort as name_additional from comforts_rooms inner join comforts ad on  comforts_rooms.id_comfort = ad.id where comforts_rooms.id_room = :roomId";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("roomId", room.getId());

@@ -1,9 +1,8 @@
 package booking.hotel.repository.impl;
 
-import booking.hotel.domain.Booking;
-import booking.hotel.domain.User;
+import booking.hotel.domain.Order;
 import booking.hotel.repository.column.BookingColumn;
-import booking.hotel.repository.BookingRepository;
+import booking.hotel.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,7 +24,7 @@ import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
-public class BookingRepositoryImpl implements BookingRepository {
+public class OrderRepositoryImpl implements OrderRepository {
 
     private  final  JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -40,22 +39,22 @@ public class BookingRepositoryImpl implements BookingRepository {
     //    }
 
     @Override
-    public List<Booking> findAllOrdersUser(String gmail) {
-        final String findOrdersUser = "select * from booking join users u on u.id = booking.id_user where u.gmail = ? ";
+    public List<Order> findAllOrdersUser(String gmail) {
+        final String findOrdersUser = "select * from orders join users u on u.id = orders.id_user where u.gmail = ? ";
         return jdbcTemplate.query(findOrdersUser, new String[]{gmail},this::getBookingRowMapper);
 
     }
 
     @Override
-    public List<Booking> findAll() {
+    public List<Order> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            return  session.createQuery("FROM Booking ").list();
+            return  session.createQuery("FROM Order ").list();
         }
     }
 
     @Override
-    public Booking findOne(Long id) {
-        final String findOneWithNameParam = "select * from booking where id = :idBooking ";
+    public Order findOne(Long id) {
+        final String findOneWithNameParam = "select * from orders where id = :idBooking ";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idBooking", id);
@@ -65,8 +64,8 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public Booking save(Booking entity) {
-        final String createQuery = "insert into booking (id_room, data_check_in, data_check_out, status, id_user, created, changed, general_price, rating_for_room,rating_for_client) " +
+    public Order save(Order entity) {
+        final String createQuery = "insert into orders (id_room, data_check_in, data_check_out, status, id_user, created, changed, general_price, rating_for_room,rating_for_client) " +
                 "values (:idRoom, :dataCheckIn, :dataCheckOut, :status, :idUser, :created, :changed, :generalPrice, :ratingForRoom, :ratingForClient);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -81,14 +80,14 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public void batchInsert(List<Booking> entities) {
-        final String createQuery = "insert into booking (id_room, data_check_in, data_check_out, status, id_user, created, changed, general_price, rating_for_room,rating_for_client) " +
+    public void batchInsert(List<Order> entities) {
+        final String createQuery = "insert into orders (id_room, data_check_in, data_check_out, status, id_user, created, changed, general_price, rating_for_room,rating_for_client) " +
                 "values (:idRoom, :dataCheckIn, :dataCheckOut, :status, :idUser, :created, :changed, :generalPrice, :ratingForRoom, :ratingForClient);";
 
         List<MapSqlParameterSource> batchParams = new ArrayList<>();
 
-        for (Booking booking : entities) {
-            batchParams.add(generateBookingParamsMap(booking));
+        for (Order order : entities) {
+            batchParams.add(generateBookingParamsMap(order));
         }
 
         namedParameterJdbcTemplate.batchUpdate(createQuery, batchParams.toArray(new MapSqlParameterSource[0]));
@@ -96,8 +95,8 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public Booking update(Booking entity) {
-        final String createQuery = "update booking set id_room = :idRoom, data_check_in= :dataCheckIn, data_check_out = :dataCheckOut," +
+    public Order update(Order entity) {
+        final String createQuery = "update orders set id_room = :idRoom, data_check_in= :dataCheckIn, data_check_out = :dataCheckOut," +
                 " status = :status, id_user = :idUser, created = :created, changed = :changed, general_price = :generalPrice," +
                 "rating_for_room = :ratingForRoom, rating_for_client = :ratingForClient  where id= :id ";
 
@@ -113,7 +112,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public void delete(Long id) {
-        final String findOneWithNameParam = "delete from booking b where b.id = :id;" ;
+        final String findOneWithNameParam = "delete from orders b where b.id = :id;" ;
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", id);
@@ -122,24 +121,24 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     }
 
-    private Booking getBookingRowMapper(ResultSet rs, int i) throws SQLException {
-        Booking booking=new Booking();
-        booking.setId(rs.getLong(BookingColumn.ID));
-        booking.setIdRoom(rs.getLong(BookingColumn.ID_ROOM));
-        booking.setDataCheckIn(rs.getDate(BookingColumn.DATA_CHECK_IN));
-        booking.setDataCheckOut(rs.getDate(BookingColumn.DATA_CHECK_OUT));
-        booking.setStatus(rs.getString(BookingColumn.STATUS));
-        booking.setIdUser(rs.getLong(BookingColumn.ID_USER));
-        booking.setCreated(rs.getDate(BookingColumn.CREATED));
-        booking.setChanged(rs.getDate(BookingColumn.CHANGED));
-        booking.setGeneralPrice(rs.getLong(BookingColumn.GENERAL_PRICE));
-        booking.setRatingForClient(rs.getLong(BookingColumn.RATING_FOR_CLIENT));
-        booking.setRatingForRoom(rs.getLong(BookingColumn.RATING_FOR_ROOM));
+    private Order getBookingRowMapper(ResultSet rs, int i) throws SQLException {
+        Order order =new Order();
+        order.setId(rs.getLong(BookingColumn.ID));
+        order.setIdRoom(rs.getLong(BookingColumn.ID_ROOM));
+        order.setDataCheckIn(rs.getTimestamp(BookingColumn.DATA_CHECK_IN));
+        order.setDataCheckOut(rs.getTimestamp(BookingColumn.DATA_CHECK_OUT));
+        order.setStatus(rs.getString(BookingColumn.STATUS));
+        order.setIdUser(rs.getLong(BookingColumn.ID_USER));
+        order.setCreated(rs.getTimestamp(BookingColumn.CREATED));
+        order.setChanged(rs.getTimestamp(BookingColumn.CHANGED));
+        order.setGeneralPrice(rs.getLong(BookingColumn.GENERAL_PRICE));
+        order.setRatingForClient(rs.getLong(BookingColumn.RATING_FOR_CLIENT));
+        order.setRatingForRoom(rs.getLong(BookingColumn.RATING_FOR_ROOM));
 
-        return booking;
+        return order;
     }
 
-    private MapSqlParameterSource generateBookingParamsMap(Booking entity) {
+    private MapSqlParameterSource generateBookingParamsMap(Order entity) {
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idRoom", entity.getIdRoom());

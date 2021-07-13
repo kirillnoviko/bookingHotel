@@ -11,24 +11,24 @@ import java.util.Collections;
 import java.util.Set;
 
 @Entity
-@Table(name = "additional_comfort")
+@Table(name = "comforts")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {
         "room"
 })
-public class AdditionalComfort {
+public class Comfort {
 
     @Id
     private Long id;
 
-    @Column(name = "name_additional")
-    private String nameAdditional;
+    @Column(name = "name_comfort")
+    private String nameComfort;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "additional_in_section",
-            joinColumns = @JoinColumn(name = "id_additional_comfort"),
-            inverseJoinColumns = @JoinColumn(name = "id_section_hotel_room")
+    @JoinTable(name = "comforts_rooms",
+            joinColumns = @JoinColumn(name = "id_comfort"),
+            inverseJoinColumns = @JoinColumn(name = "id_room")
     )
     @JsonIgnoreProperties("additional_comfort")
     private Set<Room> room = Collections.emptySet();

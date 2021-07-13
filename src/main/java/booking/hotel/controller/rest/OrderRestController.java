@@ -1,13 +1,8 @@
 package booking.hotel.controller.rest;
 
 
-import booking.hotel.controller.request.RoomSearchRequest;
-import booking.hotel.domain.Booking;
-import booking.hotel.domain.Room;
-import booking.hotel.domain.criteria.Criteria;
-import booking.hotel.domain.criteria.SearchCriteria;
-import booking.hotel.repository.BookingRepository;
-import booking.hotel.repository.UserRepository;
+import booking.hotel.domain.Order;
+import booking.hotel.repository.OrderRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,23 +14,23 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/booking")
+@RequestMapping("/rest/orders")
 @RequiredArgsConstructor
-public class BookingRestController {
+public class OrderRestController {
 
-    private final BookingRepository bookingRepository;
+    private final OrderRepository orderRepository;
 
     @ApiOperation(value = "Search orders user")
     @ApiImplicitParams({
              @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PostMapping("/search")
-    public List<Booking> createUser(@ApiIgnore Principal principal) {
-        return bookingRepository.findAllOrdersUser(principal.getName());
+    public List<Order> createUser(@ApiIgnore Principal principal) {
+        return orderRepository.findAllOrdersUser(principal.getName());
     }
 
     @GetMapping()
-    public List<Booking> findAll(){
-        return bookingRepository.findAll();
+    public List<Order> findAll(){
+        return orderRepository.findAll();
     }
 }

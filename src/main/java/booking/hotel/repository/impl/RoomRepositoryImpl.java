@@ -1,11 +1,9 @@
 package booking.hotel.repository.impl;
 
-import booking.hotel.domain.AdditionalComfort;
-import booking.hotel.domain.Role;
+import booking.hotel.domain.Comfort;
 import booking.hotel.domain.Room;
-import booking.hotel.domain.User;
 import booking.hotel.domain.criteria.Criteria;
-import booking.hotel.repository.AdditionalComfortRepository;
+import booking.hotel.repository.ComfortRepository;
 import booking.hotel.repository.column.RoomColumn;
 import booking.hotel.repository.RoomRepository;
 import booking.hotel.util.UtilsForQuery;
@@ -29,7 +27,7 @@ import java.util.*;
 public class RoomRepositoryImpl implements RoomRepository {
 
     private final UtilsForQuery utilsForQuery;
-    private final AdditionalComfortRepository additionalComfortRepository;
+    private final ComfortRepository comfortRepository;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     //    @Autowired
     //    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -52,7 +50,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Override
     public Room findOne(Long id) {
 
-        final String findOneWithNameParam = "select * from room where id = :idRoom ";
+        final String findOneWithNameParam = "select * from rooms where id = :idRoom ";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idRoom", id);
@@ -64,7 +62,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public Room save(Room entity) {
-        final String createQuery = "insert into room (name, price, principle_of_placement, number_room, rating_average) " +
+        final String createQuery = "insert into rooms (name, price, principle_of_placement, number_room, rating_average) " +
                 "values (:name, :price, :principleOfPlacement, :numberRoom, :ratingAverage);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -80,7 +78,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public void batchInsert(List<Room> entities) {
-        final String createQuery = "insert into room (name, price, principle_of_placement, comfort_level, number_room, rating_average) " +
+        final String createQuery = "insert into rooms (name, price, principle_of_placement, comfort_level, number_room, rating_average) " +
                 "values (:name, :price, :principleOfPlacement,:comfortLevel, :numberRoom, :ratingAverage);";
 
         List<MapSqlParameterSource> batchParams = new ArrayList<>();
@@ -96,7 +94,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public Room update(Room entity) {
-        final String createQuery = "update room set name = :name, price= :price, principle_of_placement = :principleOfPlacement," +
+        final String createQuery = "update rooms set name = :name, price= :price, principle_of_placement = :principleOfPlacement," +
                 " number_room = :numberRoom, rating_average = :ratingAverage  where id= :id ";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -113,8 +111,8 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Override
     public void delete(Long id) {
 
-        final String findOneWithNameParam = "delete from additional_in_section where additional_in_section.id = :idRoom;" +
-                "delete from room where room.id = :idRoom";
+        final String findOneWithNameParam = "delete from comforts_rooms where comforts_rooms.id = :idRoom;" +
+                "delete from rooms where rooms.id = :idRoom";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idRoom", id);
@@ -156,9 +154,9 @@ public class RoomRepositoryImpl implements RoomRepository {
         }
         for( T room : rooms){
             fl=0;
-            List<AdditionalComfort> roomWithAdditionals=additionalComfortRepository.getRoomAdditionalComfort((Room)room);
+            List<Comfort> roomWithComforts= comfortRepository.getRoomAdditionalComfort((Room)room);
             for(String additional : additionalComforts){
-                boolean result =roomWithAdditionals.stream().anyMatch(roomWithAdditional->roomWithAdditional.getNameAdditional().equals(additional));
+                boolean result =roomWithComforts.stream().anyMatch(roomWithAdditional->roomWithAdditional.getNameComfort().equals(additional));
                 if(!result){
                     fl=1;
                     break;
@@ -173,13 +171,13 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public void saveRoomAdditionalComfort(Room room, List<AdditionalComfort> roomAdditionalComfort) {
-        final String createQuery = "insert into additional_in_section (id,id_section_hotel_room, id_additional_comfort) " +
+    public void saveRoomAdditionalComfort(Room room, List<Comfort> roomComfort) {
+        final String createQuery = "insert into comforts_rooms (id,id_room, id_comfort) " +
                 "values (:additionalComfortId, :roomId);";
 
         List<MapSqlParameterSource> batchParams = new ArrayList<>();
 
-        for (AdditionalComfort additional : roomAdditionalComfort) {
+        for (Comfort additional : roomComfort) {
 
             MapSqlParameterSource params = new MapSqlParameterSource();
             params.addValue("additionalComfortId", additional.getId());

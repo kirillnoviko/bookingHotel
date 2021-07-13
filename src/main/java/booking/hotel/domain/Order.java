@@ -12,16 +12,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "booking")
+@Table(name = "orders")
 @Data
 @NoArgsConstructor
 /*@EqualsAndHashCode(exclude = {
         "roles"
 })*/
-public class Booking {
+public class Order {
 
     @Id
     private Long id;
@@ -30,10 +31,10 @@ public class Booking {
     private Long idRoom;
 
     @Column(name = "data_check_in")
-    private Date dataCheckIn;
+    private Timestamp dataCheckIn;
 
     @Column(name = "data_check_out")
-    private Date dataCheckOut;
+    private Timestamp dataCheckOut;
 
     @Column
     private String status;
@@ -42,10 +43,10 @@ public class Booking {
     private Long idUser;
 
     @Column
-    private Date created;
+    private Timestamp created;
 
     @Column
-    private Date changed;
+    private Timestamp changed;
 
     @Column(name = "general_price")
     private Long generalPrice;

@@ -1,9 +1,7 @@
 package booking.hotel.controller.rest;
 
-import booking.hotel.domain.AdditionalComfort;
-import booking.hotel.domain.Role;
-import booking.hotel.repository.AdditionalComfortRepository;
-import booking.hotel.repository.RoleRepository;
+import booking.hotel.domain.Comfort;
+import booking.hotel.repository.ComfortRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/rest/additional")
+@RequestMapping("/rest/comforts")
 @RequiredArgsConstructor
-public class AdditionalComfortRestController {
-    private final AdditionalComfortRepository additionalComfortRepository;
+public class ComfortRestController {
+    private final ComfortRepository comfortRepository;
 
 
 
@@ -26,8 +24,8 @@ public class AdditionalComfortRestController {
 
     })
     @GetMapping
-    public AdditionalComfort findAll(@RequestParam Long idAdditionalComfort) {
+    public Comfort findAll(@RequestParam Long idAdditionalComfort) {
         System.out.println("In rest controller");
-        return additionalComfortRepository.findOne(idAdditionalComfort);
+        return comfortRepository.findOne(idAdditionalComfort);
     }
 }

@@ -2,7 +2,6 @@ package booking.hotel.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,16 +9,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.Collections;
 import java.util.Set;
 
 @Entity
-@Table(name = "room")
+@Table(name = "rooms")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "additional_comfort"
+        "comforts"
 })
 public class Room {
 
@@ -46,7 +44,7 @@ public class Room {
 
     @ManyToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("room")
-    private Set<AdditionalComfort> additionalComforts = Collections.emptySet();
+    private Set<Comfort> comforts = Collections.emptySet();
 
     @Override
     public String toString() {

@@ -11,7 +11,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-        <groupId>booking.hotel</groupId>
+        <groupId>order.hotel</groupId>
         <artifactId>finalprojectbookinghotel</artifactId>
         <version>1.0.20210401213700</version>
 
