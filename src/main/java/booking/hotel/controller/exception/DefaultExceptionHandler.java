@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class DefaultExceptionHandler {
 
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleOthersException(Exception e) {
         /* Handles all other exceptions. Status code 500. */

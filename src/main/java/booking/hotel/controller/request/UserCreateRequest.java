@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+
 @ApiOperation("Class for creating user entity")
 @Data
 @AllArgsConstructor
@@ -18,4 +22,6 @@ public class UserCreateRequest {
     private String gmail;
 
     private String password;
+
+    private List<String> roles;
 }

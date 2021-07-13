@@ -1,9 +1,13 @@
 package booking.hotel.security.controller;
+import booking.hotel.controller.exception.DefaultExceptionHandler;
 import booking.hotel.controller.request.UserCreateRequest;
 import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
+import booking.hotel.exception.NoSuchEntityException;
 import booking.hotel.repository.RoleRepository;
 import booking.hotel.repository.UserRepository;
+import booking.hotel.security.service.ValidationNewUser;
+import booking.hotel.security.service.ValidationRoles;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,24 +26,41 @@ public class RegistrationController {
 
     private final RoleRepository roleRepository;
 
+    private final ValidationRoles validationRoles;
+    private final ValidationNewUser validationUser;
+
     @ApiOperation(value = "Creating one user")
     @PostMapping
-    public User createUser(@RequestBody UserCreateRequest createRequest) {
+    public User createUser(@RequestBody UserCreateRequest createRequest) throws RuntimeException {
 
-        User newUser = new User();
+        try{
+            validationRoles.checkRoles(createRequest.getRoles());
 
-        newUser.setGmail(createRequest.getGmail());
-        newUser.setName(createRequest.getName());
-        newUser.setSurname(createRequest.getSurname());
-        newUser.setPassword(createRequest.getPassword());
+            User newUser = new User();
 
-        User savedUser = userRepository.save(newUser);
+            newUser.setGmail(createRequest.getGmail());
+            newUser.setName(createRequest.getName());
+            newUser.setSurname(createRequest.getSurname());
+            newUser.setPassword(createRequest.getPassword());
 
-        List<Role> roles = roleRepository.findAll();
+            validationUser.checkUser(newUser);
 
-        userRepository.saveUserRoles(savedUser, roles);
+            User savedUser = userRepository.save(newUser);
 
-        return savedUser;
+            List<Role> roles = roleRepository.findAll();
+
+            userRepository.saveUserRoles(savedUser, roles);
+
+
+            return savedUser;
+
+        }catch (RuntimeException E){
+           throw E;
+        }
+
+
+
+
     }
 
 }

@@ -127,7 +127,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void saveUserRoles(User user, List<Role> userRoles) {
-        final String createQuery = "insert into user_roles (id,role_id, user_id) " +
+        final String createQuery = "insert into user_roles (role_id, user_id) " +
                 "values (:roleId, :userId);";
 
         List<MapSqlParameterSource> batchParams = new ArrayList<>();
