@@ -6,6 +6,7 @@ import booking.hotel.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -70,7 +71,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role save(Role entity) {
-        final String createQuery = "insert into roles (role_name) " +
+      /*  final String createQuery = "insert into roles (role_name) " +
                 "values (:roleName);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -82,7 +83,20 @@ public class RoleRepositoryImpl implements RoleRepository {
 
         long createdRole = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-        return findOne(createdRole);
+        return findOne(createdRole);*/
+
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.getTransaction();
+            transaction.begin();
+            Long roleId = (Long) session.save(entity);
+            transaction.commit();
+            return findOne(roleId);
+        }
+        //        EntityTransaction transaction = entityManager.getTransaction();
+        //        transaction.begin();
+        //        entityManager.persist(entity);
+        //        transaction.commit();
+        //        return entityManager.find(HibernateRoles.class, entity.getId());
     }
 
     @Override
