@@ -10,11 +10,17 @@ import booking.hotel.security.service.ValidationNewUser;
 import booking.hotel.security.service.ValidationRoles;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -28,6 +34,9 @@ public class RegistrationController {
 
     private final ValidationRoles validationRoles;
     private final ValidationNewUser validationUser;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @ApiOperation(value = "Creating one user")
     @PostMapping
@@ -62,5 +71,28 @@ public class RegistrationController {
 
 
     }
+
+
+    @RequestMapping(value="/mail",method=RequestMethod.GET)
+    public ModelAndView sendEmailToReference(HttpServletRequest request, HttpSession session) {
+
+        try {
+
+            MimeMessage mail = mailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mail, true);
+            messageHelper.setTo("kiril.novikov.2222@mail.ru");
+            messageHelper.setSubject("Testing mail");
+            messageHelper.setText("bbbbb", true);
+            mailSender.send(mail);
+
+        } catch (MailException | MessagingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
 
 }

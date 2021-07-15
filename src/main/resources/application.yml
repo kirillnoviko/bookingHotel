@@ -8,13 +8,33 @@ spring:
     password: postgres
     url: "jdbc:postgresql://localhost:5432/booking_hotel"
     driver-class-name: org.postgresql.Driver
+  mail:
+
+    host: smtp.gmail.com
+    port: 587
+    username: kiril.novikov.22222@gmail.com
+    password: KirkaNovikov12345
+    protocol: smtp
+    tls: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl.trust: smtp.gmail.com
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+
 
 ---
 
 security:
-  secretKey: top_secret_key_hoho!
+  secretKey: top_secret_key_hoho
+
 
 ---
 jwtconfig:
   secret: secret
   expiration: 60000
+
+
