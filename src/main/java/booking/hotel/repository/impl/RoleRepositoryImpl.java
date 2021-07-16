@@ -13,14 +13,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 @Primary
@@ -124,6 +121,17 @@ public class RoleRepositoryImpl implements RoleRepository {
         params.addValue("userId", user.getId());
 
         return namedParameterJdbcTemplate.query(findOneWithNameParam, params, this::getRoleRowMapper);
+    }
+
+    @Override
+    public List<Role> findByName(String roleName) {
+        final String findOneWithNameParam = "select * from roles r where r.role_name= :roleName";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("roleName", roleName);
+
+        return namedParameterJdbcTemplate.query(findOneWithNameParam, params, this::getRoleRowMapper);
+
     }
 }
 

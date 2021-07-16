@@ -1,5 +1,6 @@
 package booking.hotel.controller.request;
 
+import booking.hotel.domain.Role;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;

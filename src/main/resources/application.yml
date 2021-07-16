@@ -13,7 +13,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: kiril.novikov.22222@gmail.com
-    password: KirkaNovikov12345
+    password:
     protocol: smtp
     tls: true
     properties:

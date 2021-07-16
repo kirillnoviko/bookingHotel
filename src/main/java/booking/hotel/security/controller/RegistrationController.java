@@ -43,22 +43,17 @@ public class RegistrationController {
     public User createUser(@RequestBody UserCreateRequest createRequest) throws RuntimeException {
 
         try{
-            validationRoles.checkRoles(createRequest.getRoles());
+            List<Role> rolesListResult =validationRoles.checkRoles(createRequest.getRoles());
 
             User newUser = new User();
-
             newUser.setGmail(createRequest.getGmail());
             newUser.setName(createRequest.getName());
             newUser.setSurname(createRequest.getSurname());
             newUser.setPassword(createRequest.getPassword());
 
             validationUser.checkUser(newUser);
-
             User savedUser = userRepository.save(newUser);
-
-            List<Role> roles = roleRepository.findAll();
-
-            userRepository.saveUserRoles(savedUser, roles);
+            userRepository.saveUserRoles(savedUser, rolesListResult);
 
 
             return savedUser;

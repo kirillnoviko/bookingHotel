@@ -1,7 +1,6 @@
 package booking.hotel.repository.impl;
 
 import booking.hotel.domain.Role;
-import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
 import booking.hotel.repository.column.UserColumn;
 import booking.hotel.repository.UserRepository;
@@ -163,7 +162,7 @@ public class UserRepositoryImpl implements UserRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("gmail", gmail);
 
-        return namedParameterJdbcTemplate.queryForObject(searchQuery, params, this::getUserRowMapper);
+        return Optional.of(namedParameterJdbcTemplate.queryForObject(searchQuery, params, this::getUserRowMapper)).get();
     }
 
     private User getUserRowMapper(ResultSet rs, int i) throws SQLException {
