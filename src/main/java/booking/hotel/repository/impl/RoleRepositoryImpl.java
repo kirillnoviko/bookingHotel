@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -47,7 +48,12 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public List<Role> findAll() {
-        return jdbcTemplate.query("select * from roles order by id desc", this::getRoleRowMapper);
+        /*return jdbcTemplate.query("select * from roles order by id desc", this::getRoleRowMapper);
+        */
+
+        try (Session session = sessionFactory.openSession()) {
+            return  session.createQuery("FROM Role").list();
+        }
     }
 
     @Override
@@ -68,6 +74,15 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role save(Role entity) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.getTransaction();
+            transaction.begin();
+            Long roleId = (Long) session.save(entity);
+            transaction.commit();
+            return findOne(roleId);
+        }
+
+
       /*  final String createQuery = "insert into roles (role_name) " +
                 "values (:roleName);";
 
@@ -82,19 +97,8 @@ public class RoleRepositoryImpl implements RoleRepository {
 
         return findOne(createdRole);*/
 
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.getTransaction();
-            transaction.begin();
-            Long roleId = (Long) session.save(entity);
-            transaction.commit();
-            return findOne(roleId);
-        }
-        //        EntityTransaction transaction = entityManager.getTransaction();
-        //        transaction.begin();
-        //        entityManager.persist(entity);
-        //        transaction.commit();
-        //        return entityManager.find(HibernateRoles.class, entity.getId());
-    }
+
+         }
 
     @Override
     public void batchInsert(List<Role> entities) {
@@ -104,7 +108,15 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role update(Role entity) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.getTransaction();
+            transaction.begin();
+            session.update(entity);
+            //Long roleId = (Long) session.save(entity);
+            transaction.commit();
+            return findOne(entity.getId());
+        }
+
     }
 
 
@@ -115,23 +127,29 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public List<Role> getUserRoles(User user) {
-        final String findOneWithNameParam = "select r.id as id, r.role_name as role_name from user_roles inner join roles r on r.id = user_roles.role_id where user_roles.user_id = :userId";
+       /* final String findOneWithNameParam = "select r.id as id, r.role_name as role_name from user_roles inner join roles r on r.id = user_roles.role_id where user_roles.user_id = :userId";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userId", user.getId());
 
-        return namedParameterJdbcTemplate.query(findOneWithNameParam, params, this::getRoleRowMapper);
+        return namedParameterJdbcTemplate.query(findOneWithNameParam, params, this::getRoleRowMapper);*/
+
+        try (Session session = sessionFactory.openSession()) {
+
+            Query<Role> query = session.createQuery("select r from Role r inner join r.users as u where u.id = :idUser", Role.class);
+            query.setParameter("idUser", user.getId());
+
+            return query.getResultList();
+        }
     }
 
     @Override
-    public List<Role> findByName(String roleName) {
-        final String findOneWithNameParam = "select * from roles r where r.role_name= :roleName";
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("roleName", roleName);
-
-        return namedParameterJdbcTemplate.query(findOneWithNameParam, params, this::getRoleRowMapper);
-
+    public Role findByName(String roleName) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Role> query = session.createQuery("select r from Role r where r.roleName = :roleName", Role.class);
+            query.setParameter("roleName", roleName);
+            return query.getSingleResult();
+        }
     }
 }
 

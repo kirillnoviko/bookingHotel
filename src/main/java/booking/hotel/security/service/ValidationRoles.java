@@ -27,7 +27,7 @@ public class ValidationRoles {
 
             boolean result =rolesAll.stream().anyMatch(roleAll->roleAll.getRoleName().equals(role));
             if(result){
-                resultListRole.addAll(roleRepository.findByName(role));
+                resultListRole.add(roleRepository.findByName(role));
             }else{
                 throw  new NoSuchEntityException("некоректный ввод роли пользователя");
             }

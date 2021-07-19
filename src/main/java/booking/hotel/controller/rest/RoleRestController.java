@@ -21,21 +21,42 @@ public class RoleRestController {
 
 
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "idRole", dataType = "string", paramType = "query", value = "id role for output users"),
-
-    })
     @GetMapping
     public Role findAll(@RequestParam Long idRole) {
         System.out.println("In rest controller");
         return roleRepository.findOne(idRole);
     }
-    @PostMapping
+
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "idRole", dataType = "string", paramType = "query", value = "id role for output users"),
+
+    })
+    @GetMapping("/{roleId}")
+    public Role findOne(@PathVariable("roleId") Long id) {
+        return roleRepository.findOne(id);
+    }
+
+    @PostMapping("/save")
     public Role save(@RequestBody RoleCreateRequest request) {
 
         Role role = new Role();
         role.setRoleName(request.getRoleName());
-
         return roleRepository.save(role);
+
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "idRole", dataType = "string", paramType = "query", value = "id role for update"),
+
+    })
+    @PostMapping("/update/{roleId}")
+    public Role update(@RequestBody RoleCreateRequest request, @PathVariable Long roleId) {
+
+        Role role = new Role();
+        role.setId(roleId);
+        role.setRoleName(request.getRoleName());
+        return roleRepository.update(role);
+
     }
 }
