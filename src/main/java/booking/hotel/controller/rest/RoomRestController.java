@@ -36,19 +36,22 @@ public class RoomRestController {
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })*/
     @PostMapping("/search")
-    public List<Room> searchRoom(@RequestBody RoomSearchRequest createRequest) {
+    public List<Room> searchRoom( @ModelAttribute RoomSearchRequest request) {
 
         Criteria<SearchCriteria.Room> criteriaRoom= new Criteria<SearchCriteria.Room>();
         Criteria<SearchCriteria.DataInAndOut> criteriaData = new Criteria<DataInAndOut>();
 
-        criteriaRoom.add(SearchCriteria.Room.PRICE,createRequest.getPrice());
+
+
+        /*criteriaRoom.add(SearchCriteria.Room.PRICE,createRequest.getPrice());
         criteriaRoom.add(SearchCriteria.Room.PRINCIPLE_OF_PLACEMENT,createRequest.getPrincipleOfPlacement());
         criteriaRoom.add(SearchCriteria.Room.RATING_AVERAGE,createRequest.getRatingAverage());
 
         criteriaData.add(SearchCriteria.DataInAndOut.DATA_IN,createRequest.getDataIn());
         criteriaData.add(SearchCriteria.DataInAndOut.DATA_OUT,createRequest.getDataOut());
 
-        return roomRepository.findCriteriaRoom(criteriaRoom,criteriaData,createRequest.getAdditionalComfort());
+        return roomRepository.findCriteriaRoom(criteriaRoom,criteriaData,createRequest.getAdditionalComfort());*/
+        return  roomRepository.findCriteriaRoom(request)   ;
     }
 
 

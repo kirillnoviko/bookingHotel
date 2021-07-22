@@ -8,6 +8,7 @@ import booking.hotel.repository.RoleRepository;
 import booking.hotel.repository.UserRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +21,13 @@ public class RoleRestController {
     private final RoleRepository roleRepository;
 
 
-
+    @ApiOperation(value = "find for all roles")
     @GetMapping
     public Role findAll(@RequestParam Long idRole) {
-        System.out.println("In rest controller");
         return roleRepository.findOne(idRole);
     }
 
-
+    @ApiOperation(value = "find for one role by ID")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "idRole", dataType = "string", paramType = "query", value = "id role for output users"),
 
@@ -37,6 +37,8 @@ public class RoleRestController {
         return roleRepository.findOne(id);
     }
 
+
+    @ApiOperation(value = "save new role")
     @PostMapping("/save")
     public Role save(@RequestBody RoleCreateRequest request) {
 
@@ -46,6 +48,8 @@ public class RoleRestController {
 
     }
 
+
+    @ApiOperation(value = "update role by ID")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "idRole", dataType = "string", paramType = "query", value = "id role for update"),
 

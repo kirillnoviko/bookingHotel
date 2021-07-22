@@ -1,13 +1,16 @@
 package booking.hotel.repository.impl;
 
+import booking.hotel.controller.request.RoomSearchRequest;
 import booking.hotel.domain.Comfort;
 import booking.hotel.domain.Room;
+import booking.hotel.domain.Room_;
 import booking.hotel.domain.criteria.Criteria;
 import booking.hotel.repository.ComfortRepository;
 import booking.hotel.repository.column.RoomColumn;
 import booking.hotel.repository.RoomRepository;
 import booking.hotel.util.UtilsForQuery;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -33,6 +39,12 @@ public class RoomRepositoryImpl implements RoomRepository {
     //    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
     //        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     //    }
+
+
+    @Autowired
+    @Qualifier("entityManagerFactory")
+    private EntityManager entityManager;
+
 
     @Autowired
     @Qualifier("sessionFactory")
@@ -124,9 +136,9 @@ public class RoomRepositoryImpl implements RoomRepository {
 
 
 
-    @Override
+  /*  @Override
     public <E,M> List<Room> findCriteriaRoom( Criteria<E> searchRoom,Criteria<M> searchData, List<String> additionalComfort){
-        MapSqlParameterSource params = new MapSqlParameterSource();
+    *//*    MapSqlParameterSource params = new MapSqlParameterSource();
 
         for (Map.Entry<E, Object> entry : searchRoom.getCriteria()) {
             if(entry.getValue()!=null ){
@@ -142,9 +154,9 @@ public class RoomRepositoryImpl implements RoomRepository {
         String query= utilsForQuery.createStringForSearchByParams(searchRoom)+ utilsForQuery.createStringForSearchByDate(searchData);
 
         return searchByAdditionalComfortForRoom(namedParameterJdbcTemplate.query(query, params, this::getRoomRowMapper),additionalComfort);
+*//*
 
-
-    }
+    }*/
 
     public <T> List<T> searchByAdditionalComfortForRoom(List<T> rooms,List<String> additionalComforts) {
         int fl=0;
@@ -168,6 +180,49 @@ public class RoomRepositoryImpl implements RoomRepository {
         }
 
         return RoomsWithFilterAdditional;
+    }
+
+    @Override
+    public List<Room> findCriteriaRoom(RoomSearchRequest request) {
+        //1. Get Builder for Criteria object
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Room> query = cb.createQuery(Room.class); //here select, where, orderBy, having
+        Root<Room> root = query.from(Room.class); //here params  select * from m_users -> mapping
+        /*type of future params in prepared statement*/
+        ParameterExpression<String> params = cb.parameter(String.class);
+        ParameterExpression<Long> paramsLong= cb.parameter(Long.class);
+        ParameterExpression<Long> paramsLong1= cb.parameter(Long.class);
+        /*Provide access to fields in class that mapped to columns*/
+        Expression<Long> price = root.get(Room_.price);
+        Expression<Long> rating = root.get(Room_.ratingAverage);
+
+        /*SQL Query customizing*/
+        query
+                .select(root) //select * = select method, (root) = from users
+                .distinct(true)
+                .where( //where
+
+                        cb.and(
+
+                                cb.gt(price, paramsLong), //>0
+                                cb.gt(rating, paramsLong1)
+                        )
+//                        ,
+//                        cb.between(
+//                                root.get(TestUser_.birthDate),
+//                                new Timestamp(new Date().getTime()),
+//                                new Timestamp(new Date().getTime())
+//                        )
+                )
+                .orderBy(cb.desc(price));
+
+
+        TypedQuery<Room> resultQuery = entityManager.createQuery(query); //prepared statement on hql
+
+        resultQuery.setParameter(paramsLong, request.getPrice());
+        resultQuery.setParameter(paramsLong1, request.getRatingAverage());
+
+        return  resultQuery.getResultList();
     }
 
     @Override
