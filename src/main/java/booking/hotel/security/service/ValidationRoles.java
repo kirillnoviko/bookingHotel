@@ -20,11 +20,10 @@ public class ValidationRoles {
         if(roles.isEmpty()){
             new NoSuchEntityException("список ролей пуст");
         }
-        List<Role> resultListRole = new ArrayList<>();
+        List<Role> resultListRole = new ArrayList<Role>();
         List<Role> rolesAll=roleRepository.findAll();
         for( String role: roles){
-
-
+            
             boolean result =rolesAll.stream().anyMatch(roleAll->roleAll.getRoleName().equals(role));
             if(result){
                 resultListRole.add(roleRepository.findByName(role));

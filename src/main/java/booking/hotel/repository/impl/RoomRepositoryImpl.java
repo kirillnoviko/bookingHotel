@@ -189,10 +189,13 @@ public class RoomRepositoryImpl implements RoomRepository {
         CriteriaQuery<Room> query = cb.createQuery(Room.class); //here select, where, orderBy, having
         Root<Room> root = query.from(Room.class); //here params  select * from m_users -> mapping
         /*type of future params in prepared statement*/
+
         ParameterExpression<String> params = cb.parameter(String.class);
         ParameterExpression<Long> paramsLong= cb.parameter(Long.class);
         ParameterExpression<Long> paramsLong1= cb.parameter(Long.class);
+
         /*Provide access to fields in class that mapped to columns*/
+
         Expression<Long> price = root.get(Room_.price);
         Expression<Long> rating = root.get(Room_.ratingAverage);
 

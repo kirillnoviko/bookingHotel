@@ -48,10 +48,8 @@ public class UserRepositoryImpl implements UserRepository {
     public User findOne(Long id) {
 
       /*  final String findOneWithNameParam = "select * from users where id = :idUser ";
-
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idUser", id);
-
         return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getUserRowMapper);*/
 
         try (Session session = sessionFactory.openSession()) {

@@ -6,6 +6,7 @@ import booking.hotel.domain.User;
 import booking.hotel.exception.NoSuchEntityException;
 import booking.hotel.repository.RoleRepository;
 import booking.hotel.repository.UserRepository;
+import booking.hotel.repository.dataspring.UserRepositoryData;
 import booking.hotel.security.service.ValidationNewUser;
 import booking.hotel.security.service.ValidationRoles;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +22,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -28,7 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RegistrationController {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryData userRepositoryData;
 
     private final RoleRepository roleRepository;
 
@@ -50,10 +52,19 @@ public class RegistrationController {
             newUser.setName(createRequest.getName());
             newUser.setSurname(createRequest.getSurname());
             newUser.setPassword(createRequest.getPassword());
+            newUser.setBanned(false);
+            newUser.setDeleted(false);
+            newUser.setRatingAverage(5L);
+            newUser.setBirthDate(new Timestamp(10000));
+            newUser.setCreated(new Timestamp(10000));
+            newUser.setChanged(new Timestamp(10000));
 
             validationUser.checkUser(newUser);
-            User savedUser = userRepository.save(newUser);
-            userRepository.saveUserRoles(savedUser, rolesListResult);
+            User savedUser = userRepositoryData.save(newUser);
+
+            for(Role role:rolesListResult) {
+                userRepositoryData.createSomeRow(savedUser.getId(), role.getId());
+            }
 
 
             return savedUser;

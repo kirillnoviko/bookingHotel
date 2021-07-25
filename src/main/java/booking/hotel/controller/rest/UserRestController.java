@@ -1,8 +1,10 @@
 package booking.hotel.controller.rest;
 
 import booking.hotel.beans.SecurityConfig;
+import booking.hotel.controller.request.UserCreateRequest;
 import booking.hotel.domain.User;
-import booking.hotel.repository.UserRepository;
+import booking.hotel.repository.dataspring.UserRepositoryData;
+
 import booking.hotel.util.PrincipalUtils;
 import io.swagger.annotations.*;
 
@@ -22,17 +24,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserRestController {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryData userRepositoryData;
     private final SecurityConfig securityConfig;
     private final PrincipalUtils principalUtils;
     private final SecurityConfig config;
 
 
 
+
     @GetMapping
     public List<User> findAll() {
         System.out.println("In rest controller");
-        return userRepository.findAll();
+        return userRepositoryData.findByIsBannedFalseAndIsDeletedFalse();
+    }
+
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "UserID", dataType = "string", paramType = "query", value = "ID for search user"),
+
+    })
+    @GetMapping("/findOne")
+    public User findOne(@RequestParam Long limit) {
+        return userRepositoryData.findById(limit).get();
     }
 
 
@@ -42,12 +55,18 @@ public class UserRestController {
     @GetMapping("/search")
     public User findUser(@ApiIgnore Principal principal){
         String username = principalUtils.getUsername(principal);
-        return userRepository.findByLogin(username);
+        return userRepositoryData.findByGmail(username).get();
     }
 
 
 
-    @ApiImplicitParams({
+
+
+
+
+
+
+/*    @ApiImplicitParams({
             @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header",
                     value = "Secret header for secret functionality!! Hoho")
     })
@@ -55,13 +74,15 @@ public class UserRestController {
     public List<User> securedFindAll(HttpServletRequest request) {
         String secretKey = request.getHeader("Secret-Key");
         if (StringUtils.isNotBlank(secretKey) && secretKey.equals(securityConfig.getSecretKey())) {
-            return userRepository.findAll();
+            return userRepositoryData.findAll();
         } else {
             //throw new UnauthorizedException();
             return Collections.emptyList();
         }
-    }
+    }*/
 
+
+/*
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header", value = "Secret header for secret functionality!! Hoho"),
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
@@ -80,17 +101,10 @@ public class UserRestController {
             //throw new UnauthorizedException();
             return Collections.emptyList();
         }
-    }
+    }*/
 
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "limit", dataType = "string", paramType = "query", value = "Limit users in result list"),
 
-    })
-    @GetMapping("/findOneTest")
-    public User userSearch(@RequestParam Long limit) {
-        return userRepository.findOne(limit);
-    }
 
 /*    @ApiOperation(value = "Creating one user")
     @PostMapping

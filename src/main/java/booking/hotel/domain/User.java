@@ -20,9 +20,12 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {
         "roles"
 })
+@NamedQuery(name = "User_findByLogin",
+        query = "select u from User  u where u.gmail = :gmail")
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
