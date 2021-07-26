@@ -39,13 +39,14 @@ public class UserRestController {
     }
 
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "UserID", dataType = "string", paramType = "query", value = "ID for search user"),
+   @ApiImplicitParams({
+            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for search user"),
 
     })
     @GetMapping("/findOne")
-    public User findOne(@RequestParam Long limit) {
-        return userRepositoryData.findById(limit).get();
+    public User findOne(@RequestParam Long idUser) {
+
+        return userRepositoryData.findById(idUser).get();
     }
 
 
