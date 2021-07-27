@@ -43,17 +43,15 @@ public class User {
     @Column
     private String password;
 
-    @Column (name = "is_deleted")
-    private boolean isDeleted;
 
-    @Column (name = "is_banned")
-    private boolean isBanned;
-
-    @Column
-    private Timestamp created;
-
-    @Column
-    private Timestamp changed;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "isBanned", column = @Column(name = "is_banned")),
+            @AttributeOverride(name = "isDeleted", column = @Column(name = "is_deleted")),
+            @AttributeOverride(name = "created", column = @Column(name = "created")),
+            @AttributeOverride(name = "changed", column = @Column(name = "changed"))
+    })
+    private UserSystemInfo userSystemInfo;
 
     @Column(name = "rating_average")
     private Long ratingAverage;
