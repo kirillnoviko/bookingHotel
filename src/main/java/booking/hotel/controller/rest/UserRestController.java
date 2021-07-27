@@ -32,11 +32,13 @@ public class UserRestController {
 
 
 
+/*
     @GetMapping
     public List<User> findAll() {
         System.out.println("In rest controller");
         return userRepositoryData.findByIsBannedFalseAndIsDeletedFalse();
     }
+*/
 
 
    @ApiImplicitParams({

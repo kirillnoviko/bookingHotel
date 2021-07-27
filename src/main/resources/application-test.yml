@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    include: default
+  datasource:
+    hikari:
+      jdbc-url: "jdbc:postgresql://localhost:5432/booking_hotel"
+      maximum-pool-size: 10
+    username: postgres
+    password: postgres
+    url: "jdbc:postgresql://localhost:5432/booking_hotel"
+
+jwtconfig:
+  secret: secret
+  expiration: 600

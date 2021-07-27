@@ -25,16 +25,11 @@ spring:
             enable: true
     default-encoding: UTF-8
 
-
----
-
 security:
   secretKey: top_secret_key_hoho
 
 
----
 jwtconfig:
   secret: secret
   expiration: 60000
-
 

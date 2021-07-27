@@ -1,0 +1,31 @@
+spring:
+  profiles: default
+  flyway:
+    enabled: true
+    ignore-missing-migrations: true
+    locations: classpath:/migration
+    baseline-on-migrate: true
+    baseline-description: Flyway Scripts
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+  datasource:
+    hikari:
+      jdbc-url: "jdbc:postgresql://localhost:5432/booking_hotel"
+      maximum-pool-size: 10
+      driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    url: "jdbc:postgresql://localhost:5432/booking_hotel"
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8080
+
+security:
+  secretKey: top_secret_key_hoho!
+
+jwtconfig:
+  secret: secret
+  expiration: 60000

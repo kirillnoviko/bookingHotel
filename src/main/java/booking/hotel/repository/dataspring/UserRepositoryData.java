@@ -22,8 +22,10 @@ import java.util.Optional;
 public interface UserRepositoryData extends CrudRepository<User, Long>, PagingAndSortingRepository<User, Long> ,JpaRepository<User, Long> {
 
 
+/*
     @Cacheable("users")
     List<User> findByIsBannedFalseAndIsDeletedFalse();
+*/
 
 
     @Cacheable("users")
