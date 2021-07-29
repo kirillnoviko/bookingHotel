@@ -195,14 +195,14 @@ public class RoomRepositoryImpl implements RoomRepository {
         ParameterExpression<Long> paramsLong1= cb.parameter(Long.class);
 
         /*Provide access to fields in class that mapped to columns*/
-
+/*
         Expression<Long> price =root.get(Room_.price);
-        Expression<Long> rating = root.get(Room_.ratingAverage);
+        Expression<Long> rating = root.get(Room_.ratingAverage);*/
         /*SQL Query customizing*/
         query
                 .select(root) //select * = select method, (root) = from users
-                .distinct(true)
-                .where( //where
+                .distinct(true);
+                /*.where( //where
 
                         cb.and(
 
@@ -216,7 +216,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 //                                new Timestamp(new Date().getTime())
 //                        )
                 )
-                .orderBy(cb.desc(price));
+                .orderBy(cb.desc(price));*/
 
 
         TypedQuery<Room> resultQuery = entityManager.createQuery(query); //prepared statement on hql
