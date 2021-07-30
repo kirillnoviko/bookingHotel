@@ -18,11 +18,15 @@ public class RoomSearchRequest {
 
     private List<String> additionalComfort;
 
-    private Long price;
+    private Long priceMin;
+
+    private Long priceMax;
 
     private String principleOfPlacement;
 
-    private Long ratingAverage;
+    private Long ratingMin;
+
+    private Long ratingMax;
 
     private Date dataOut;
 

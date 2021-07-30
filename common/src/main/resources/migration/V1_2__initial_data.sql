@@ -27,7 +27,8 @@ INSERT INTO public.users (id, name, surname, gmail, password, is_deleted, is_ban
 INSERT INTO public.users (id, name, surname, gmail, password, is_deleted, is_banned, created, changed, rating_average, birth_date) VALUES (36, '111', '1223', '111', '1111', false, false, '2021-07-13 13:26:35.120000', '2021-07-13 13:26:35.120000', 1, '2021-07-13 13:26:35.120000');
 INSERT INTO public.users (id, name, surname, gmail, password, is_deleted, is_banned, created, changed, rating_average, birth_date) VALUES (38, 'kirill', 'novikov', 'kiril@mail.ru', '12345', false, false, '1970-01-01 00:00:10.000000', '1970-01-01 00:00:10.000000', 5, '1970-01-01 00:00:10.000000');
 
-
+INSERT INTO public.comforts (id, name_comfort) VALUES (1, 'kondition');
+INSERT INTO public.comforts (id, name_comfort) VALUES (2, 'wi-fi');
 
 INSERT INTO public.comforts_rooms (id, id_room, id_comfort) VALUES (1, 1, 2);
 INSERT INTO public.comforts_rooms (id, id_room, id_comfort) VALUES (2, 3, 1);

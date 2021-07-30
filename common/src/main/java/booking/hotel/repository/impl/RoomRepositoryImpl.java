@@ -1,11 +1,8 @@
 package booking.hotel.repository.impl;
 
 
-import booking.hotel.domain.Comfort;
+import booking.hotel.domain.*;
 
-import booking.hotel.domain.Room;
-import booking.hotel.domain.RoomSearchRequest;
-import booking.hotel.domain.UtilsForQuery;
 import booking.hotel.repository.ComfortRepository;
 import booking.hotel.repository.column.RoomColumn;
 import booking.hotel.repository.RoomRepository;
@@ -13,6 +10,7 @@ import booking.hotel.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -26,6 +24,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Repository
@@ -35,6 +34,7 @@ public class RoomRepositoryImpl implements RoomRepository {
     private final UtilsForQuery utilsForQuery;
     private final ComfortRepository comfortRepository;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     //    @Autowired
     //    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
     //        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -183,48 +183,159 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public List<Room> findCriteriaRoom(RoomSearchRequest request) {
+    public List<Room> findByParamsRoom(RoomSearchRequest request) {
         //1. Get Builder for Criteria object
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Room> query = cb.createQuery(Room.class); //here select, where, orderBy, having
         Root<Room> root = query.from(Room.class); //here params  select * from m_users -> mapping
+        //Join<Room,Comfort>   rc = root.join(Room_.comforts);
+
         /*type of future params in prepared statement*/
 
-        ParameterExpression<String> params = cb.parameter(String.class);
-        ParameterExpression<Long> paramsLong= cb.parameter(Long.class);
-        ParameterExpression<Long> paramsLong1= cb.parameter(Long.class);
 
+        ParameterExpression<Long> paramPriceMin= cb.parameter(Long.class);
+        ParameterExpression<Long> paramPriceMax= cb.parameter(Long.class);
+        ParameterExpression<Long> paramRatingMin= cb.parameter(Long.class);
+        ParameterExpression<Long> paramRatingMax= cb.parameter(Long.class);
+        ParameterExpression<String> paramPrincipleOfPlacement= cb.parameter(String.class);
         /*Provide access to fields in class that mapped to columns*/
-/*
-        Expression<Long> price =root.get(Room_.price);
-        Expression<Long> rating = root.get(Room_.ratingAverage);*/
+
+
+        Expression<Long> priceMin =root.get(Room_.price);
+        Expression<Long> priceMax = root.get(Room_.price);
+        Expression<Long> ratingMin= root.get(Room_.ratingAverage);
+        Expression<Long> ratingMax = root.get(Room_.ratingAverage);
+        Expression<String> principleOfPlacement = root.get(Room_.principleOfPlacement);
+
+
+      /*  List<ParameterExpression<String>> paramNameComforts = new ArrayList<>();
+        List<Expression<String>> nameComforts = new ArrayList<>();
+        for(int i=0;i<request.getAdditionalComfort().size();i++){
+            paramNameComforts.add(cb.parameter(String.class));
+            nameComforts.add(rc.get(Comfort_.nameComfort));
+        }*/
+
+
+
+
         /*SQL Query customizing*/
+
+        List<Predicate> predicates = new ArrayList<>();
+        if(request.getPriceMin() != null)
+        {
+            predicates.add(cb.ge(priceMin,paramPriceMin));
+        }
+        if(request.getPriceMax() != null)
+        {
+            predicates.add(cb.le(priceMax,paramPriceMax));
+        }
+
+        if(request.getRatingMin() != null)
+        {
+            predicates.add(cb.ge(ratingMin, paramRatingMin));
+        }
+        if(request.getRatingMax() != null)
+        {
+            predicates.add(cb.le(ratingMax,paramRatingMax));
+        }
+
+        if(request.getPrincipleOfPlacement() != null)
+        {
+            predicates.add(cb.equal(principleOfPlacement,paramPrincipleOfPlacement));
+        }
+
+     /*   if(request.getAdditionalComfort() != null)
+        {
+            for(int i=0;i<request.getAdditionalComfort().size();i++){
+                predicates.add(cb.equal(nameComforts.get(i),paramNameComforts.get(i)));
+            }
+        }*/
+
         query
                 .select(root) //select * = select method, (root) = from users
-                .distinct(true);
-                /*.where( //where
-
-                        cb.and(
-
-                                cb.gt(price, paramsLong), //>0
-                                cb.gt(rating, paramsLong1)
-                        )
-//                        ,
-//                        cb.between(
-//                                root.get(TestUser_.birthDate),
-//                                new Timestamp(new Date().getTime()),
-//                                new Timestamp(new Date().getTime())
-//                        )
-                )
-                .orderBy(cb.desc(price));*/
-
+                .distinct(true)
+                .where(                         //where
+                        cb.and(cb.and(predicates.toArray(new Predicate[predicates.size()])))
+                );
 
         TypedQuery<Room> resultQuery = entityManager.createQuery(query); //prepared statement on hql
 
-        resultQuery.setParameter(paramsLong, request.getPrice());
-        resultQuery.setParameter(paramsLong1, request.getRatingAverage());
+
+        if(request.getPriceMin() != null)
+        {
+            resultQuery.setParameter(paramPriceMin, request.getPriceMin());
+        }
+        if(request.getPriceMax() != null)
+        {
+            resultQuery.setParameter(paramPriceMax, request.getPriceMax());
+        }
+
+        if(request.getRatingMin() != null)
+        {
+            resultQuery.setParameter(paramRatingMin, request.getRatingMin());
+        }
+        if(request.getRatingMax() != null)
+        {
+            resultQuery.setParameter(paramRatingMax, request.getRatingMax());
+        }
+
+        if(request.getPrincipleOfPlacement() != null)
+        {
+            resultQuery.setParameter(paramPrincipleOfPlacement, request.getPrincipleOfPlacement());
+        }
+      /*  if(request.getAdditionalComfort() != null)
+        {
+            for(int i=0;i<request.getAdditionalComfort().size();i++){
+                resultQuery.setParameter(paramNameComforts.get(i), request.getAdditionalComfort().get(i));
+            }
+        }*/
 
         return  resultQuery.getResultList();
+    }
+
+    @Override
+    public List<Room> findByListComfortsRoom(List<String> comforts){
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Room> query = cb.createQuery(Room.class); //here select, where, orderBy, having
+        Root<Room> root = query.from(Room.class); //here params  select * from m_users -> mapping
+        Join<Room,Comfort>   rc = root.join(Room_.comforts);
+
+
+        List<ParameterExpression<String>> paramNameComforts = new ArrayList<>();
+        List<Expression<String>> nameComforts = new ArrayList<>();
+        Expression<Long> id = root.get(Room_.id);
+        for(int i=0;i<comforts.size();i++){
+            paramNameComforts.add(cb.parameter(String.class));
+            nameComforts.add(rc.get(Comfort_.nameComfort));
+        }
+
+        List<Predicate> predicates = new ArrayList<>();
+        for(int i=0;i<comforts.size();i++){
+            predicates.add(cb.equal(nameComforts.get(i),paramNameComforts.get(i)));
+        }
+
+        query
+                .select(root)//select * = select method, (root) = from users
+
+                //.distinct(true)
+                .where(                         //where
+                        cb.and(cb.or(predicates.toArray(new Predicate[predicates.size()])))
+                );
+
+
+        TypedQuery<Room> resultQuery = entityManager.createQuery(query);
+        //prepared statement on hql
+        for(int i=0;i<comforts.size();i++){
+            resultQuery.setParameter(paramNameComforts.get(i), comforts.get(i));
+        }
+
+        return resultQuery.getResultList();
+    }
+
+    public List<Room> findByData(Timestamp dataIn,Timestamp dataOut){
+        return null;
     }
 
     @Override
