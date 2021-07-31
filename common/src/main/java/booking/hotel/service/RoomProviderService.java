@@ -14,9 +14,9 @@ public class RoomProviderService {
     private final RoomRepository roomRepository;
     public List<Room> searchByAllParamsRoom(RoomSearchRequest request){
 
-        List<Room> result =roomRepository.findByListComfortsRoom(request.getAdditionalComfort());
+       // List<Room> result =roomRepository.findByListComfortsRoom(request.getAdditionalComfort());
 
-        return null;
+        return roomRepository.findByListComfortsRoom(request.getAdditionalComfort());
     }
 
 }

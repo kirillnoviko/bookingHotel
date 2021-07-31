@@ -20,6 +20,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.sql.ResultSet;
@@ -301,7 +302,11 @@ public class RoomRepositoryImpl implements RoomRepository {
         CriteriaQuery<Room> query = cb.createQuery(Room.class); //here select, where, orderBy, having
         Root<Room> root = query.from(Room.class); //here params  select * from m_users -> mapping
         Join<Room,Comfort>   rc = root.join(Room_.comforts);
+        query.groupBy(root.get("name"));
+        query.orderBy(cb.desc(cb.count(root.get("name"))));
+        query.multiselect(root.get("name"),cb.count(root.get("name")));
 
+       // ParameterExpression<Long> count = cb.parameter(Long.class);
 
         List<ParameterExpression<String>> paramNameComforts = new ArrayList<>();
         List<Expression<String>> nameComforts = new ArrayList<>();
@@ -318,18 +323,21 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         query
                 .select(root)//select * = select method, (root) = from users
-
                 //.distinct(true)
                 .where(                         //where
                         cb.and(cb.or(predicates.toArray(new Predicate[predicates.size()])))
-                );
+                )
+                .groupBy(root.get("id"))
+                .having(cb.ge(cb.count(root.get("id")),comforts.size()));
 
 
         TypedQuery<Room> resultQuery = entityManager.createQuery(query);
         //prepared statement on hql
+
         for(int i=0;i<comforts.size();i++){
             resultQuery.setParameter(paramNameComforts.get(i), comforts.get(i));
         }
+
 
         return resultQuery.getResultList();
     }
