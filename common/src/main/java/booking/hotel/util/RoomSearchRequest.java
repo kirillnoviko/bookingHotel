@@ -1,4 +1,4 @@
-package booking.hotel.domain;
+package booking.hotel.util;
 
 import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
 import io.swagger.annotations.ApiOperation;
@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class RoomSearchRequest {
 
-    private List<String> additionalComfort;
+    private List<Long> idComfort;
 
     private Long priceMin;
 
@@ -28,9 +29,9 @@ public class RoomSearchRequest {
 
     private Long ratingMax;
 
-    private Date dataOut;
+    private Timestamp dataOut;
 
-    private Date dataIn;
+    private Timestamp dataIn;
 
 
 

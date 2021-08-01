@@ -124,7 +124,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     private Order getBookingRowMapper(ResultSet rs, int i) throws SQLException {
         Order order =new Order();
         order.setId(rs.getLong(BookingColumn.ID));
-        order.setIdRoom(rs.getLong(BookingColumn.ID_ROOM));
+
         order.setDataCheckIn(rs.getTimestamp(BookingColumn.DATA_CHECK_IN));
         order.setDataCheckOut(rs.getTimestamp(BookingColumn.DATA_CHECK_OUT));
         order.setStatus(rs.getString(BookingColumn.STATUS));
@@ -141,7 +141,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     private MapSqlParameterSource generateBookingParamsMap(Order entity) {
 
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("idRoom", entity.getIdRoom());
+
         params.addValue("dataCheckIn", entity.getDataCheckIn());
         params.addValue("dataCheckOut", entity.getDataCheckOut());
         params.addValue("status", entity.getStatus());

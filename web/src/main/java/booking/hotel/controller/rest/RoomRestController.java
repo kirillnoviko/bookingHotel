@@ -1,10 +1,9 @@
 package booking.hotel.controller.rest;
 
 
-import booking.hotel.domain.RoomSearchRequest;
+import booking.hotel.repository.dataspring.RoomRepositoryData;
+import booking.hotel.util.RoomSearchRequest;
 import booking.hotel.domain.Room;
-import booking.hotel.domain.criteria.Criteria;
-import booking.hotel.domain.criteria.SearchCriteria;
 import booking.hotel.repository.RoomRepository;
 import booking.hotel.service.RoomProviderService;
 import io.swagger.annotations.*;
@@ -13,18 +12,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import booking.hotel.domain.criteria.SearchCriteria.*;
 @RestController
 @RequestMapping("/rest/rooms")
 @RequiredArgsConstructor
 public class RoomRestController {
 
-    private final RoomRepository roomRepository;
+    private final RoomRepositoryData roomRepositoryData;
     private final RoomProviderService roomProviderService;
 
     @GetMapping
     public List<Room> findAll() {
-        return roomRepository.findAll();
+        return null;
     }
 
 
@@ -40,7 +38,7 @@ public class RoomRestController {
     public List<Room> searchRoom( @ModelAttribute RoomSearchRequest request) {
 
 
-        return  roomProviderService.searchByAllParamsRoom(request);
+        return  roomProviderService.searchRoomByAllParams(request);
     }
 
 

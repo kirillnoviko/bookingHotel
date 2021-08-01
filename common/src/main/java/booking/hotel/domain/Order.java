@@ -1,6 +1,7 @@
 package booking.hotel.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,10 +9,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -26,9 +24,6 @@ public class Order {
 
     @Id
     private Long id;
-
-    @Column(name = "id_room")
-    private Long idRoom;
 
     @Column(name = "data_check_in")
     private Timestamp dataCheckIn;
@@ -56,6 +51,11 @@ public class Order {
 
     @Column(name = "rating_for_room")
     private Long ratingForRoom;
+
+    @ManyToOne
+    @JoinColumn(name = "id_room")
+    @JsonBackReference
+    private Room room;
 
     @Override
     public String toString() {

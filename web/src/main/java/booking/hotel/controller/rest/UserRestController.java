@@ -45,6 +45,7 @@ public class UserRestController {
     public User findOne(@RequestParam Long idUser) {
 
         return userRepositoryData.findById(idUser).get();
+
     }
 
 

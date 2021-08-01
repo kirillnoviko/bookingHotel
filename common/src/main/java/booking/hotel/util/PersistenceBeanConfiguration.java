@@ -1,4 +1,4 @@
-package booking.hotel.domain;
+package booking.hotel.util;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package booking.hotel;
 
 
 import booking.hotel.beans.ApplicationBeans;
-import booking.hotel.domain.PersistenceBeanConfiguration;
+import booking.hotel.util.PersistenceBeanConfiguration;
 import booking.hotel.beans.SecurityConfig;
 import booking.hotel.beans.SwaggerConfig;
 import booking.hotel.security.configuration.WebSecurityConfiguration;
