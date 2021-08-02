@@ -20,6 +20,9 @@ import java.util.Date;
 /*@EqualsAndHashCode(exclude = {
         "roles"
 })*/
+@EqualsAndHashCode(exclude = {
+        "room"
+})
 public class Order {
 
     @Id

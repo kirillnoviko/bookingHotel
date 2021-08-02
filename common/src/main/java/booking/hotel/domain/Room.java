@@ -47,7 +47,7 @@ public class Room {
     @JsonIgnoreProperties("room")
     private Set<Comfort> comforts = Collections.emptySet();
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<Order> orders = Collections.emptySet();
 

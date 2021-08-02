@@ -51,20 +51,16 @@ public class RoomRepositoryImpl implements RoomRepository {
 
 
     @Override
-    public List<Room> findByParamsRoom(RoomSearchRequest request) {
-        //1. Get Builder for Criteria object
-        Long minPriceRequest = request.getPriceMin();
-        Long maxPriceRequest = request.getPriceMax();
-        Long minRatingRequest = request.getRatingMin();
-        Long maxRatingRequest = request.getRatingMax();
-        String principlePlacementRequest = request.getPrincipleOfPlacement();
+    public List<Room> findByParamsRoom(Long minPriceRequest, Long maxPriceRequest,
+                                       Long minRatingRequest, Long maxRatingRequest, String principlePlacementRequest ) {
 
-        if(minPriceRequest == null && maxPriceRequest== null
+
+ /*       if(minPriceRequest == null && maxPriceRequest== null
                 && minRatingRequest == null && maxRatingRequest == null
                 && principlePlacementRequest ==null)
         {
             throw new NoParamsException("All params is null");
-        }
+        }*/
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Room> query = cb.createQuery(Room.class); //here select, where, orderBy, having
@@ -115,21 +111,21 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         TypedQuery<Room> resultQuery = entityManager.createQuery(query);
 
-        if (request.getPriceMin() != null) {
+        if (minPriceRequest != null) {
             resultQuery.setParameter(paramPriceMin, minPriceRequest);
         }
-        if (request.getPriceMax() != null) {
+        if (maxPriceRequest!= null) {
             resultQuery.setParameter(paramPriceMax, maxPriceRequest);
         }
 
-        if (request.getRatingMin() != null) {
+        if (minRatingRequest!= null) {
             resultQuery.setParameter(paramRatingMin, minRatingRequest);
         }
-        if (request.getRatingMax() != null) {
+        if (maxRatingRequest!= null) {
             resultQuery.setParameter(paramRatingMax, maxRatingRequest);
         }
 
-        if (request.getPrincipleOfPlacement() != null) {
+        if (principlePlacementRequest != null) {
             resultQuery.setParameter(paramPrincipleOfPlacement, principlePlacementRequest);
         }
 
@@ -195,38 +191,33 @@ public class RoomRepositoryImpl implements RoomRepository {
 
 
         List<ParameterExpression<Long>> paramRoomId = new ArrayList<>();
-        List<Expression<Long>> RoomId = new ArrayList<>();
+        List<Expression<Long>> roomId = new ArrayList<>();
 
         for(int i=0;i<rooms.size();i++){
             paramRoomId.add(cb.parameter(Long.class));
-            RoomId.add(root.get(Room_.id));
+            roomId.add(root.get(Room_.id));
         }
 
         List<Predicate> predicates = new ArrayList<>();
         for(int i=0;i<rooms.size();i++){
-            predicates.add(cb.equal(RoomId.get(i),paramRoomId.get(i)));
+            predicates.add(cb.equal(roomId.get(i),paramRoomId.get(i)));
         }
-
 
         query
                 .select(root)
                 .where(
                         cb.and(
-                                (cb.not(
-                                    (cb.and
-                                        ((cb.between(parameterDataIn,exprDataIn,exprDataOut)),
-                                        (cb.between(parameterDataOut,exprDataIn,exprDataOut)))
+                                (cb.between(parameterDataIn,exprDataIn,exprDataOut)),
+                                (cb.between(parameterDataOut,exprDataIn,exprDataOut)),
+                                (cb.or(predicates.toArray(new Predicate[predicates.size()])))
+                                )
+                        );
 
-                                    )
-                                )),
-                                ( cb.or(predicates.toArray(new Predicate[predicates.size()])))
-                        )
-                );
 
 
         TypedQuery<Room> resultQuery = entityManager.createQuery(query);
         for(int i=0;i<rooms.size();i++){
-            resultQuery.setParameter(String.valueOf(paramRoomId.get(i)), RoomId.get(i));
+            resultQuery.setParameter(paramRoomId.get(i), rooms.get(i).getId());
         }
 
         resultQuery.setParameter(parameterDataIn,dataIn);

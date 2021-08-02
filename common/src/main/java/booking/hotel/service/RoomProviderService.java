@@ -1,5 +1,6 @@
 package booking.hotel.service;
 
+import booking.hotel.domain.Comfort;
 import booking.hotel.domain.Room;
 import booking.hotel.exception.NoParamsException;
 import booking.hotel.exception.NoSuchEntityException;
@@ -31,51 +32,78 @@ public class RoomProviderService {
         List<Room> roomWithParams = new ArrayList<>();
         List<Room> roomAdditionalComforts = new ArrayList<>();
 
-            if(!request.getIdComfort().isEmpty()){
-                for(Long id : request.getIdComfort())
+
+        Long minPrice=request.getPriceMin();
+        Long maxPrice=request.getPriceMax();
+        Long minRating=request.getRatingMin();
+        Long maxRating=request.getRatingMax();
+        String principleOfPlacement=request.getPrincipleOfPlacement();
+
+
+        if(!request.getIdComfort().isEmpty()) {
+
+            roomAdditionalComforts = roomRepositoryData.findByListComfortsRoom(request.getIdComfort());
+            //TODO exception for no suchID, list null
+        }
+        else {
+            roomAdditionalComforts = roomRepositoryData.findAll();
+        }
+
+        if(minPrice!=null || maxPrice!=null || minRating!=null
+                || maxRating!=null  || principleOfPlacement!=null){
+
+            roomWithParams = roomRepositoryData.findByParamsRoom(minPrice,maxPrice,minRating,maxRating,principleOfPlacement);
+            //TODO exception list null
+        }
+        else {
+            roomWithParams = roomRepositoryData.findAll();
+        }
+
+
+        if(!roomAdditionalComforts.equals(roomWithParams)){
+            for(Room room : roomAdditionalComforts){
+                for(Room room1: roomWithParams)
                 {
-                    try {
-                        comfortRepositoryData.findById(id).get();
-                    }
-                    catch (RuntimeException E){
-                        throw new NoParamsException("no Such ID:" + id);
+                    if(room.getId()==room1.getId()){
+                        resultRooms.add(room);
+                        break;
                     }
                 }
-                roomAdditionalComforts = roomRepositoryData.findByListComfortsRoom(request.getIdComfort());
             }
-
-
-        try {
-            roomWithParams = roomRepositoryData.findByParamsRoom(request);
-        }
-        catch (NoParamsException E){
-            resultRooms=searchRoomByData(roomAdditionalComforts,request.getDataIn(),request.getDataOut());
-        }
-
-        if(roomAdditionalComforts.isEmpty() || roomWithParams.isEmpty()){
-            throw  new NoSuchEntityException("rooms with such parameters were not found");
-        }
-
-
-        for(Room room : roomAdditionalComforts){
-           for(Room room1: roomWithParams)
-           {
-               if(room.getId()==room1.getId()){
-                    resultRooms.add(room);
-                    break;
-               }
-           }
+        }else{
+            return searchRoomByData(roomWithParams,request.getDataIn(),request.getDataOut());
         }
 
         resultRooms=searchRoomByData(resultRooms,request.getDataIn(),request.getDataOut());
-
+        //TODO exception
 
         return resultRooms;
+
     }
     public List<Room> searchRoomByData(List<Room> rooms, Timestamp dataIn, Timestamp dataOut){
+        List<Room> bookingRooms = new ArrayList<>();
 
 
-        return null;
+        if(dataIn==null || dataOut == null){
+            //TODO no such data
+        }else if(dataIn==null && dataOut ==null ){
+                return rooms;
+        }else{
+                bookingRooms = roomRepositoryData.findByData(rooms,dataIn,dataOut);
+        }
+
+
+        for(Room bookingRoom : bookingRooms){
+            for(Room room : rooms){
+                if(room.getId()==bookingRoom.getId()){
+                    rooms.remove(room);
+                    break;
+                }
+            }
+        }
+
+
+        return rooms;
     }
 
 }

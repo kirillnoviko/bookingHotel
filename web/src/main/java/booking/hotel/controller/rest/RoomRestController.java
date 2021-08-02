@@ -35,10 +35,11 @@ public class RoomRestController {
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })*/
     @PostMapping("/search")
-    public List<Room> searchRoom( @ModelAttribute RoomSearchRequest request) {
+    public List<Room> searchRoom(@RequestBody RoomSearchRequest request) {
 
 
         return  roomProviderService.searchRoomByAllParams(request);
+
     }
 
 
