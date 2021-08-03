@@ -12,7 +12,11 @@ import booking.hotel.util.RoomSearchRequest;
 import booking.hotel.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -103,4 +107,11 @@ public class RoomProviderService {
         return rooms;
     }
 
+
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
+    public void deleteWithDependencies(Long id){
+        roomRepositoryData.deleteDependenciesComforts(id);
+        roomRepositoryData.delete(id);
+    }
 }

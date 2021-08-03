@@ -25,8 +25,6 @@ import java.util.Optional;
 
 public interface RoomRepositoryData extends JpaRepository<Room, Long>,CrudRepository<Room,Long>, RoomRepository {
 
-
-
     List<Room> findByDeletedIsFalse();
 
     List<Room> findAll();
@@ -43,12 +41,12 @@ public interface RoomRepositoryData extends JpaRepository<Room, Long>,CrudReposi
     int delete(@Param("idRoom") Long idRoom);
 
 
-/*
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
     @Modifying
-    @Query(value = "")
-    int save(@Param("idRoom") Long idRoom);
-*/
+    @Query(value = "delete  from comforts_rooms where id_room= :idRoom",nativeQuery = true)
+    int deleteDependenciesComforts(@Param("idRoom") Long idRoom);
+
+
 
 
 

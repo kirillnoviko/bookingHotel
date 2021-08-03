@@ -54,9 +54,7 @@ public class RoomRestController {
     })
     @DeleteMapping()
     public void delete(@RequestParam("idRoom") Long id ) {
-
-        roomRepositoryData.delete(id);
-
+        roomProviderService.deleteWithDependencies(id);
     }
 
 
