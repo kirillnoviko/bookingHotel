@@ -22,9 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomProviderService {
     private final RoomRepositoryData roomRepositoryData;
-    private final ComfortRepositoryData  comfortRepositoryData;
-    private  final OrderRepositoryData orderRepositoryData;
-
 
     public List<Room> searchRoomByAllParams(RoomSearchRequest request) throws RuntimeException{
 
@@ -46,7 +43,7 @@ public class RoomProviderService {
             //TODO exception for no suchID, list null
         }
         else {
-            roomAdditionalComforts = roomRepositoryData.findAll();
+            roomAdditionalComforts = roomRepositoryData.findByDeletedIsFalse();
         }
 
         if(minPrice!=null || maxPrice!=null || minRating!=null
@@ -56,7 +53,7 @@ public class RoomProviderService {
             //TODO exception list null
         }
         else {
-            roomWithParams = roomRepositoryData.findAll();
+            roomWithParams = roomRepositoryData.findByDeletedIsFalse();
         }
 
 

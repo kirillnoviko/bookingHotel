@@ -45,9 +45,11 @@ public class RoomRepositoryImpl implements RoomRepository {
     private EntityManager entityManager;
 
 
+/*
     @Autowired
     @Qualifier("sessionFactory")
     private SessionFactory sessionFactory;
+*/
 
 
     @Override
@@ -136,9 +138,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Override
     public List<Room> findByListComfortsRoom(List<Long> comforts){
 
-
-
-
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Room> query = cb.createQuery(Room.class); //here select, where, orderBy, having
         Root<Room> root = query.from(Room.class); //here params  select * from m_users -> mapping
@@ -226,47 +225,4 @@ public class RoomRepositoryImpl implements RoomRepository {
         return resultQuery.getResultList();
     }
 
-    @Override
-    public void saveRoomAdditionalComfort(Room room, List<Comfort> roomComfort) {
-        final String createQuery = "insert into comforts_rooms (id,id_room, id_comfort) " +
-                "values (:additionalComfortId, :roomId);";
-
-        List<MapSqlParameterSource> batchParams = new ArrayList<>();
-
-        for (Comfort additional : roomComfort) {
-
-            MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("additionalComfortId", additional.getId());
-            params.addValue("roomId", room.getId());
-            batchParams.add(params);
-
-        }
-
-        namedParameterJdbcTemplate.batchUpdate(createQuery, batchParams.toArray(new MapSqlParameterSource[0]));
-
-    }
-
-
-    private Room getRoomRowMapper(ResultSet rs, int i) throws SQLException {
-        Room room = new Room();
-        room.setId(rs.getLong(RoomColumn.ID));
-        room.setName(rs.getString(RoomColumn.NAME));
-        room.setPrice(rs.getLong(RoomColumn.PRICE));
-        room.setPrincipleOfPlacement(rs.getString(RoomColumn.PRINCIPLE_OF_PLACEMENT));
-        room.setNumberRoom(rs.getString(RoomColumn.NUMBER_ROOM));
-        room.setRatingAverage(rs.getLong(RoomColumn.RATING_AVERAGE));
-        return room;
-    }
-
-
-    private MapSqlParameterSource generateRoomParamsMap(Room entity) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id",entity.getId());
-        params.addValue("name", entity.getName());
-        params.addValue("price", entity.getPrice());
-        params.addValue("principleOfPlacement", entity.getPrincipleOfPlacement());
-        params.addValue("numberRoom", entity.getNumberRoom());
-        params.addValue("ratingAverage", entity.getRatingAverage());
-        return params;
-    }
 }

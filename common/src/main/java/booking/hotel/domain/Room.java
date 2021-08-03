@@ -23,25 +23,26 @@ import java.util.Set;
 public class Room {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String name;
 
-    @Column
-    private Long price;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column = @Column(name = "name")),
+            @AttributeOverride(name = "price", column = @Column(name = "price")),
+            @AttributeOverride(name = "principleOfPlacement", column = @Column(name = "principle_of_placement")),
+            @AttributeOverride(name = "comfortLevel", column = @Column(name = "comfort_level")),
+                    @AttributeOverride(name = "numberRoom", column = @Column(name = "number_room"))
+    })
+    private RoomGeneralInfo userSystemInfo;
 
-    @Column (name = "principle_of_placement")
-    private String principleOfPlacement;
-
-    @Column (name = "comfort_level")
-    private String comfortLevel;
-
-    @Column (name = "number_room")
-    private String numberRoom;
 
     @Column (name = "rating_average")
     private Long ratingAverage;
+
+    @Column (name = "is_deleted")
+    private boolean deleted;
 
     @ManyToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("room")

@@ -18,8 +18,6 @@ public interface RoomRepository {
 
     List<Room> findByListComfortsRoom(List<Long> comforts);
 
-    public void saveRoomAdditionalComfort(Room room, List<Comfort> userRoles);
-
     List<Room> findByData(List<Room> rooms, Timestamp dataIn, Timestamp dataOut);
 
 
