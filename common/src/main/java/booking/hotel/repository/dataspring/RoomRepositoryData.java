@@ -47,6 +47,11 @@ public interface RoomRepositoryData extends JpaRepository<Room, Long>,CrudReposi
     int deleteDependenciesComforts(@Param("idRoom") Long idRoom);
 
 
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
+    @Modifying
+    @Query(value = "insert into comforts_rooms(id_room, id_comfort) values (:id_room, :id_comfort)", nativeQuery = true)
+    int createSomeRow(@Param("id_room") Long idUser, @Param("id_comfort") Long idRole);
+
 
 
 

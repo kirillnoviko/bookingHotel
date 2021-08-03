@@ -64,21 +64,14 @@ public class RoomRestController {
             @ApiResponse(code = 500, message = "Internal server error ")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "idRoom", dataType = "string", paramType = "query", value = "IdRoom for update"),
-
+            @ApiImplicitParam(name = "idRoom", dataType = "string", paramType = "query", value = "IdRoom for update")
     })
     @PostMapping()
-    public Room saveRoom(@ModelAttribute RoomGeneralInfo roomInfo,@RequestParam Long idRoom) {
+    public Room saveRoom(@ModelAttribute RoomGeneralInfo roomInfo,@RequestParam Long idRoom, @RequestBody List<Long> comforts) {
 
-        Room room = new Room();
+     return roomProviderService.saveOrUpdateWithAddedComforts(idRoom,roomInfo,comforts);
 
-        if(idRoom!=null){
-            room=roomRepositoryData.findById(idRoom).get();
-        }
 
-        room.setUserSystemInfo(roomInfo);
-        room.setRatingAverage(5l);
-        return  roomRepositoryData.save(room);
 
     }
 

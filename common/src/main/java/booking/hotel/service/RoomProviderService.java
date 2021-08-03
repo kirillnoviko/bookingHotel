@@ -2,6 +2,8 @@ package booking.hotel.service;
 
 import booking.hotel.domain.Comfort;
 import booking.hotel.domain.Room;
+import booking.hotel.domain.RoomGeneralInfo;
+import booking.hotel.domain.RoomGeneralInfo_;
 import booking.hotel.exception.NoParamsException;
 import booking.hotel.exception.NoSuchEntityException;
 import booking.hotel.repository.ComfortRepository;
@@ -113,5 +115,44 @@ public class RoomProviderService {
     public void deleteWithDependencies(Long id){
         roomRepositoryData.deleteDependenciesComforts(id);
         roomRepositoryData.delete(id);
+    }
+
+    public Room saveOrUpdateWithAddedComforts(Long id, RoomGeneralInfo roomGeneralInfo, List<Long> comforts){
+
+        Room room = new Room();
+
+        if(id!=null){
+            room=roomRepositoryData.findById(id).get();
+
+            if(roomGeneralInfo.getName()!=null){
+                room.getUserSystemInfo().setName(roomGeneralInfo.getName());
+            }
+            if(roomGeneralInfo.getPrice()!=null){
+                room.getUserSystemInfo().setPrice(roomGeneralInfo.getPrice());
+            }
+            if(roomGeneralInfo.getNumberRoom()!=null){
+                room.getUserSystemInfo().setNumberRoom(roomGeneralInfo.getNumberRoom());
+            }
+            if(roomGeneralInfo.getPrincipleOfPlacement()!=null){
+                room.getUserSystemInfo().setPrincipleOfPlacement(roomGeneralInfo.getPrincipleOfPlacement());
+            }
+            if(roomGeneralInfo.getComfortLevel()!=null){
+                room.getUserSystemInfo().setComfortLevel(roomGeneralInfo.getComfortLevel());
+            }
+
+        }else{
+            room.setUserSystemInfo(roomGeneralInfo);
+            room.setRatingAverage(5l);
+        }
+
+        room = roomRepositoryData.save(room);
+
+        if (comforts != null) {
+            for(Long comfort : comforts){
+                roomRepositoryData.createSomeRow(room.getId(),comfort);
+            }
+        }
+
+        return  room;
     }
 }
