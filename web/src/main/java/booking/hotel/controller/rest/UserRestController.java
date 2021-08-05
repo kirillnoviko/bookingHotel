@@ -65,7 +65,6 @@ public class UserRestController {
 
 
 
-
 /*    @ApiImplicitParams({
             @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header",
                     value = "Secret header for secret functionality!! Hoho")

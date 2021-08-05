@@ -47,7 +47,7 @@ public class RegistrationController {
             List<Role> rolesListResult =validationRoles.checkRoles(createRequest.getRoles());
 
             User newUser = new User();
-            newUser.setGmail(createRequest.getGmail());
+         /*   newUser.setGmail(createRequest.getGmail());
             newUser.setName(createRequest.getName());
             newUser.setSurname(createRequest.getSurname());
             newUser.setPassword(createRequest.getPassword());
@@ -56,7 +56,7 @@ public class RegistrationController {
             newUser.setRatingAverage(5L);
             newUser.setBirthDate(new Timestamp(10000));
             //newUser.setCreated(new Timestamp(10000));
-            //newUser.setChanged(new Timestamp(10000));
+            //newUser.setChanged(new Timestamp(10000));*/
 
             validationUser.checkUser(newUser);
             User savedUser = userRepositoryData.save(newUser);

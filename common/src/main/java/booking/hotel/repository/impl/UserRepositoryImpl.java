@@ -32,8 +32,58 @@ public class UserRepositoryImpl implements UserRepository {
     @Qualifier("sessionFactory")
     private SessionFactory sessionFactory;
 
+    @Override
+    public List<User> findAll() {
+        return null;
+    }
 
     @Override
+    public User findOne(Long id) {
+        return null;
+    }
+
+    @Override
+    public User save(User entity) {
+        return null;
+    }
+
+    @Override
+    public void batchInsert(List<User> entities) {
+
+    }
+
+    @Override
+    public User update(User entity) {
+        return null;
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
+
+    @Override
+    public List<User> findUsersByQuery(Integer limit, String query) {
+        return null;
+    }
+
+    @Override
+    public void saveUserRoles(User user, List<Role> userRoles) {
+
+    }
+
+    @Override
+    public User findByLoginAndPassword(String login, String password) {
+        return null;
+    }
+
+    @Override
+    public User findByLogin(String login) {
+        return null;
+    }
+
+
+  /*  @Override
     public List<User> findAll() {
         //return namedParameterJdbcTemplate.query("select * from users order by id desc", this::getUserRowMapper);
 
@@ -47,10 +97,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findOne(Long id) {
 
-      /*  final String findOneWithNameParam = "select * from users where id = :idUser ";
+      *//*  final String findOneWithNameParam = "select * from users where id = :idUser ";
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("idUser", id);
-        return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getUserRowMapper);*/
+        return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getUserRowMapper);*//*
 
         try (Session session = sessionFactory.openSession()) {
             return session.find(User.class,id);
@@ -162,8 +212,8 @@ public class UserRepositoryImpl implements UserRepository {
 
         return Optional.of(namedParameterJdbcTemplate.queryForObject(searchQuery, params, this::getUserRowMapper)).get();
     }
-
-    private User getUserRowMapper(ResultSet rs, int i) throws SQLException {
+*/
+/*    private User getUserRowMapper(ResultSet rs, int i) throws SQLException {
         User user = new User();
         user.setId(rs.getLong(UserColumn.ID));
         user.setName(rs.getString(UserColumn.NAME));
@@ -190,5 +240,5 @@ public class UserRepositoryImpl implements UserRepository {
         params.addValue("ratingAverage", 1l);
 
         return params;
-    }
+    }*/
 }

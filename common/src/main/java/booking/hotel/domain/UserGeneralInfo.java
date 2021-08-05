@@ -14,15 +14,18 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserSystemInfo {
+public class UserGeneralInfo {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp created;
+    String name;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp changed;
+    String surname;
 
-    private boolean isBanned;
+    Timestamp birthDate;
 
-    private boolean isDeleted;
+    String gmail;
+
+    String password;
+
+
+
 }

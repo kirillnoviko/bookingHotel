@@ -1,12 +1,10 @@
 package booking.hotel.controller.rest;
 
 
-import booking.hotel.domain.RoomGeneralInfo;
-import booking.hotel.domain.UserSystemInfo;
+import booking.hotel.domain.GeneralInfoRoom;
 import booking.hotel.repository.dataspring.RoomRepositoryData;
 import booking.hotel.util.RoomSearchRequest;
 import booking.hotel.domain.Room;
-import booking.hotel.repository.RoomRepository;
 import booking.hotel.service.RoomProviderService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +65,7 @@ public class RoomRestController {
             @ApiImplicitParam(name = "idRoom", dataType = "string", paramType = "query", value = "IdRoom for update")
     })
     @PostMapping()
-    public Room saveRoom(@ModelAttribute RoomGeneralInfo roomInfo,@RequestParam Long idRoom, @RequestBody List<Long> comforts) {
+    public Room saveRoom(@ModelAttribute GeneralInfoRoom roomInfo, @RequestParam Long idRoom, @RequestBody List<Long> comforts) {
 
      return roomProviderService.saveOrUpdateWithAddedComforts(idRoom,roomInfo,comforts);
 

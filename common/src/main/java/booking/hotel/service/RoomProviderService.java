@@ -1,17 +1,9 @@
 package booking.hotel.service;
 
-import booking.hotel.domain.Comfort;
+import booking.hotel.domain.GeneralInfoRoom;
 import booking.hotel.domain.Room;
-import booking.hotel.domain.RoomGeneralInfo;
-import booking.hotel.domain.RoomGeneralInfo_;
-import booking.hotel.exception.NoParamsException;
-import booking.hotel.exception.NoSuchEntityException;
-import booking.hotel.repository.ComfortRepository;
-import booking.hotel.repository.dataspring.ComfortRepositoryData;
-import booking.hotel.repository.dataspring.OrderRepositoryData;
 import booking.hotel.repository.dataspring.RoomRepositoryData;
 import booking.hotel.util.RoomSearchRequest;
-import booking.hotel.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -19,7 +11,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,31 +108,31 @@ public class RoomProviderService {
         roomRepositoryData.delete(id);
     }
 
-    public Room saveOrUpdateWithAddedComforts(Long id, RoomGeneralInfo roomGeneralInfo, List<Long> comforts){
+    public Room saveOrUpdateWithAddedComforts(Long id, GeneralInfoRoom generalInfoRoom, List<Long> comforts){
 
         Room room = new Room();
 
         if(id!=null){
             room=roomRepositoryData.findById(id).get();
 
-            if(roomGeneralInfo.getName()!=null){
-                room.getUserSystemInfo().setName(roomGeneralInfo.getName());
+            if(generalInfoRoom.getName()!=null){
+                room.getGeneralInfoRoom().setName(generalInfoRoom.getName());
             }
-            if(roomGeneralInfo.getPrice()!=null){
-                room.getUserSystemInfo().setPrice(roomGeneralInfo.getPrice());
+            if(generalInfoRoom.getPrice()!=null){
+                room.getGeneralInfoRoom().setPrice(generalInfoRoom.getPrice());
             }
-            if(roomGeneralInfo.getNumberRoom()!=null){
-                room.getUserSystemInfo().setNumberRoom(roomGeneralInfo.getNumberRoom());
+            if(generalInfoRoom.getNumberRoom()!=null){
+                room.getGeneralInfoRoom().setNumberRoom(generalInfoRoom.getNumberRoom());
             }
-            if(roomGeneralInfo.getPrincipleOfPlacement()!=null){
-                room.getUserSystemInfo().setPrincipleOfPlacement(roomGeneralInfo.getPrincipleOfPlacement());
+            if(generalInfoRoom.getPrincipleOfPlacement()!=null){
+                room.getGeneralInfoRoom().setPrincipleOfPlacement(generalInfoRoom.getPrincipleOfPlacement());
             }
-            if(roomGeneralInfo.getComfortLevel()!=null){
-                room.getUserSystemInfo().setComfortLevel(roomGeneralInfo.getComfortLevel());
+            if(generalInfoRoom.getComfortLevel()!=null){
+                room.getGeneralInfoRoom().setComfortLevel(generalInfoRoom.getComfortLevel());
             }
 
         }else{
-            room.setUserSystemInfo(roomGeneralInfo);
+            room.setGeneralInfoRoom(generalInfoRoom);
             room.setRatingAverage(5l);
         }
 

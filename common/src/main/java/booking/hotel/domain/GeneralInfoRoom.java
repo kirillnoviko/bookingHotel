@@ -1,18 +1,15 @@
 package booking.hotel.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Embeddable
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class RoomGeneralInfo {
+@Getter
+@Setter
+public class GeneralInfoRoom implements Serializable {
     private String name;
 
     private Long price;

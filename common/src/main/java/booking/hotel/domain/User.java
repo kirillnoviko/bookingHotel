@@ -1,5 +1,6 @@
 package booking.hotel.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,8 +20,8 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {
         "roles"
 })
-@NamedQuery(name = "User_findByLogin",
-        query = "select u from User  u where u.gmail = :gmail")
+/*@NamedQuery(name = "User_findByLogin",
+        query = "select u from User  u where gmail= :gmail")*/
 public class User {
 
     @Id
@@ -28,32 +29,32 @@ public class User {
     private Long id;
 
     @Column
-    private String name;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp created;
 
     @Column
-    private String surname;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp changed;
 
-    @Column (name = "birth_date")
-    private Timestamp birthDate;
+    @Column (name = "is_banned")
+    private boolean isBanned;
 
-    @Column
-    private String gmail;
+    @Column (name = "is_deleted")
+    private boolean isDeleted;
 
-    @Column
-    private String password;
-
+    @Column (name = "rating_average")
+    private Long ratingAverage;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "isBanned", column = @Column(name = "is_banned")),
-            @AttributeOverride(name = "isDeleted", column = @Column(name = "is_deleted")),
-            @AttributeOverride(name = "created", column = @Column(name = "created")),
-            @AttributeOverride(name = "changed", column = @Column(name = "changed"))
-    })
-    private UserSystemInfo userSystemInfo;
+            @AttributeOverride(name = "name", column = @Column(name = "name")),
+            @AttributeOverride(name = "surname", column = @Column(name = "surname")),
+            @AttributeOverride(name = "birthDate", column = @Column(name = "birth_date")),
+            @AttributeOverride(name = "gmail", column = @Column(name = "gmail")),
+            @AttributeOverride(name = "password", column = @Column(name = "password"))
 
-    @Column(name = "rating_average")
-    private Long ratingAverage;
+    })
+    private UserGeneralInfo userGeneralInfo;
 
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("users")

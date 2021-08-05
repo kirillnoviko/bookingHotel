@@ -4,25 +4,18 @@ package booking.hotel.repository.impl;
 import booking.hotel.domain.*;
 
 import booking.hotel.domain.Order;
-import booking.hotel.exception.NoParamsException;
 import booking.hotel.repository.ComfortRepository;
-import booking.hotel.repository.column.RoomColumn;
 import booking.hotel.repository.RoomRepository;
 
-import booking.hotel.util.RoomSearchRequest;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -75,12 +68,11 @@ public class RoomRepositoryImpl implements RoomRepository {
         ParameterExpression<String> paramPrincipleOfPlacement = cb.parameter(String.class);
         /*Provide access to fields in class that mapped to columns*/
 
-        Expression<Long> priceMin = root.get(Room_.price);
-        Expression<Long> priceMax = root.get(Room_.price);
+        Expression<Long> priceMin = root.get(Room_.generalInfoRoom).get(GeneralInfoRoom_.price);
+        Expression<Long> priceMax = root.get(Room_.generalInfoRoom).get(GeneralInfoRoom_.price);
         Expression<Long> ratingMin = root.get(Room_.ratingAverage);
         Expression<Long> ratingMax = root.get(Room_.ratingAverage);
-        Expression<String> principleOfPlacement = root.get(Room_.principleOfPlacement);
-
+        Expression<String> principleOfPlacement = root.get(Room_.generalInfoRoom).get(GeneralInfoRoom_.principleOfPlacement);
 
         List<Predicate> predicates = new ArrayList<>();
         if (minPriceRequest != null) {
@@ -108,7 +100,6 @@ public class RoomRepositoryImpl implements RoomRepository {
                 .where(
                         cb.and(cb.and(predicates.toArray(new Predicate[predicates.size()])))
                 );
-
 
 
         TypedQuery<Room> resultQuery = entityManager.createQuery(query);

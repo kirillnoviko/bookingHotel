@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -22,18 +23,23 @@ import java.util.Optional;
 public interface UserRepositoryData extends JpaRepository<User, Long>  {
 
 
-/*
+
     @Cacheable("users")
     List<User> findByIsBannedFalseAndIsDeletedFalse();
-*/
 
-
-    @Cacheable("users")
     Optional<User> findById(Long id);
 
-    Optional<User> findByGmailAndName(String gmail, String name);
+    //Optional<User> findByGmailAndName(String gmail, String name);
 
-    Optional<User> findByGmail(String gmail);
+    @Query(value = "select * from users  where gmail = :gmail ", nativeQuery = true)
+    Optional<User>  findByGmail(String gmail);
+
+
+
+/*    @Transactional
+    @Modifying
+    @Query(value = "update User set ")
+    int delete(@Param("idUser") Long idUser);*/
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
     User save(User entity);

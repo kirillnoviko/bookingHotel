@@ -20,6 +20,8 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {
         "comforts"
 })
+/*@NamedQuery(name = "User_findByLogin",
+        query = "select r from Room  r where r.generalInfoRoom.gmail = :gmail")*/
 public class Room {
 
     @Id
@@ -35,7 +37,7 @@ public class Room {
             @AttributeOverride(name = "comfortLevel", column = @Column(name = "comfort_level")),
                     @AttributeOverride(name = "numberRoom", column = @Column(name = "number_room"))
     })
-    private RoomGeneralInfo userSystemInfo;
+    private GeneralInfoRoom generalInfoRoom;
 
 
     @Column (name = "rating_average")
