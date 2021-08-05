@@ -23,6 +23,7 @@ public class RoomRestController {
     @ApiOperation(value = "show all rooms")
     @GetMapping()
     public List<Room> findAll() {
+        System.out.println("in rest controller");
         return roomRepositoryData.findByDeletedIsFalse();
     }
 

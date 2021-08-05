@@ -29,9 +29,7 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
 
     Optional<User> findById(Long id);
 
-    //Optional<User> findByGmailAndName(String gmail, String name);
-
-    @Query(value = "select * from users  where gmail = :gmail ", nativeQuery = true)
+    @Query(value = "select * from  users  where gmail = :gmail ", nativeQuery = true)
     Optional<User>  findByGmail(String gmail);
 
 

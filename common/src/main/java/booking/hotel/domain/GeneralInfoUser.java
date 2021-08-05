@@ -14,12 +14,13 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserGeneralInfo {
+public class GeneralInfoUser {
 
     String name;
 
     String surname;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     Timestamp birthDate;
 
     String gmail;

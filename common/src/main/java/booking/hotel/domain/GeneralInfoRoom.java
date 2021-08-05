@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class GeneralInfoRoom implements Serializable {
+
     private String name;
 
     private Long price;

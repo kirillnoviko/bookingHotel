@@ -20,10 +20,12 @@ public class ApplicationBeans {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("users");
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("users","rooms");
         cacheManager.setCaffeine(cacheProperties());
         return cacheManager;
     }
+
+
 
     public Caffeine<Object, Object> cacheProperties() {
         return Caffeine.newBuilder()

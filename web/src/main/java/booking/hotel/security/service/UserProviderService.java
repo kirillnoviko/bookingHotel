@@ -29,8 +29,8 @@ public class UserProviderService implements UserDetailsService {
             if (searchResult.isPresent()) {
                 User user = searchResult.get();
                 return new org.springframework.security.core.userdetails.User(
-                        user.getUserGeneralInfo().getGmail(),
-                        user.getUserGeneralInfo().getPassword(),
+                        user.getGeneralInfoUser().getGmail(),
+                        user.getGeneralInfoUser().getPassword(),
 //                      ["ROLE_USER", "ROLE_ADMIN"]
                         AuthorityUtils.commaSeparatedStringToAuthorityList(roleRepository.getUserRoles(user).stream().map(Role::getRoleName).collect(Collectors.joining(",")))
                 );

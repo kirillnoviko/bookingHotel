@@ -2,6 +2,7 @@ package booking.hotel.repository.dataspring;
 
 import booking.hotel.domain.Room;
 import booking.hotel.repository.RoomRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,18 +16,18 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-//@Cacheable("rooms")
+@Cacheable("rooms")
 public interface RoomRepositoryData extends JpaRepository<Room, Long>,CrudRepository<Room,Long>, RoomRepository {
 
+    @Cacheable("rooms")
     List<Room> findByDeletedIsFalse();
 
-    //List<Room>  findByGeneralInfoRoomGmail();
-    //@Cacheable("rooms")
+    @Cacheable("rooms")
     List<Room> findAll();
 
-    //Room findByRoomGeneralInfoGmail(String gmail);
 
     Optional<Room> findByIdAndDeletedIsFalse(Long id);
+
 
     Optional<Room> findById(Long id);
 

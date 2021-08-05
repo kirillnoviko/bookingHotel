@@ -1,7 +1,7 @@
 package booking.hotel.repository.impl;
 
 import booking.hotel.domain.Order;
-import booking.hotel.repository.column.BookingColumn;
+
 import booking.hotel.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
@@ -123,18 +123,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     private Order getBookingRowMapper(ResultSet rs, int i) throws SQLException {
         Order order =new Order();
-        order.setId(rs.getLong(BookingColumn.ID));
-
-        order.setDataCheckIn(rs.getTimestamp(BookingColumn.DATA_CHECK_IN));
-        order.setDataCheckOut(rs.getTimestamp(BookingColumn.DATA_CHECK_OUT));
-        order.setStatus(rs.getString(BookingColumn.STATUS));
-        order.setIdUser(rs.getLong(BookingColumn.ID_USER));
-        order.setCreated(rs.getTimestamp(BookingColumn.CREATED));
-        order.setChanged(rs.getTimestamp(BookingColumn.CHANGED));
-        order.setGeneralPrice(rs.getLong(BookingColumn.GENERAL_PRICE));
-        order.setRatingForClient(rs.getLong(BookingColumn.RATING_FOR_CLIENT));
-        order.setRatingForRoom(rs.getLong(BookingColumn.RATING_FOR_ROOM));
-
+       
         return order;
     }
 

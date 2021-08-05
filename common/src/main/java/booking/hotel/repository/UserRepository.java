@@ -5,7 +5,7 @@ import booking.hotel.domain.User;
 
 import java.util.List;
 
-public interface UserRepository extends CrudOperations<Long, User>{
+public interface UserRepository {
 
 
     List<User> findUsersByQuery(Integer limit, String query);

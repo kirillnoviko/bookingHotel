@@ -54,7 +54,7 @@ public class User {
             @AttributeOverride(name = "password", column = @Column(name = "password"))
 
     })
-    private UserGeneralInfo userGeneralInfo;
+    private GeneralInfoUser generalInfoUser;
 
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("users")
