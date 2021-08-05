@@ -101,13 +101,13 @@ public class RoomProviderService {
     }
 
 
-
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
     public void deleteWithDependencies(Long id){
         roomRepositoryData.deleteDependenciesComforts(id);
         roomRepositoryData.delete(id);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
     public Room saveOrUpdateWithAddedComforts(Long id, GeneralInfoRoom generalInfoRoom, List<Long> comforts){
 
         Room room = new Room();

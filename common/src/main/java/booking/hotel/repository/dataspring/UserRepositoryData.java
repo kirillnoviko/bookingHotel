@@ -32,16 +32,17 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
     @Query(value = "select * from  users  where gmail = :gmail ", nativeQuery = true)
     Optional<User>  findByGmail(String gmail);
 
-
-
-/*    @Transactional
-    @Modifying
-    @Query(value = "update User set ")
-    int delete(@Param("idUser") Long idUser);*/
+    void deleteById(Long id);
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
-    User save(User entity);
+    @Modifying
+    @Query(value = "update User set isDeleted = true where id = :idUser")
+    int delete(@Param("idUser") Long idUser);
 
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
+    @Modifying
+    @Query(value = "delete  from user_roles where user_id= :idUser",nativeQuery = true)
+    int deleteDependenciesRoles(@Param("idUser") Long idUser);
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
     @Modifying

@@ -1,9 +1,13 @@
 package booking.hotel.controller.rest;
 
 import booking.hotel.beans.SecurityConfig;
+import booking.hotel.domain.GeneralInfoRoom;
+import booking.hotel.domain.GeneralInfoUser;
+import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 
+import booking.hotel.service.UserProviderService;
 import booking.hotel.util.PrincipalUtils;
 import io.swagger.annotations.*;
 
@@ -21,28 +25,25 @@ import java.util.List;
 public class UserRestController {
 
     private final UserRepositoryData userRepositoryData;
+    private final UserProviderService userProviderService;
     private final SecurityConfig securityConfig;
     private final PrincipalUtils principalUtils;
     private final SecurityConfig config;
 
 
 
-
+    @ApiOperation(value = "show all users ")
     @GetMapping
     public List<User> findAll() {
         System.out.println("In rest controller");
         return userRepositoryData.findByIsBannedFalseAndIsDeletedFalse();
     }
 
+    @ApiOperation(value = "find user by id")
+    @GetMapping("/{idUser}")
+    public User findOne(@PathVariable("idUser") Long id) {
 
-   @ApiImplicitParams({
-            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for search user"),
-
-    })
-    @GetMapping("/findOne")
-    public User findOne(@RequestParam Long idUser) {
-
-        return userRepositoryData.findById(idUser).get();
+        return userRepositoryData.findById(id).get();
 
     }
 
@@ -58,65 +59,38 @@ public class UserRestController {
 
 
 
-
-
-
-
-
-/*    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header",
-                    value = "Secret header for secret functionality!! Hoho")
-    })
-    @GetMapping("/secret")
-    public List<User> securedFindAll(HttpServletRequest request) {
-        String secretKey = request.getHeader("Secret-Key");
-        if (StringUtils.isNotBlank(secretKey) && secretKey.equals(securityConfig.getSecretKey())) {
-            return userRepositoryData.findAll();
-        } else {
-            //throw new UnauthorizedException();
-            return Collections.emptyList();
-        }
-    }*/
-
-
-/*
+    @ApiOperation(value = "deleted user by id")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Secret-Key", dataType = "string", paramType = "header", value = "Secret header for secret functionality!! Hoho"),
-            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for deleted Room"),
+
     })
-
-    @GetMapping("/hello")
-    public List<User> securedFindAll(HttpServletRequest request,
-                                     @ApiIgnore Principal principal) {
-
-        String username = principalUtils.getUsername(principal);
-        String secretKey = request.getHeader("Secret-Key");
-
-        if (StringUtils.isNotBlank(secretKey) && secretKey.equals(config.getSecretKey())) {
-            return Collections.singletonList(userRepository.findByLogin(username));
-        } else {
-            //throw new UnauthorizedException();
-            return Collections.emptyList();
-        }
-    }*/
+    @DeleteMapping()
+    public void delete(@RequestParam("idUser") Long id ) {
+        userProviderService.deleteWithDependencies(id);
+    }
 
 
+    @ApiOperation(value = "created or update Room  ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successfully!"),
+            @ApiResponse(code = 500, message = "Internal server error ")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "idRoom", dataType = "string", paramType = "query", value = "IdRoom for update")
+    })
+    @PostMapping()
+    public User saveUser(@ModelAttribute GeneralInfoUser userInfo, @RequestParam Long idUser, @RequestBody List<Long> roles) {
 
+        return userProviderService.saveOrUpdateWithAddedRoles(idUser, userInfo, roles);
 
-/*    @ApiOperation(value = "Creating one user")
-    @PostMapping
-    public User createUser(@RequestBody UserCreateRequest createRequest) {
-        User generatedUser = userGenerator.generate();
-        generatedUser.setWeight(createRequest.getWeight());
-        generatedUser.setLogin(createRequest.getLogin());
-        generatedUser.setName(createRequest.getName());
-        generatedUser.setSurname(createRequest.getSurname());
-        return userRepository.save(generatedUser);
-    }*/
+    }
 
 
 
-    @ApiOperation(value = "Generate auto users in system")
+
+
+
+  /*  @ApiOperation(value = "Generate auto users in system")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "usersCount", dataType = "string", paramType = "path",
                     value = "Count of generated users", required = true, defaultValue = "100")
@@ -132,6 +106,6 @@ public class UserRestController {
 //        userRepository.batchInsert(generateUsers);
 //
 //        return userRepository.findAll();
-    }
+    }*/
 
 }
