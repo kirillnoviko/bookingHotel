@@ -21,13 +21,31 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {
         "roles"
 })
-/*@NamedQuery(name = "User_findByLogin",
-        query = "select u from User  u where gmail= :gmail")*/
+@NamedQuery(name = "User_findByLogin",
+        query = "select u from User  u where u.gmail= :gmail")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    String name;
+
+    @Column
+    String surname;
+
+
+    @Column
+    String gmail;
+
+    @Column
+    String password;
+
+
+    @Column(name = "birth_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
+    Timestamp birthDate;
 
     @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
@@ -45,17 +63,6 @@ public class User {
 
     @Column (name = "rating_average")
     private Long ratingAverage;
-
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "name", column = @Column(name = "name")),
-            @AttributeOverride(name = "surname", column = @Column(name = "surname")),
-            @AttributeOverride(name = "birthDate", column = @Column(name = "birth_date")),
-            @AttributeOverride(name = "gmail", column = @Column(name = "gmail")),
-            @AttributeOverride(name = "password", column = @Column(name = "password"))
-
-    })
-    private GeneralInfoUser generalInfoUser;
 
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("users")

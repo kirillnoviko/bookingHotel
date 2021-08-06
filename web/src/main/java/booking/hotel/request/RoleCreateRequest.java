@@ -1,4 +1,4 @@
-package booking.hotel.controller.request;
+package booking.hotel.request;
 
 
 import io.swagger.annotations.ApiOperation;

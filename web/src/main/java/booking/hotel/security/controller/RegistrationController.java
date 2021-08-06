@@ -1,10 +1,8 @@
 package booking.hotel.security.controller;
-import booking.hotel.controller.request.UserCreateRequest;
+import booking.hotel.request.UserCreateRequest;
 import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
-import booking.hotel.exception.NoSuchEntityException;
 import booking.hotel.repository.RoleRepository;
-import booking.hotel.repository.UserRepository;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 import booking.hotel.security.service.ValidationNewUser;
 import booking.hotel.security.service.ValidationRoles;
@@ -21,7 +19,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -44,7 +41,7 @@ public class RegistrationController {
     public User createUser(@RequestBody UserCreateRequest createRequest) throws RuntimeException {
 
         try{
-            List<Role> rolesListResult =validationRoles.checkRoles(createRequest.getRoles());
+            //List<Role> rolesListResult =validationRoles.checkRoles(createRequest.getRoles());
 
             User newUser = new User();
          /*   newUser.setGmail(createRequest.getGmail());
@@ -61,9 +58,9 @@ public class RegistrationController {
             validationUser.checkUser(newUser);
             User savedUser = userRepositoryData.save(newUser);
 
-            for(Role role:rolesListResult) {
+           /* for(Role role:rolesListResult) {
                 userRepositoryData.createSomeRow(savedUser.getId(), role.getId());
-            }
+            }*/
 
 
             return savedUser;

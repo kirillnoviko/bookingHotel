@@ -14,10 +14,10 @@ public class ValidationNewUser {
 
     public void checkUser(User user){
 
-        if(user.getGeneralInfoUser().getGmail().isEmpty() || user.getGeneralInfoUser().getPassword().isEmpty() ){
+        if(user.getGmail().isEmpty() || user.getPassword().isEmpty() ){
             throw  new  NoSuchEntityException("заполните все поля");
         }
-        if(!userRepositoryData.findByGmail(user.getGeneralInfoUser().getGmail()).isEmpty()){
+        if(!userRepositoryData.findByGmail(user.getGmail()).isEmpty()){
             throw  new  NoSuchEntityException("пользователь с таким gmail  уже зарегистрирован");
         }
 

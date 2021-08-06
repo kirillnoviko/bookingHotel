@@ -1,11 +1,9 @@
 package booking.hotel.controller.rest;
 
 
-import booking.hotel.controller.request.RoleCreateRequest;
+import booking.hotel.request.RoleCreateRequest;
 import booking.hotel.domain.Role;
-import booking.hotel.domain.User;
 import booking.hotel.repository.RoleRepository;
-import booking.hotel.repository.UserRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;

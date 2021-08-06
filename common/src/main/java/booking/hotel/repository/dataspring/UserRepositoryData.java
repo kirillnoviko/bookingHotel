@@ -1,5 +1,6 @@
 package booking.hotel.repository.dataspring;
 
+import booking.hotel.domain.Order;
 import booking.hotel.domain.User;
 import booking.hotel.repository.RoomRepository;
 import org.springframework.cache.annotation.Cacheable;
@@ -50,5 +51,7 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
     int createSomeRow(@Param("user_id") Long userId, @Param("role_id") Long roleId);
 
 
+    @Query(value = "select o from Order o   join  o.user where o.user = :idUser")
+    List<Order> showAllOrderUser(User idUser);
 
 }

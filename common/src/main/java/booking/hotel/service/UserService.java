@@ -1,9 +1,6 @@
 package booking.hotel.service;
 
 
-import booking.hotel.domain.GeneralInfoRoom;
-import booking.hotel.domain.GeneralInfoUser;
-import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 
@@ -34,11 +31,11 @@ public class UserService {
 
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
-    public User saveOrUpdateWithAddedRoles(Long id, GeneralInfoUser generalInfoUser, List<Long> roles){
+    public User saveOrUpdateWithAddedRoles(User user){
 
-        User user = new User();
+        User usewr = new User();
 
-        if(id!=null){
+       /* if(id!=null){
             user=userRepositoryData.findById(id).get();
 
             if(generalInfoUser.getName()!=null){
@@ -71,7 +68,7 @@ public class UserService {
             for(Long role : roles){
                 userRepositoryData.createSomeRow(user.getId(),role);
             }
-        }
+        }*/
 
         return  user;
     }

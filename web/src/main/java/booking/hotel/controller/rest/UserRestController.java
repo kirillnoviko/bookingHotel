@@ -1,15 +1,18 @@
 package booking.hotel.controller.rest;
 
 import booking.hotel.beans.SecurityConfig;
-import booking.hotel.domain.GeneralInfoUser;
+import booking.hotel.domain.Order;
 import booking.hotel.domain.User;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 
+import booking.hotel.request.UserChangeRequest;
+import booking.hotel.request.UserCreateRequest;
 import booking.hotel.service.UserService;
 import booking.hotel.util.PrincipalUtils;
 import io.swagger.annotations.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -28,6 +31,7 @@ public class UserRestController {
     private final PrincipalUtils principalUtils;
     private final SecurityConfig config;
 
+    public final ConversionService conversionService;
 
 
     @ApiOperation(value = "show all users ")
@@ -45,6 +49,19 @@ public class UserRestController {
 
     }
 
+    @ApiOperation(value = "show all orders user ")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for deleted Room"),
+
+    })
+    @GetMapping("/orders")
+    public List<Order> showOrders(@RequestParam("idUser") Long id) {
+
+       User user = userRepositoryData.findById(id).get();
+        return userRepositoryData.showAllOrderUser(user);
+
+    }
+
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
@@ -54,6 +71,7 @@ public class UserRestController {
         String username = principalUtils.getUsername(principal);
         return userRepositoryData.findByGmail(username).get();
     }
+
 
 
 
@@ -68,18 +86,33 @@ public class UserRestController {
     }
 
 
-    @ApiOperation(value = "created or update User ")
+    @ApiOperation(value = "created User ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successfully!"),
             @ApiResponse(code = 500, message = "Internal server error ")
     })
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "IdUser for update")
-    })
-    @PostMapping()
-    public User saveUser(@ModelAttribute GeneralInfoUser userInfo, @RequestParam Long idUser, @RequestBody List<Long> roles) {
+    @PostMapping("/save")
+    public User saveUser( @RequestBody UserCreateRequest request) {
 
-        return userService.saveOrUpdateWithAddedRoles(idUser, userInfo, roles);
+        User User = conversionService.convert(request, User.class);
+
+        return userRepositoryData.save(User);
+        //return userService.saveOrUpdateWithAddedRoles(idUser, userInfo, roles);
+
+    }
+
+    @ApiOperation(value = "update User ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successfully!"),
+            @ApiResponse(code = 500, message = "Internal server error ")
+    })
+    @PostMapping("/update")
+    public User updateUser( @RequestBody UserChangeRequest request) {
+
+        User User = conversionService.convert(request, User.class);
+
+        return userRepositoryData.save(User);
+        //return userService.saveOrUpdateWithAddedRoles(idUser, userInfo, roles);
 
     }
 
