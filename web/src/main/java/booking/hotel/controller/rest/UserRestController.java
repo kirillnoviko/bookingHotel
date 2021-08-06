@@ -1,13 +1,11 @@
 package booking.hotel.controller.rest;
 
 import booking.hotel.beans.SecurityConfig;
-import booking.hotel.domain.GeneralInfoRoom;
 import booking.hotel.domain.GeneralInfoUser;
-import booking.hotel.domain.Room;
 import booking.hotel.domain.User;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 
-import booking.hotel.service.UserProviderService;
+import booking.hotel.service.UserService;
 import booking.hotel.util.PrincipalUtils;
 import io.swagger.annotations.*;
 
@@ -25,7 +23,7 @@ import java.util.List;
 public class UserRestController {
 
     private final UserRepositoryData userRepositoryData;
-    private final UserProviderService userProviderService;
+    private final UserService userService;
     private final SecurityConfig securityConfig;
     private final PrincipalUtils principalUtils;
     private final SecurityConfig config;
@@ -66,22 +64,22 @@ public class UserRestController {
     })
     @DeleteMapping()
     public void delete(@RequestParam("idUser") Long id ) {
-        userProviderService.deleteWithDependencies(id);
+        userService.deleteWithDependencies(id);
     }
 
 
-    @ApiOperation(value = "created or update Room  ")
+    @ApiOperation(value = "created or update User ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successfully!"),
             @ApiResponse(code = 500, message = "Internal server error ")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "idRoom", dataType = "string", paramType = "query", value = "IdRoom for update")
+            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "IdUser for update")
     })
     @PostMapping()
     public User saveUser(@ModelAttribute GeneralInfoUser userInfo, @RequestParam Long idUser, @RequestBody List<Long> roles) {
 
-        return userProviderService.saveOrUpdateWithAddedRoles(idUser, userInfo, roles);
+        return userService.saveOrUpdateWithAddedRoles(idUser, userInfo, roles);
 
     }
 

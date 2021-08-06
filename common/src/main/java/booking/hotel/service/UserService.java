@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserProviderService {
+public class UserService {
 
     private final UserRepositoryData userRepositoryData;
 

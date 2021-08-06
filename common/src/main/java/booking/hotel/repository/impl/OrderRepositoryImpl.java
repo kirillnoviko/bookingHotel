@@ -134,7 +134,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         params.addValue("dataCheckIn", entity.getDataCheckIn());
         params.addValue("dataCheckOut", entity.getDataCheckOut());
         params.addValue("status", entity.getStatus());
-        params.addValue("idUser", entity.getIdUser());
+
         params.addValue("created", new Date());
         params.addValue("changed", new Date());
         params.addValue("generalPrice", entity.getGeneralPrice());

@@ -21,8 +21,9 @@ import java.util.Date;
         "roles"
 })*/
 @EqualsAndHashCode(exclude = {
-        "room"
+        "room","user"
 })
+
 public class Order {
 
     @Id
@@ -36,9 +37,6 @@ public class Order {
 
     @Column
     private String status;
-
-    @Column(name = "id_user")
-    private Long idUser;
 
     @Column
     private Timestamp created;
@@ -59,6 +57,11 @@ public class Order {
     @JoinColumn(name = "id_room")
     @JsonBackReference
     private Room room;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    @JsonBackReference
+    private User user;
 
     @Override
     public String toString() {

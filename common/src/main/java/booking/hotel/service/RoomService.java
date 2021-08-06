@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RoomProviderService {
+public class RoomService {
     private final RoomRepositoryData roomRepositoryData;
 
     public List<Room> searchRoomByAllParams(RoomSearchRequest request) throws RuntimeException{

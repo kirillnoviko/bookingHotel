@@ -50,4 +50,5 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
     int createSomeRow(@Param("user_id") Long userId, @Param("role_id") Long roleId);
 
 
+
 }

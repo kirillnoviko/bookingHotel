@@ -5,7 +5,7 @@ import booking.hotel.domain.GeneralInfoRoom;
 import booking.hotel.repository.dataspring.RoomRepositoryData;
 import booking.hotel.util.RoomSearchRequest;
 import booking.hotel.domain.Room;
-import booking.hotel.service.RoomProviderService;
+import booking.hotel.service.RoomService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ import java.util.List;
 public class RoomRestController {
 
     private final RoomRepositoryData roomRepositoryData;
-    private final RoomProviderService roomProviderService;
+    private final RoomService roomService;
 
     @ApiOperation(value = "show all rooms")
     @GetMapping()
@@ -42,7 +42,7 @@ public class RoomRestController {
     @PostMapping("/search")
     public List<Room> searchRoom(@RequestBody RoomSearchRequest request) {
 
-        return  roomProviderService.searchRoomByAllParams(request);
+        return  roomService.searchRoomByAllParams(request);
 
     }
 
@@ -53,7 +53,7 @@ public class RoomRestController {
     })
     @DeleteMapping()
     public void delete(@RequestParam("idRoom") Long id ) {
-        roomProviderService.deleteWithDependencies(id);
+        roomService.deleteWithDependencies(id);
     }
 
 
@@ -68,7 +68,7 @@ public class RoomRestController {
     @PostMapping()
     public Room saveRoom(@ModelAttribute GeneralInfoRoom roomInfo, @RequestParam Long idRoom, @RequestBody List<Long> comforts) {
 
-     return roomProviderService.saveOrUpdateWithAddedComforts(idRoom,roomInfo,comforts);
+     return roomService.saveOrUpdateWithAddedComforts(idRoom,roomInfo,comforts);
 
 
 
