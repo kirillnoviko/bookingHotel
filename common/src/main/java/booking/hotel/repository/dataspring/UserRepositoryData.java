@@ -1,6 +1,7 @@
 package booking.hotel.repository.dataspring;
 
 import booking.hotel.domain.Order;
+import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
 import booking.hotel.repository.RoomRepository;
 import org.springframework.cache.annotation.Cacheable;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,11 +47,15 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
     @Query(value = "delete  from user_roles where user_id= :idUser",nativeQuery = true)
     int deleteDependenciesRoles(@Param("idUser") Long idUser);
 
+
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
     @Modifying
     @Query(value = "insert into user_roles(user_id, role_id) values (:user_id, :role_id)", nativeQuery = true)
     int createSomeRow(@Param("user_id") Long userId, @Param("role_id") Long roleId);
 
+    @Nullable
+    @Query(value = "select * from user_roles where user_id = :user_id and role_id = :role_id ", nativeQuery = true)
+    Optional<Role> checkRole(@Param("user_id") Long userId, @Param("role_id") Long roleId);
 
     @Query(value = "select o from Order o   join  o.user where o.user = :idUser")
     List<Order> showAllOrderUser(User idUser);

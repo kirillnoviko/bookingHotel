@@ -95,9 +95,7 @@ public class UserRestController {
     public User saveUser( @RequestBody UserCreateRequest request) {
 
         User User = conversionService.convert(request, User.class);
-
-        return userRepositoryData.save(User);
-        //return userService.saveOrUpdateWithAddedRoles(idUser, userInfo, roles);
+        return userService.saveOrUpdateWithAddedRoles(User);
 
     }
 
@@ -110,9 +108,7 @@ public class UserRestController {
     public User updateUser( @RequestBody UserChangeRequest request) {
 
         User User = conversionService.convert(request, User.class);
-
-        return userRepositoryData.save(User);
-        //return userService.saveOrUpdateWithAddedRoles(idUser, userInfo, roles);
+        return userService.saveOrUpdateWithAddedRoles(User);
 
     }
 

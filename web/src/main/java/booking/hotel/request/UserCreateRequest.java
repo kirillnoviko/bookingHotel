@@ -26,6 +26,4 @@ public class UserCreateRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp birthDate;
 
-    private List<Long> roles;
-
 }

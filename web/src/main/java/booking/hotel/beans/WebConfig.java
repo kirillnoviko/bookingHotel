@@ -3,6 +3,8 @@ package booking.hotel.beans;
 import booking.hotel.converter.EntityConverter;
 import booking.hotel.converter.UserCreateRequestConverter;
 import booking.hotel.converter.UserEditRequestConverter;
+import booking.hotel.repository.RoleRepository;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 import booking.hotel.request.UserCreateRequest;
 import lombok.NoArgsConstructor;
@@ -14,13 +16,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
-
     private final UserRepositoryData userRepositoryData;
+    private final RoleRepositoryData roleRepositoryData;
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
 
         registry.addConverter(new UserEditRequestConverter(userRepositoryData) {
         });
-        registry.addConverter(new UserCreateRequestConverter(){});
+        registry.addConverter(new UserCreateRequestConverter(roleRepositoryData){});
     }
 }
