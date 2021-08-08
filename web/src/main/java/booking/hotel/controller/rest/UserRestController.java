@@ -112,6 +112,26 @@ public class UserRestController {
 
     }
 
+    @ApiOperation(value = "added roles for  User ")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for deleted Room"),
+
+    })
+    @PostMapping("/admin/roles")
+    public User addRoleForUser(@RequestParam("idUser") Long id, @RequestBody List<String> listRoles){
+        return userService.addRolesForUser(id,listRoles);
+    }
+
+    @ApiOperation(value = "delete role for  User ")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for deleted Room"),
+
+    })
+    @DeleteMapping("/admin/role")
+    public User deleteRoleForUser(@RequestParam("idUser") Long id, @RequestBody List<String> listRoles){
+        return userService.deleteRoleForUser(id,listRoles);
+    }
+
 
 
 

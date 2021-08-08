@@ -45,4 +45,34 @@ public class UserService {
 
         return  user;
     }
+
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
+    public User addRolesForUser(Long id, List<String> listRoles){
+        for(String nameRole : listRoles){
+
+            if(userRepositoryData.checkRole(id,roleRepositoryData.findByRoleName(nameRole).get().getId()).isEmpty()){
+
+                userRepositoryData.createSomeRow(id,roleRepositoryData.findByRoleName(nameRole).get().getId());
+
+            }
+
+        }
+        return userRepositoryData.findById(id).get();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
+    public User deleteRoleForUser(Long id, List<String> listRoles){
+        for(String nameRole : listRoles){
+
+           // if(userRepositoryData.checkRole(id,roleRepositoryData.findByRoleName(nameRole).get().getId()).isEmpty()){
+
+                userRepositoryData.deleteSomeRow(id,roleRepositoryData.findByRoleName(nameRole).get().getId());
+
+            //}
+
+        }
+        return userRepositoryData.findById(id).get();
+    }
+
 }

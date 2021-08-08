@@ -53,9 +53,17 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
     @Query(value = "insert into user_roles(user_id, role_id) values (:user_id, :role_id)", nativeQuery = true)
     int createSomeRow(@Param("user_id") Long userId, @Param("role_id") Long roleId);
 
-    @Nullable
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
+    @Modifying
+    @Query(value = "delete  from user_roles where user_id = :user_id and role_id = :role_id", nativeQuery = true)
+    int deleteSomeRow(@Param("user_id") Long userId, @Param("role_id") Long roleId);
+
+
+
     @Query(value = "select * from user_roles where user_id = :user_id and role_id = :role_id ", nativeQuery = true)
-    Optional<Role> checkRole(@Param("user_id") Long userId, @Param("role_id") Long roleId);
+    Optional<Object> checkRole(@Param("user_id") Long userId, @Param("role_id") Long roleId);
+
 
     @Query(value = "select o from Order o   join  o.user where o.user = :idUser")
     List<Order> showAllOrderUser(User idUser);
