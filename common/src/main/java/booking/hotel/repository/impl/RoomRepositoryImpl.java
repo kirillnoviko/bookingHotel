@@ -4,13 +4,11 @@ package booking.hotel.repository.impl;
 import booking.hotel.domain.*;
 
 import booking.hotel.domain.Order;
-import booking.hotel.repository.ComfortRepository;
 import booking.hotel.repository.RoomRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

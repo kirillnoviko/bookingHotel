@@ -132,6 +132,11 @@ public class UserRestController {
         return userService.deleteRoleForUser(id,listRoles);
     }
 
+    @ApiOperation(value = "find all Users by Role ")
+    @GetMapping("/admin/users/{idRole}")
+    public List<User> findAllUsersByRole(@PathVariable Long idRole){
+        return  userRepositoryData.findAllUsersByRole(idRole);
+    }
 
 
 

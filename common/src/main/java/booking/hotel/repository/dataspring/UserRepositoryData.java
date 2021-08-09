@@ -68,4 +68,6 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
     @Query(value = "select o from Order o   join  o.user where o.user = :idUser")
     List<Order> showAllOrderUser(User idUser);
 
+    @Query(value ="select * from users left join user_roles ur on users.id = ur.user_id where ur.role_id = :idRole", nativeQuery = true)
+    List<User> findAllUsersByRole (Long idRole);
 }

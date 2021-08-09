@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
     private static final Logger log = Logger.getLogger(LoggingAspect.class);
 
-    @Pointcut("execution(* booking.hotel.repository.impl.UserRepositoryImpl.*(..))")
+    @Pointcut("execution(* booking.hotel.repository.dataspring.UserRepositoryData.*(..))")
     public void aroundRepositoryPointcut() {
 
     }

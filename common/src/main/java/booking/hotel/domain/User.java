@@ -64,7 +64,7 @@ public class User {
     @Column (name = "rating_average")
     private Long ratingAverage;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("users")
     private Set<Role> roles = Collections.emptySet();
 

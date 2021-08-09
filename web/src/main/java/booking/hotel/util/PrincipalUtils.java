@@ -1,5 +1,6 @@
 package booking.hotel.util;
 
+import booking.hotel.repository.dataspring.UserRepositoryData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +14,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class PrincipalUtils {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryData userRepository;
 
     public String getUsername(Principal principal) {
         Object castedPrincipal = ((UsernamePasswordAuthenticationToken) principal).getPrincipal();

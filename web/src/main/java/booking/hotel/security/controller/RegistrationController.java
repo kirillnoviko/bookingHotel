@@ -1,4 +1,5 @@
 package booking.hotel.security.controller;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
 import booking.hotel.request.UserCreateRequest;
 import booking.hotel.domain.User;
 import booking.hotel.repository.dataspring.UserRepositoryData;
@@ -25,7 +26,7 @@ public class RegistrationController {
 
     private final UserRepositoryData userRepositoryData;
 
-    private final RoleRepository roleRepository;
+    private final RoleRepositoryData roleRepository;
 
     private final ValidationRoles validationRoles;
     private final ValidationNewUser validationUser;
