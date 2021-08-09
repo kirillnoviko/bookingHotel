@@ -23,26 +23,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class RoomRepositoryImpl implements RoomRepository {
 
-
-    private final ComfortRepository comfortRepository;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    //    @Autowired
-    //    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-    //        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-    //    }
-
-
     @Autowired
     @Qualifier("entityManagerFactory")
     private EntityManager entityManager;
-
-
-/*
-    @Autowired
-    @Qualifier("sessionFactory")
-    private SessionFactory sessionFactory;
-*/
 
 
     @Override

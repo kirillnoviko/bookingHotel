@@ -1,9 +1,7 @@
 package booking.hotel.service;
 
 
-import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
-import booking.hotel.repository.RoleRepository;
 import booking.hotel.repository.dataspring.RoleRepositoryData;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 
@@ -15,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @Service

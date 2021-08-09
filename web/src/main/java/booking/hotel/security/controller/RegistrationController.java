@@ -1,8 +1,6 @@
 package booking.hotel.security.controller;
 import booking.hotel.request.UserCreateRequest;
-import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
-import booking.hotel.repository.RoleRepository;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 import booking.hotel.security.service.ValidationNewUser;
 import booking.hotel.security.service.ValidationRoles;
@@ -19,7 +17,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @RestController
 @RequestMapping("/registration")

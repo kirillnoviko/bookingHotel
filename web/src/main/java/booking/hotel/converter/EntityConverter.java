@@ -2,10 +2,8 @@ package booking.hotel.converter;
 
 import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
-import booking.hotel.repository.RoleRepository;
+import booking.hotel.request.RoleCreateRequest;
 import booking.hotel.request.UserCreateRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 
 
@@ -38,4 +36,11 @@ public abstract class EntityConverter<S, T> implements Converter<S, T> {
 
         return user;
     }
+    protected Role doConvert(RoleCreateRequest request,Role role){
+        if(request.getRoleName()!=null){
+            role.setRoleName(request.getRoleName());
+        }
+        return role;
+    }
+
 }

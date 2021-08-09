@@ -2,8 +2,8 @@ package booking.hotel.security.service;
 
 import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
-import booking.hotel.repository.RoleRepository;
-import booking.hotel.repository.UserRepository;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
+import booking.hotel.repository.dataspring.UserRepositoryData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,21 +18,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserProviderService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryData userRepository;
 
-    private final RoleRepository roleRepository;
+    private final RoleRepositoryData roleRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            Optional<User> searchResult = Optional.ofNullable(userRepository.findByLogin(username));
+            Optional<User> searchResult = Optional.ofNullable(userRepository.findByGmail(username).get());
             if (searchResult.isPresent()) {
                 User user = searchResult.get();
                 return new org.springframework.security.core.userdetails.User(
                         user.getGmail(),
                         user.getPassword(),
 //                      ["ROLE_USER", "ROLE_ADMIN"]
-                        AuthorityUtils.commaSeparatedStringToAuthorityList(roleRepository.getUserRoles(user).stream().map(Role::getRoleName).collect(Collectors.joining(",")))
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(roleRepository.getUserRoles(user.getId()).stream().map(Role::getRoleName).collect(Collectors.joining(",")))
                 );
             } else {
                 throw new UsernameNotFoundException(String.format("No user found with login '%s'.", username));

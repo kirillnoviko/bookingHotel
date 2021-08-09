@@ -2,7 +2,7 @@ package booking.hotel.security.service;
 
 import booking.hotel.domain.Role;
 import booking.hotel.exception.NoSuchEntityException;
-import booking.hotel.repository.RoleRepository;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ValidationRoles {
 
-    private final RoleRepository roleRepository;
+    private final RoleRepositoryData roleRepository;
 
     public List<Role> checkRoles(List<String> roles){
         if(roles.isEmpty()){
@@ -25,7 +25,7 @@ public class ValidationRoles {
             
             boolean result =rolesAll.stream().anyMatch(roleAll->roleAll.getRoleName().equals(role));
             if(result){
-                resultListRole.add(roleRepository.findByName(role));
+                resultListRole.add(roleRepository.findByRoleName(role).get());
             }else{
                 throw  new NoSuchEntityException("некоректный ввод роли пользователя");
             }

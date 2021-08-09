@@ -1,62 +1,74 @@
 package booking.hotel.controller.rest;
 
 
-import booking.hotel.request.RoleCreateRequest;
+import booking.hotel.domain.User;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
 import booking.hotel.domain.Role;
-import booking.hotel.repository.RoleRepository;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import booking.hotel.request.RoleChangeRequest;
+import booking.hotel.request.RoleCreateRequest;
+import booking.hotel.request.UserChangeRequest;
+import booking.hotel.request.UserCreateRequest;
+import booking.hotel.service.RoleService;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/roles")
 @RequiredArgsConstructor
 public class RoleRestController {
-    private final RoleRepository roleRepository;
+    private final RoleRepositoryData roleRepositoryData;
+    private final RoleService roleService;
+    public final ConversionService conversionService;
 
 
-    @ApiOperation(value = "find for all roles")
+    @ApiOperation(value = "show all roles")
     @GetMapping
-    public Role findAll(@RequestParam Long idRole) {
-        return roleRepository.findOne(idRole);
+    public List<Role> findAll() {
+        return roleRepositoryData.findAll();
     }
 
     @ApiOperation(value = "find for one role by ID")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "idRole", dataType = "string", paramType = "query", value = "id role for output users"),
-
-    })
     @GetMapping("/{roleId}")
     public Role findOne(@PathVariable("roleId") Long id) {
-        return roleRepository.findOne(id);
+        return roleRepositoryData.findById(id).get();
     }
 
 
-    @ApiOperation(value = "save new role")
+    @ApiOperation(value = "created User ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successfully!"),
+            @ApiResponse(code = 500, message = "Internal server error ")
+    })
     @PostMapping("/save")
-    public Role save(@RequestBody RoleCreateRequest request) {
+    public Role saveUser(@RequestBody RoleCreateRequest request) {
 
-        Role role = new Role();
-        role.setRoleName(request.getRoleName());
-        return roleRepository.save(role);
+        Role role = conversionService.convert(request, Role.class);
+        return roleService.saveOrUpdateRole(role);
 
     }
 
+    @ApiOperation(value = "update User ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successfully!"),
+            @ApiResponse(code = 500, message = "Internal server error ")
+    })
+    @PostMapping("/update")
+    public Role updateUser( @RequestBody RoleChangeRequest request) {
 
-    @ApiOperation(value = "update role by ID")
+        Role role = conversionService.convert(request, Role.class);
+        return roleService.saveOrUpdateRole(role);
+
+    }
+
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "idRole", dataType = "string", paramType = "query", value = "id role for update"),
+            @ApiImplicitParam(name = "idRole", dataType = "string", paramType = "query", value = "idRole for search entity Role "),
 
     })
-    @PostMapping("/update/{roleId}")
-    public Role update(@RequestBody RoleCreateRequest request, @PathVariable Long roleId) {
-
-        Role role = new Role();
-        role.setId(roleId);
-        role.setRoleName(request.getRoleName());
-        return roleRepository.update(role);
-
-    }
+    @DeleteMapping("/delete")
+    public void delete(@RequestParam Long idRole ){
+        roleService.deleteWithDependencies(idRole);    }
 }
