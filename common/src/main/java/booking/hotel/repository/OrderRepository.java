@@ -4,6 +4,6 @@ import booking.hotel.domain.Order;
 
 import java.util.List;
 
-public interface OrderRepository extends  CrudOperations<Long, Order> {
+public interface OrderRepository {
     List<Order> findAllOrdersUser(String gmail);
 }

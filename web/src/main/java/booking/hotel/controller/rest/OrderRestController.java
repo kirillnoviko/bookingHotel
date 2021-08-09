@@ -3,6 +3,7 @@ package booking.hotel.controller.rest;
 
 import booking.hotel.domain.Order;
 import booking.hotel.repository.OrderRepository;
+import booking.hotel.repository.dataspring.OrderRepositoryData;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderRestController {
 
-    private final OrderRepository orderRepository;
+    private final OrderRepositoryData orderRepository;
 
     @ApiOperation(value = "Search orders user")
     @ApiImplicitParams({
@@ -26,7 +27,8 @@ public class OrderRestController {
     })
     @PostMapping("/search")
     public List<Order> createUser(@ApiIgnore Principal principal) {
-        return orderRepository.findAllOrdersUser(principal.getName());
+        return null;
+        //return orderRepository.findAllOrdersUser(principal.getName());
     }
 
     @GetMapping()

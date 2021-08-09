@@ -9,5 +9,8 @@ import java.util.List;
 
 public interface OrderRepositoryData extends JpaRepository<Order, Long>, RoomRepository {
 
+    List<Order> findAll();
+
+
 
 }

@@ -36,7 +36,8 @@ public class Order {
     private Timestamp dataCheckOut;
 
     @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusName status;
 
     @Column
     private Timestamp created;

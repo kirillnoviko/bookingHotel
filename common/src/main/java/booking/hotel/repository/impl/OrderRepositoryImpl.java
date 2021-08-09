@@ -24,7 +24,7 @@ import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
-public class OrderRepositoryImpl implements OrderRepository {
+public class OrderRepositoryImpl  {
 
     private  final  JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -37,7 +37,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     //    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
     //        this.jdbcTemplate = jdbcTemplate;
     //    }
-
+/*
     @Override
     public List<Order> findAllOrdersUser(String gmail) {
         final String findOrdersUser = "select * from orders join users u on u.id = orders.id_user where u.gmail = ? ";
@@ -142,5 +142,5 @@ public class OrderRepositoryImpl implements OrderRepository {
         params.addValue("ratingForClient",new Date());
 
         return params;
-    }
+    }*/
 }
