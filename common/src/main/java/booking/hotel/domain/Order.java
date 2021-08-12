@@ -2,6 +2,7 @@ package booking.hotel.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,11 +30,14 @@ import java.util.Date;
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "data_check_in")
     private Timestamp dataCheckIn;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "data_check_out")
     private Timestamp dataCheckOut;
 
@@ -41,14 +45,13 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private StatusName status;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
     private Timestamp created;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
     private Timestamp changed;
-
-    @Column(name = "general_price")
-    private Long generalPrice;
 
     @Column(name = "rating_for_client")
     private Long ratingForClient;

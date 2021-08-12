@@ -1,7 +1,9 @@
 package booking.hotel.converter;
 
+import booking.hotel.domain.Order;
 import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
+import booking.hotel.request.OrderCreateRequest;
 import booking.hotel.request.RoleCreateRequest;
 import booking.hotel.request.UserCreateRequest;
 import org.springframework.core.convert.converter.Converter;
@@ -41,6 +43,11 @@ public abstract class EntityConverter<S, T> implements Converter<S, T> {
             role.setRoleName(request.getRoleName());
         }
         return role;
+    }
+
+    protected  Order doConvert(OrderCreateRequest request, Order order){
+        order.setChanged(new Timestamp(new Date().getTime()));
+        return order;
     }
 
 }

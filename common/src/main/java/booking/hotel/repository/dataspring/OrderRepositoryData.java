@@ -22,7 +22,9 @@ public interface OrderRepositoryData extends JpaRepository<Order, Long>, RoomRep
 
     List<Order> findByUserGmailAndStatus(String gmail, StatusName status);
 
-    @Query(value = " select o from Order o " +
-            "where o.room.id = :idRoom and (:dataIn between o.dataCheckIn and o.dataCheckOut) and (:dataOut between o.dataCheckIn and o.dataCheckOut)")
-    List<Order> findByIdUserAndData(Long idRoom, Timestamp dataIn, Timestamp dataOut );
+    @Query(value = " select o.room.id from Order o " +
+            "where o.room.id = :idRoom and " +
+                 "(:dataIn between o.dataCheckIn and o.dataCheckOut) and " +
+                 "(:dataOut between o.dataCheckIn and o.dataCheckOut)")
+    List<Long> findByIdUserAndData(Long idRoom, Timestamp dataIn, Timestamp dataOut );
 }

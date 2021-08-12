@@ -16,5 +16,16 @@ import java.util.List;
 public class OrderService {
     private final OrderRepositoryData orderRepositoryData;
 
+    public Order createOrder(Order order){
+        List<Long> bookedRooms = orderRepositoryData.findByIdUserAndData(order.getRoom().getId(),order.getDataCheckIn(),order.getDataCheckOut());
+        for(Long idRoom : bookedRooms ){
+            if(idRoom==order.getRoom().getId()){
+               // break;
+                return null;
+                //TODO exception this room is already booked
+            }
+        }
+        return orderRepositoryData.save(order);
+    }
 
 }
