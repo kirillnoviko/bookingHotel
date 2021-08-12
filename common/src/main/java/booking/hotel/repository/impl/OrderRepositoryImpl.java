@@ -3,6 +3,7 @@ package booking.hotel.repository.impl;
 import booking.hotel.domain.Order;
 
 import booking.hotel.repository.OrderRepository;
+import booking.hotel.repository.dataspring.OrderRepositoryData;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,6 +27,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class OrderRepositoryImpl  {
 
+    private final OrderRepositoryData orderRepositoryData;
     private  final  JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -37,14 +39,9 @@ public class OrderRepositoryImpl  {
     //    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
     //        this.jdbcTemplate = jdbcTemplate;
     //    }
+
+
 /*
-    @Override
-    public List<Order> findAllOrdersUser(String gmail) {
-        final String findOrdersUser = "select * from orders join users u on u.id = orders.id_user where u.gmail = ? ";
-        return jdbcTemplate.query(findOrdersUser, new String[]{gmail},this::getBookingRowMapper);
-
-    }
-
     @Override
     public List<Order> findAll() {
         try (Session session = sessionFactory.openSession()) {

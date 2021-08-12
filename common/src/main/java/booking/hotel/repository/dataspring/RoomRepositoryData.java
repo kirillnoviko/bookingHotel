@@ -25,7 +25,7 @@ public interface RoomRepositoryData extends JpaRepository<Room, Long>,CrudReposi
     @Cacheable("rooms")
     List<Room> findAll();
 
-
+    @Query (value = "")
     Optional<Room> findByIdAndDeletedIsFalse(Long id);
 
 

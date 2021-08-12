@@ -18,13 +18,15 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "comforts"
+        "comforts","orders"
 })
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
 
     @Embedded
     @AttributeOverrides({

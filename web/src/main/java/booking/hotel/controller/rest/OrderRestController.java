@@ -2,6 +2,7 @@ package booking.hotel.controller.rest;
 
 
 import booking.hotel.domain.Order;
+import booking.hotel.domain.StatusName;
 import booking.hotel.repository.OrderRepository;
 import booking.hotel.repository.dataspring.OrderRepositoryData;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,4 +36,15 @@ public class OrderRestController {
     public List<Order> findAll(){
         return orderRepository.findAll();
     }
+
+    @GetMapping("/{gmail}")
+    public List<Order> findAllOrdersUser(@PathVariable String gmail){
+        return orderRepository.findByUserGmail(gmail);
+    }
+
+    @GetMapping("/{gmail}/{status}")
+    public List<Order> findOrdersUserByStatus(@PathVariable String gmail, @PathVariable StatusName status){
+        return orderRepository.findByUserGmailAndStatus(gmail, status);
+    }
+
 }

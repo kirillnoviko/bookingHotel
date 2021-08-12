@@ -2,15 +2,27 @@ package booking.hotel.repository.dataspring;
 
 import booking.hotel.domain.Order;
 import booking.hotel.domain.Room;
+import booking.hotel.domain.StatusName;
+import booking.hotel.domain.User;
 import booking.hotel.repository.RoomRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepositoryData extends JpaRepository<Order, Long>, RoomRepository {
 
     List<Order> findAll();
 
+    Optional<Order> findById(Long idOrder);
 
+    List<Order> findByUserGmail(String gmail);
 
+    List<Order> findByUserGmailAndStatus(String gmail, StatusName status);
+
+    @Query(value = " select o from Order o " +
+            "where o.room.id = :idRoom and (:dataIn between o.dataCheckIn and o.dataCheckOut) and (:dataOut between o.dataCheckIn and o.dataCheckOut)")
+    List<Order> findByIdUserAndData(Long idRoom, Timestamp dataIn, Timestamp dataOut );
 }

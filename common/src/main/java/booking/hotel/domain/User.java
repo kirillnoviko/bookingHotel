@@ -19,7 +19,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "roles"
+        "roles","orders"
 })
 @NamedQuery(name = "User_findByLogin",
         query = "select u from User  u where u.gmail= :gmail")
