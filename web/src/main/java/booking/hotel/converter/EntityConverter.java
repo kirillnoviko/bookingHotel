@@ -3,6 +3,7 @@ package booking.hotel.converter;
 import booking.hotel.domain.Order;
 import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
+import booking.hotel.request.OrderChangeRequest;
 import booking.hotel.request.OrderCreateRequest;
 import booking.hotel.request.RoleCreateRequest;
 import booking.hotel.request.UserCreateRequest;

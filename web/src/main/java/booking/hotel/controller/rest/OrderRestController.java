@@ -7,6 +7,7 @@ import booking.hotel.domain.StatusName;
 import booking.hotel.repository.OrderRepository;
 import booking.hotel.repository.dataspring.OrderRepositoryData;
 import booking.hotel.repository.dataspring.UserRepositoryData;
+import booking.hotel.request.OrderChangeRequest;
 import booking.hotel.request.OrderCreateRequest;
 import booking.hotel.service.OrderService;
 import booking.hotel.service.RoomService;
@@ -31,7 +32,7 @@ public class OrderRestController  {
     private final OrderService orderService;
     public final ConversionService conversionService;
 
-    @ApiOperation(value = "Search orders user")
+ /*   @ApiOperation(value = "Search orders user")
     @ApiImplicitParams({
              @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
@@ -39,21 +40,29 @@ public class OrderRestController  {
     public List<Order> createUser(@ApiIgnore Principal principal) {
         return null;
         //return orderRepository.findAllOrdersUser(principal.getName());
-    }
+    }*/
 
-    @GetMapping()
+    @GetMapping("/admin/")
     public List<Order> findAll(){
         return orderRepository.findAll();
     }
 
-    @GetMapping("/{gmail}")
-    public List<Order> findAllOrdersUser(@PathVariable String gmail){
-        return orderRepository.findByUserGmail(gmail);
+    @ApiOperation(value = "show all orders of auth User")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
+    @GetMapping()
+    public List<Order> findAllOrdersUser(@ApiIgnore Principal principal){
+        return orderRepository.findByUserGmail(principal.getName());
     }
 
-    @GetMapping("/{gmail}/{status}")
-    public List<Order> findOrdersUserByStatus(@PathVariable String gmail, @PathVariable StatusName status){
-        return orderRepository.findByUserGmailAndStatus(gmail, status);
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
+    @GetMapping("/{status}")
+    public List<Order> findOrdersUserByStatus(@ApiIgnore Principal principal, @PathVariable StatusName status){
+        return orderRepository.findByUserGmailAndStatus(principal.getName(),status);
     }
 
 
@@ -62,7 +71,7 @@ public class OrderRestController  {
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PostMapping()
-    public Order findRoomOnData(@ApiIgnore Principal principal, @RequestBody OrderCreateRequest request){
+    public Order save(@ApiIgnore Principal principal, @RequestBody OrderCreateRequest request){
        Order order=conversionService.convert(request, Order.class);
 
 
@@ -71,8 +80,27 @@ public class OrderRestController  {
        }else
        {
             throw new RuntimeException("user with this login does not exist");
-           //TODO exception  user not auth
        }
+
+        return orderService.createOrder(order);
+    }
+
+
+    @ApiOperation(value = "update order for auth user")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
+    @PutMapping ()
+    public Order update(@ApiIgnore Principal principal, @RequestBody OrderChangeRequest request){
+
+        Order order=conversionService.convert(request, Order.class);
+
+    /*    if(!userRepository.findByGmail(principal.getName()).isEmpty()){
+            order.setUser(userRepository.findByGmail(principal.getName()).get());
+        }else
+        {
+            throw new RuntimeException("user with this login does not exist");
+        }*/
 
         return orderService.createOrder(order);
     }
