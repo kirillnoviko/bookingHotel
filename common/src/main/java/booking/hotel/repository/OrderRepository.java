@@ -5,5 +5,5 @@ import booking.hotel.domain.Order;
 import java.util.List;
 
 public interface OrderRepository {
-    List<Order> findAllOrdersUser(String gmail);
+  List<Order> findByAllParams(Order order);
 }

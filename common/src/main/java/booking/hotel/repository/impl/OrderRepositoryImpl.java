@@ -1,7 +1,8 @@
 package booking.hotel.repository.impl;
 
-import booking.hotel.domain.Order;
+import booking.hotel.domain.*;
 
+import booking.hotel.domain.Order;
 import booking.hotel.repository.OrderRepository;
 import booking.hotel.repository.dataspring.OrderRepositoryData;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,12 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,119 +30,73 @@ import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
-public class OrderRepositoryImpl  {
-
-    private final OrderRepositoryData orderRepositoryData;
-    private  final  JdbcTemplate jdbcTemplate;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+public class OrderRepositoryImpl implements OrderRepository {
 
     @Autowired
-    @Qualifier("sessionFactory")
-    private SessionFactory sessionFactory;
-
-    // @Autowired
-    //    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-    //        this.jdbcTemplate = jdbcTemplate;
-    //    }
+    @Qualifier("entityManagerFactory")
+    private EntityManager entityManager;
 
 
-/*
     @Override
-    public List<Order> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return  session.createQuery("FROM Order ").list();
+    public List<Order> findByAllParams(Order order ) {
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Order> query = cb.createQuery(Order.class); //here select, where, orderBy, having
+        Root<Order> root = query.from(Order.class); //here params  select * from m_users -> mapping
+        Join<Order,User> ou = root.join(Order_.user);
+
+        ParameterExpression<Timestamp> paramDataIn = cb.parameter(Timestamp.class);
+        ParameterExpression<Timestamp> paramDataOut = cb.parameter(Timestamp.class);
+        ParameterExpression<StatusName> paramStatus = cb.parameter(StatusName.class);
+        ParameterExpression<Long> paramIdUser = cb.parameter(Long.class);
+
+        /*Provide access to fields in class that mapped to columns*/
+
+        Expression<Timestamp> dataCheckIn = root.get(Order_.dataCheckIn);
+        Expression<Timestamp> dataCheckOut = root.get(Order_.dataCheckOut);
+        Expression<StatusName> status = root.get(Order_.status);
+        Expression<Long> idUser = ou.get(User_.id);
+
+
+        List<Predicate> predicates = new ArrayList<>();
+        if (order.getStatus() != null) {
+            predicates.add(cb.equal(status, paramStatus));
         }
-    }
-
-    @Override
-    public Order findOne(Long id) {
-        final String findOneWithNameParam = "select * from orders where id = :idBooking ";
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("idBooking", id);
-
-        return namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getBookingRowMapper);
-
-    }
-
-    @Override
-    public Order save(Order entity) {
-        final String createQuery = "insert into orders (id_room, data_check_in, data_check_out, status, id_user, created, changed, general_price, rating_for_room,rating_for_client) " +
-                "values (:idRoom, :dataCheckIn, :dataCheckOut, :status, :idUser, :created, :changed, :generalPrice, :ratingForRoom, :ratingForClient);";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        MapSqlParameterSource params = generateBookingParamsMap(entity);
-
-        namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{"id"});
-
-        long createdUserId = Objects.requireNonNull(keyHolder.getKey()).longValue();
-
-        return findOne(createdUserId);
-    }
-
-    @Override
-    public void batchInsert(List<Order> entities) {
-        final String createQuery = "insert into orders (id_room, data_check_in, data_check_out, status, id_user, created, changed, general_price, rating_for_room,rating_for_client) " +
-                "values (:idRoom, :dataCheckIn, :dataCheckOut, :status, :idUser, :created, :changed, :generalPrice, :ratingForRoom, :ratingForClient);";
-
-        List<MapSqlParameterSource> batchParams = new ArrayList<>();
-
-        for (Order order : entities) {
-            batchParams.add(generateBookingParamsMap(order));
+        if (order.getDataCheckOut() != null) {
+            predicates.add(cb.between(dataCheckOut, paramDataIn,paramDataOut));
         }
 
-        namedParameterJdbcTemplate.batchUpdate(createQuery, batchParams.toArray(new MapSqlParameterSource[0]));
+        if (order.getDataCheckIn() != null) {
+            predicates.add(cb.between(dataCheckIn, paramDataIn,paramDataOut));
+        }
 
+
+
+        query
+                .select(root)
+                .distinct(true)
+                .where(
+                        cb.and(
+                                (cb.equal(idUser, paramIdUser)),
+                                (cb.and(predicates.toArray(new Predicate[predicates.size()])))
+                        )
+                );
+
+
+        TypedQuery<Order> resultQuery = entityManager.createQuery(query);
+
+
+        if (order.getStatus() != null) {
+            resultQuery.setParameter(paramStatus,order.getStatus());
+        }
+        if (order.getDataCheckOut() != null) {
+            resultQuery.setParameter(paramDataIn,order.getDataCheckIn());
+        }
+        if (order.getDataCheckIn() != null) {
+            resultQuery.setParameter(paramDataOut,order.getDataCheckOut());
+        }
+
+        return resultQuery.getResultList();
     }
 
-    @Override
-    public Order update(Order entity) {
-        final String createQuery = "update orders set id_room = :idRoom, data_check_in= :dataCheckIn, data_check_out = :dataCheckOut," +
-                " status = :status, id_user = :idUser, created = :created, changed = :changed, general_price = :generalPrice," +
-                "rating_for_room = :ratingForRoom, rating_for_client = :ratingForClient  where id= :id ";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        MapSqlParameterSource params = generateBookingParamsMap(entity);
-
-        namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{"id"});
-
-        long createdUserId = Objects.requireNonNull(keyHolder.getKey()).longValue();
-
-        return findOne(createdUserId);
-    }
-
-    @Override
-    public void delete(Long id) {
-        final String findOneWithNameParam = "delete from orders b where b.id = :id;" ;
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", id);
-
-        namedParameterJdbcTemplate.queryForObject(findOneWithNameParam, params, this::getBookingRowMapper);
-
-    }
-
-    private Order getBookingRowMapper(ResultSet rs, int i) throws SQLException {
-        Order order =new Order();
-       
-        return order;
-    }
-
-    private MapSqlParameterSource generateBookingParamsMap(Order entity) {
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-
-        params.addValue("dataCheckIn", entity.getDataCheckIn());
-        params.addValue("dataCheckOut", entity.getDataCheckOut());
-        params.addValue("status", entity.getStatus());
-
-        params.addValue("created", new Date());
-        params.addValue("changed", new Date());
-        params.addValue("generalPrice", entity.getGeneralPrice());
-        params.addValue("ratingForRoom", new Date());
-        params.addValue("ratingForClient",new Date());
-
-        return params;
-    }*/
 }

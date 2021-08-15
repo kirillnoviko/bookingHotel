@@ -4,6 +4,7 @@ import booking.hotel.domain.Order;
 import booking.hotel.domain.Room;
 import booking.hotel.domain.StatusName;
 import booking.hotel.domain.User;
+import booking.hotel.repository.OrderRepository;
 import booking.hotel.repository.RoomRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
-public interface OrderRepositoryData extends JpaRepository<Order, Long>, RoomRepository {
+public interface OrderRepositoryData extends JpaRepository<Order, Long>, RoomRepository, OrderRepository {
 
     List<Order> findAll();
 

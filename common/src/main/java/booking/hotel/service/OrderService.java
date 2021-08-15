@@ -27,6 +27,16 @@ public class OrderService {
         return orderRepositoryData.save(order);
     }
 
+    public List<Order> findAllParams(Order orderSearch){
 
+        if(orderSearch.getDataCheckIn()==null && orderSearch.getDataCheckOut()==null && orderSearch.getStatus()!=null){
+           return orderRepositoryData.findByUserGmailAndStatus(orderSearch.getUser().getGmail(),orderSearch.getStatus());
+        }
+        if(orderSearch.getDataCheckIn()==null && orderSearch.getDataCheckOut()==null && orderSearch.getStatus()==null){
+            return orderRepositoryData.findByUserGmail(orderSearch.getUser().getGmail());
+        }
+        return orderRepositoryData.findByAllParams(orderSearch);
+
+    }
 
 }

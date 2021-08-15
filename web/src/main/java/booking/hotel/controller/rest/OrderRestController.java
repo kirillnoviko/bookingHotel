@@ -9,6 +9,7 @@ import booking.hotel.repository.dataspring.OrderRepositoryData;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 import booking.hotel.request.OrderChangeRequest;
 import booking.hotel.request.OrderCreateRequest;
+import booking.hotel.request.OrderSearchRequest;
 import booking.hotel.service.OrderService;
 import booking.hotel.service.RoomService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -65,6 +66,24 @@ public class OrderRestController  {
         return orderRepository.findByUserGmailAndStatus(principal.getName(),status);
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
+    @PostMapping("/search")
+    public List<Order> findOrdersUserByAllParams(@ApiIgnore Principal principal, @RequestBody OrderSearchRequest request){
+        Order orderSearch=conversionService.convert(request, Order.class);
+
+        if(!userRepository.findByGmail(principal.getName()).isEmpty()){
+            orderSearch.setUser(userRepository.findByGmail(principal.getName()).get());
+        }else
+        {
+            throw new RuntimeException("user with this login does not exist");
+        }
+
+        return orderService.findAllParams(orderSearch);
+    }
+
+
 
     @ApiOperation(value = "save order for auth user")
     @ApiImplicitParams({
@@ -94,13 +113,6 @@ public class OrderRestController  {
     public Order update(@ApiIgnore Principal principal, @RequestBody OrderChangeRequest request){
 
         Order order=conversionService.convert(request, Order.class);
-
-    /*    if(!userRepository.findByGmail(principal.getName()).isEmpty()){
-            order.setUser(userRepository.findByGmail(principal.getName()).get());
-        }else
-        {
-            throw new RuntimeException("user with this login does not exist");
-        }*/
 
         return orderService.createOrder(order);
     }
