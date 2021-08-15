@@ -71,8 +71,6 @@ public class OrderRestController {
            //TODO exception  user not auth
        }
 
-
-
         return orderService.createOrder(order);
     }
 

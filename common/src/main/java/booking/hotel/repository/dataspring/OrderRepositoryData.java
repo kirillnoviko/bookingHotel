@@ -24,7 +24,11 @@ public interface OrderRepositoryData extends JpaRepository<Order, Long>, RoomRep
 
     @Query(value = " select o.room.id from Order o " +
             "where o.room.id = :idRoom and " +
-                 "(:dataIn between o.dataCheckIn and o.dataCheckOut) and " +
-                 "(:dataOut between o.dataCheckIn and o.dataCheckOut)")
+            "( " +
+            " (:dataIn between o.dataCheckIn and o.dataCheckOut) or " +
+            "(:dataOut between o.dataCheckIn and o.dataCheckOut) or" +
+            "(:dataIn < o.dataCheckIn and :dataOut > o.dataCheckOut) " +
+            ")"
+        )
     List<Long> findByIdUserAndData(Long idRoom, Timestamp dataIn, Timestamp dataOut );
 }
