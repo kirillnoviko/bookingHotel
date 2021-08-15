@@ -3,6 +3,7 @@ package booking.hotel.service;
 
 import booking.hotel.domain.Order;
 import booking.hotel.domain.StatusName;
+import booking.hotel.exception.BookingRoomException;
 import booking.hotel.repository.dataspring.OrderRepositoryData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,7 @@ public class OrderService {
         List<Long> bookedRooms = orderRepositoryData.findByIdUserAndData(order.getRoom().getId(),order.getDataCheckIn(),order.getDataCheckOut());
         for(Long idRoom : bookedRooms ){
             if(idRoom==order.getRoom().getId()){
-               // break;
-                return null;
-                //TODO exception this room is already booked
+                throw  new BookingRoomException("The room with id = "+ idRoom +" has already been booked for these dates");
             }
         }
         return orderRepositoryData.save(order);

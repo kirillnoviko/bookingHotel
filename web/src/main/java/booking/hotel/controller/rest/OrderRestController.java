@@ -1,6 +1,7 @@
 package booking.hotel.controller.rest;
 
 
+import booking.hotel.controller.exception.ErrorMessage;
 import booking.hotel.domain.Order;
 import booking.hotel.domain.StatusName;
 import booking.hotel.repository.OrderRepository;
@@ -23,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/rest/orders")
 @RequiredArgsConstructor
-public class OrderRestController {
+public class OrderRestController  {
 
     private final OrderRepositoryData orderRepository;
     private final UserRepositoryData userRepository;
@@ -64,10 +65,12 @@ public class OrderRestController {
     public Order findRoomOnData(@ApiIgnore Principal principal, @RequestBody OrderCreateRequest request){
        Order order=conversionService.convert(request, Order.class);
 
+
        if(!userRepository.findByGmail(principal.getName()).isEmpty()){
            order.setUser(userRepository.findByGmail(principal.getName()).get());
        }else
        {
+            throw new RuntimeException("user with this login does not exist");
            //TODO exception  user not auth
        }
 
