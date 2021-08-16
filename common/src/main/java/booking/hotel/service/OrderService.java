@@ -4,10 +4,13 @@ package booking.hotel.service;
 import booking.hotel.domain.Order;
 import booking.hotel.domain.StatusName;
 import booking.hotel.exception.BookingRoomException;
+import booking.hotel.exception.NoSuchEntityException;
 import booking.hotel.repository.dataspring.OrderRepositoryData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -36,6 +39,23 @@ public class OrderService {
             return orderRepositoryData.findByUserGmail(orderSearch.getUser().getGmail());
         }
         return orderRepositoryData.findByAllParams(orderSearch);
+
+    }
+
+    public Order updateStatusName(Long idOrder, StatusName name){
+
+
+        if(!orderRepositoryData.findById(idOrder).isEmpty()){
+
+            Order order=orderRepositoryData.findById(idOrder).get();
+            order.setChanged(new Timestamp(new Date().getTime()));
+            order.setStatus(name);
+            return orderRepositoryData.save(order);
+
+        }
+        else{
+            throw new NoSuchEntityException("entity Order with id = " + idOrder + " does not exist");
+        }
 
     }
 

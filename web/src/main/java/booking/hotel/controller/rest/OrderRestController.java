@@ -33,20 +33,12 @@ public class OrderRestController  {
     private final OrderService orderService;
     public final ConversionService conversionService;
 
- /*   @ApiOperation(value = "Search orders user")
-    @ApiImplicitParams({
-             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
-    })
-    @PostMapping("/search")
-    public List<Order> createUser(@ApiIgnore Principal principal) {
-        return null;
-        //return orderRepository.findAllOrdersUser(principal.getName());
-    }*/
-
+    @ApiOperation(value = "show all orders")
     @GetMapping("/admin/")
     public List<Order> findAll(){
         return orderRepository.findAll();
     }
+
 
     @ApiOperation(value = "show all orders of auth User")
     @ApiImplicitParams({
@@ -115,6 +107,17 @@ public class OrderRestController  {
         Order order=conversionService.convert(request, Order.class);
 
         return orderService.createOrder(order);
+    }
+
+    @ApiOperation(value = "update statusName Order")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "idOrder", dataType = "string", paramType = "query", value = "idOrder for Order"),
+            @ApiImplicitParam(name = "statusName", dataType = "string", paramType = "query", value = "statusName for update Order "),
+    })
+    @PutMapping ("/admin")
+    public Order updateStatusName(@RequestParam Long idOrder,@RequestParam StatusName statusName){
+
+        return orderService.updateStatusName(idOrder,statusName);
     }
 
 }
