@@ -65,7 +65,6 @@ public class OrderRepositoryImpl implements OrderRepository {
         if (order.getDataCheckOut() != null) {
             predicates.add(cb.between(dataCheckOut, paramDataIn,paramDataOut));
         }
-
         if (order.getDataCheckIn() != null) {
             predicates.add(cb.between(dataCheckIn, paramDataIn,paramDataOut));
         }
@@ -85,7 +84,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
         TypedQuery<Order> resultQuery = entityManager.createQuery(query);
 
-
+        resultQuery.setParameter(paramIdUser,order.getUser().getId());
         if (order.getStatus() != null) {
             resultQuery.setParameter(paramStatus,order.getStatus());
         }
@@ -95,6 +94,9 @@ public class OrderRepositoryImpl implements OrderRepository {
         if (order.getDataCheckIn() != null) {
             resultQuery.setParameter(paramDataOut,order.getDataCheckOut());
         }
+
+
+
 
         return resultQuery.getResultList();
     }
