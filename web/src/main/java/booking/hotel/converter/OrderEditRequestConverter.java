@@ -2,6 +2,7 @@ package booking.hotel.converter;
 
 import booking.hotel.domain.Order;
 import booking.hotel.domain.Role;
+import booking.hotel.exception.NoSuchEntityException;
 import booking.hotel.repository.dataspring.OrderRepositoryData;
 import booking.hotel.repository.dataspring.RoleRepositoryData;
 import booking.hotel.repository.dataspring.RoomRepositoryData;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static booking.hotel.domain.StatusName.BOOKED;
+import static booking.hotel.domain.StatusName.*;
 
 
 @Component
@@ -41,6 +42,14 @@ public class OrderEditRequestConverter  extends  EntityConverter <OrderChangeReq
         }
         if(request.getIdRoom()!=null){
             order.setRoom(roomRepository.findById(request.getIdRoom()).get());
+        }
+        if(request.getName()!=null ){
+            if(order.getStatus()!=COMPLETED || order.getStatus()!=CANCELED){
+                order.setStatus(request.getName());
+            }else{
+                throw new NoSuchEntityException("the order has a completed or canceled status, you cannot change the order status");
+            }
+
         }
 
         return doConvert(request,order);

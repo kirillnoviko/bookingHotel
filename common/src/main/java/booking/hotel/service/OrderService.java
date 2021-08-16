@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import static booking.hotel.domain.StatusName.CANCELED;
 
 
 @Service
@@ -21,6 +22,11 @@ public class OrderService {
     private final OrderRepositoryData orderRepositoryData;
 
     public Order createOrder(Order order){
+
+        if(order.getStatus()==CANCELED){
+            return orderRepositoryData.save(order);
+        }
+
         List<Long> bookedRooms = orderRepositoryData.findByIdUserAndData(order.getRoom().getId(),order.getDataCheckIn(),order.getDataCheckOut());
         for(Long idRoom : bookedRooms ){
             if(idRoom==order.getRoom().getId()){
