@@ -7,6 +7,7 @@ import booking.hotel.domain.Order;
 import booking.hotel.repository.RoomRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.boot.jaxb.hbm.spi.JaxbHbmNativeQueryJoinReturnType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -108,12 +109,29 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public List<Room> findByListComfortsRoom(List<Long> comforts){
+    public List<Room> findByListComfortsRoom(List<Long> comforts, Timestamp dataIn,Timestamp dataOut){
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
         CriteriaQuery<Room> query = cb.createQuery(Room.class); //here select, where, orderBy, having
         Root<Room> root = query.from(Room.class); //here params  select * from m_users -> mapping
-        Join<Room,Comfort> rc = root.join(Room_.comforts);
+        Join<Room,Comfort> rc = root.join(Room_.comforts,JoinType.LEFT);
+
+
+        Subquery<Room> subquery = query.subquery(Room.class);
+        Root<Room> subroot = subquery.from(Room.class); // too broad
+        Join<Room,Order> roomOrderJoin = root.join(Room_.orders, JoinType.LEFT);
+
+
+
+
+
+        ParameterExpression<Timestamp> parameterDataIn = cb.parameter(Timestamp.class);
+        ParameterExpression<Timestamp> parameterDataOut = cb.parameter(Timestamp.class);
+        Expression<Timestamp> exprDataIn =roomOrderJoin.get(Order_.dataCheckIn);
+        Expression<Timestamp> exprDataOut =roomOrderJoin.get(Order_.dataCheckOut);
+
+
 
         List<ParameterExpression<Long>> paramNameComforts = new ArrayList<>();
         List<Expression<Long>> nameComforts = new ArrayList<>();
@@ -129,10 +147,24 @@ public class RoomRepositoryImpl implements RoomRepository {
             predicates.add(cb.equal(nameComforts.get(i),paramNameComforts.get(i)));
         }
 
+
+
+
+
+        subquery.select(subroot)
+                .where(cb.and(//
+                        (cb.between(parameterDataIn,exprDataIn,exprDataOut)),
+                        (cb.between(parameterDataOut,exprDataIn,exprDataOut))
+                        ));
+
         query
                 .select(root)
                 .where(
-                        cb.and(cb.or(predicates.toArray(new Predicate[predicates.size()])))
+
+                        cb.and(
+                                cb.or(predicates.toArray(new Predicate[predicates.size()])),
+                                cb.not(cb.exists(subquery))
+                        )
                 )
                 .groupBy(root.get("id"))
                 .having(cb.ge(cb.count(root.get("id")),comforts.size()));
@@ -142,6 +174,9 @@ public class RoomRepositoryImpl implements RoomRepository {
         for(int i=0;i<comforts.size();i++){
             resultQuery.setParameter(paramNameComforts.get(i), comforts.get(i));
         }
+
+        resultQuery.setParameter(parameterDataIn,dataIn);
+        resultQuery.setParameter(parameterDataOut,dataOut);
 
 
         return resultQuery.getResultList();

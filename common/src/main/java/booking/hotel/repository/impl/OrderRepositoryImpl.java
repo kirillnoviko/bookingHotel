@@ -79,7 +79,8 @@ public class OrderRepositoryImpl implements OrderRepository {
                                 (cb.equal(idUser, paramIdUser)),
                                 (cb.and(predicates.toArray(new Predicate[predicates.size()])))
                         )
-                );
+                )
+                ;
 
 
         TypedQuery<Order> resultQuery = entityManager.createQuery(query);

@@ -22,7 +22,7 @@ public class RoomService {
 
     public List<Room> searchRoomByAllParams(RoomSearchRequest request) throws RuntimeException{
 
-        List<Room> resultRooms = new ArrayList<>();
+       /* List<Room> resultRooms = new ArrayList<>();
         List<Room> roomWithParams = new ArrayList<>();
         List<Room> roomAdditionalComforts = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class RoomService {
 
         if(!request.getIdComfort().isEmpty()) {
 
-            roomAdditionalComforts = roomRepositoryData.findByListComfortsRoom(request.getIdComfort());
+            roomAdditionalComforts = roomRepositoryData.findByListComfortsRoom(request.getIdComfort(),request.getDataIn(),request.getDataOut());
             //TODO exception for no suchID, list null
         }
         else {
@@ -69,9 +69,9 @@ public class RoomService {
         }
 
         resultRooms=searchRoomByData(resultRooms,request.getDataIn(),request.getDataOut());
-        //TODO exception
+        //TODO exception*/
 
-        return resultRooms;
+        return roomRepositoryData.findByListComfortsRoom(request.getIdComfort(),request.getDataIn(),request.getDataOut());
 
     }
     public List<Room> searchRoomByData(List<Room> rooms, Timestamp dataIn, Timestamp dataOut){

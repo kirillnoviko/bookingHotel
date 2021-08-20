@@ -2,6 +2,7 @@ package booking.hotel.aspect;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
     private static final Logger log = Logger.getLogger(LoggingAspect.class);
 
-    @Pointcut("execution(* booking.hotel.repository.dataspring.UserRepositoryData.*(..))")
+
+    //@Pointcut("@annotation(org.springframework.stereotype.Service)")
+    @Pointcut("execution(* booking.hotel.*.*.*(..))")
     public void aroundRepositoryPointcut() {
 
     }
@@ -23,5 +26,10 @@ public class LoggingAspect {
         Object proceed = joinPoint.proceed();
         log.info("Method " + joinPoint.getSignature().getName() + " finished");
         return proceed;
+    }
+
+    @AfterThrowing(pointcut = "aroundRepositoryPointcut()", throwing = "e")
+    public void inCaseOfExceptionThrowAdvice(Exception e) {
+        log.error("Exception : " + e.toString());
     }
 }

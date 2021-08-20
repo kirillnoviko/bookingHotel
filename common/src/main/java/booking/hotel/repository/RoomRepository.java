@@ -16,7 +16,7 @@ public interface RoomRepository {
     List<Room> findByParamsRoom(Long minPriceRequest, Long maxPriceRequest,
                                 Long minRatingRequest, Long maxRatingRequest, String principlePlacementRequest );
 
-    List<Room> findByListComfortsRoom(List<Long> comforts);
+    List<Room> findByListComfortsRoom(List<Long> comforts, Timestamp dataIn,Timestamp dataOut);
 
     List<Room> findByData(List<Room> rooms, Timestamp dataIn, Timestamp dataOut);
 
