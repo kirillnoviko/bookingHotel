@@ -29,6 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new OrderCreateRequestConverter(roomRepositoryData){});
         registry.addConverter(new OrderEditRequestConverter(orderRepositoryData,roomRepositoryData){});
         registry.addConverter(new OrderSearchRequestConverter(orderRepositoryData,roomRepositoryData){});
+        registry.addConverter(new RoomSearchRequestConverter(){});
 
     }
 }

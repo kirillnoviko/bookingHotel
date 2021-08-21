@@ -3,11 +3,13 @@ package booking.hotel.controller.rest;
 
 import booking.hotel.domain.GeneralInfoRoom;
 import booking.hotel.repository.dataspring.RoomRepositoryData;
-import booking.hotel.util.RoomSearchRequest;
+import booking.hotel.util.EntityForSearchRoom;
+import booking.hotel.request.RoomSearchRequest;
 import booking.hotel.domain.Room;
 import booking.hotel.service.RoomService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class RoomRestController {
 
     private final RoomRepositoryData roomRepositoryData;
     private final RoomService roomService;
+    public final ConversionService conversionService;
 
     @ApiOperation(value = "show all rooms")
     @GetMapping()
@@ -41,9 +44,8 @@ public class RoomRestController {
     })
     @PostMapping("/search")
     public List<Room> searchRoom(@RequestBody RoomSearchRequest request) {
-
-        return  roomService.searchRoomByAllParams(request);
-
+           EntityForSearchRoom entity = conversionService.convert(request, EntityForSearchRoom.class);
+            return  roomService.searchRoomByAllParams(entity);
     }
 
     @ApiOperation(value = "deleted room by id")

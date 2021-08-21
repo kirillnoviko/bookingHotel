@@ -3,7 +3,7 @@ package booking.hotel.service;
 import booking.hotel.domain.GeneralInfoRoom;
 import booking.hotel.domain.Room;
 import booking.hotel.repository.dataspring.RoomRepositoryData;
-import booking.hotel.util.RoomSearchRequest;
+import booking.hotel.util.EntityForSearchRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +18,7 @@ import java.util.List;
 public class RoomService {
     private final RoomRepositoryData roomRepositoryData;
 
-    public List<Room> searchRoomByAllParams(RoomSearchRequest request) throws RuntimeException{
+    public List<Room> searchRoomByAllParams(EntityForSearchRoom entity) throws RuntimeException{
 
        /* List<Room> resultRooms = new ArrayList<>();
         List<Room> roomWithParams = new ArrayList<>();
@@ -71,10 +69,10 @@ public class RoomService {
         resultRooms=searchRoomByData(resultRooms,request.getDataIn(),request.getDataOut());
         //TODO exception*/
 
-        return roomRepositoryData.findByListComfortsRoom(request.getIdComfort(),request.getDataIn(),request.getDataOut());
 
+        return roomRepositoryData.findByListComfortsRoom(entity);
     }
-    public List<Room> searchRoomByData(List<Room> rooms, Timestamp dataIn, Timestamp dataOut){
+ /*   public List<Room> searchRoomByData(List<Room> rooms, Timestamp dataIn, Timestamp dataOut){
         List<Room> bookingRooms = new ArrayList<>();
 
 
@@ -98,7 +96,7 @@ public class RoomService {
 
 
         return rooms;
-    }
+    }*/
 
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)

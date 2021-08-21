@@ -1,22 +1,17 @@
 package booking.hotel.util;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
-import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoomSearchRequest {
+public class EntityForSearchRoom {
 
     private List<Long> idComfort;
 
