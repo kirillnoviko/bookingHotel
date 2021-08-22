@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,8 +33,14 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
 
     Optional<User> findById(Long id);
 
-    @Query(value = "select * from  users  where gmail = :gmail ", nativeQuery = true)
+    @Query(value = "select * from  users  where gmail = :gmail  ", nativeQuery = true)
     Optional<User>  findByGmail(String gmail);
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
+    @Modifying
+    @Query(value = "update User set isBanned = false where id = :idUser")
+    int updateIsBanned(@Param("idUser") Long idUser);
+
 
     void deleteById(Long id);
 
@@ -52,6 +59,11 @@ public interface UserRepositoryData extends JpaRepository<User, Long>  {
     @Modifying
     @Query(value = "insert into user_roles(user_id, role_id) values (:user_id, :role_id)", nativeQuery = true)
     int createSomeRow(@Param("user_id") Long userId, @Param("role_id") Long roleId);
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)
+    @Modifying
+    @Query(value = "insert into uuid_key_registration(uuid, created,id_user) VALUES (:uuid, :created, :id_user)", nativeQuery = true)
+    int createRowUuidCode(@Param("uuid") String uuid, @Param("created") Timestamp created, @Param("id_user") Long idUser);
 
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, rollbackFor = SQLException.class)

@@ -12,7 +12,7 @@ public class ValidationNewUser {
 
     private final UserRepositoryData userRepositoryData;
 
-    public void checkUser(User user){
+    public User checkUser(User user){
 
         if(user.getGmail().isEmpty() || user.getPassword().isEmpty() ){
             throw  new  NoSuchEntityException("заполните все поля");
@@ -21,6 +21,7 @@ public class ValidationNewUser {
             throw  new  NoSuchEntityException("пользователь с таким gmail  уже зарегистрирован");
         }
 
+        return user;
 
 
     }

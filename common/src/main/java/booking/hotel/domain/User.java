@@ -30,22 +30,22 @@ public class User {
     private Long id;
 
     @Column
-    String name;
+    private String name;
 
     @Column
-    String surname;
+    private String surname;
 
 
     @Column
-    String gmail;
+    private String gmail;
 
     @Column
-    String password;
+    private String password;
 
 
     @Column(name = "birth_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    Timestamp birthDate;
+    private Timestamp birthDate;
 
     @Column
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")

@@ -12,4 +12,5 @@ public class OrderChangeRequest extends OrderCreateRequest{
     Long idOrder;
 
     StatusName name=CANCELED;
+
 }

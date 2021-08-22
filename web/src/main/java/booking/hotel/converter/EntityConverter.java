@@ -37,6 +37,7 @@ public abstract class EntityConverter<S, T> implements Converter<S, T> {
         }
 
         user.setChanged(new Timestamp(new Date().getTime()));
+        user.setBanned(true);
 
         return user;
     }
