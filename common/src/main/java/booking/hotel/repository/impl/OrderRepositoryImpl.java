@@ -1,32 +1,24 @@
 package booking.hotel.repository.impl;
 
-import booking.hotel.domain.*;
-
-import booking.hotel.domain.Order;
-import booking.hotel.repository.OrderRepository;
-import booking.hotel.repository.dataspring.OrderRepositoryData;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
+import booking.hotel.domain.Order;
+import booking.hotel.domain.Order_;
+import booking.hotel.domain.User;
+import booking.hotel.domain.User_;
+import booking.hotel.repository.OrderRepository;
+import booking.hotel.domain.StatusName;
+
 
 @Repository
 @RequiredArgsConstructor

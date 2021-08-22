@@ -8,20 +8,6 @@ import java.util.List;
 
 public interface RoomRepository {
 
-    //<E,M> List<Room> findCriteriaRoom(Criteria<E> searchRoom, Criteria<M> searchData, List<String> additionalComfort);
-    // List<Room> findCriteriaRoom(RoomSearchRequest request);
-
-/*
-    List<Room> findByParamsRoom(Long minPriceRequest, Long maxPriceRequest,
-                                Long minRatingRequest, Long maxRatingRequest, String principlePlacementRequest );
-*/
-
     List<Room> findByListComfortsRoom(EntityForSearchRoom entity);
-/*
-
-    List<Room> findByData(List<Room> rooms, Timestamp dataIn, Timestamp dataOut);
-
-*/
-
 
 }

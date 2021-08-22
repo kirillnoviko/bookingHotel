@@ -9,7 +9,16 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Set;
@@ -21,8 +30,6 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {
         "roles","orders"
 })
-@NamedQuery(name = "User_findByLogin",
-        query = "select u from User  u where u.gmail= :gmail")
 public class User {
 
     @Id
@@ -34,7 +41,6 @@ public class User {
 
     @Column
     private String surname;
-
 
     @Column
     private String gmail;
@@ -64,7 +70,7 @@ public class User {
     @Column (name = "rating_average")
     private Long ratingAverage;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("users")
     private Set<Role> roles = Collections.emptySet();
 

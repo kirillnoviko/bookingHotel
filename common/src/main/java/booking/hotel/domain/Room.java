@@ -9,7 +9,19 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+import javax.persistence.Embedded;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
 import java.util.Collections;
 import java.util.Set;
 

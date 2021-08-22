@@ -1,16 +1,14 @@
 package booking.hotel.service;
 
-
-import booking.hotel.domain.User;
-import booking.hotel.repository.dataspring.RoleRepositoryData;
-import booking.hotel.repository.dataspring.UserRepositoryData;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import booking.hotel.domain.User;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
+import booking.hotel.repository.dataspring.UserRepositoryData;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -61,11 +59,8 @@ public class UserService {
     public User deleteRoleForUser(Long id, List<String> listRoles){
         for(String nameRole : listRoles){
 
-           // if(userRepositoryData.checkRole(id,roleRepositoryData.findByRoleName(nameRole).get().getId()).isEmpty()){
-
                 userRepositoryData.deleteSomeRow(id,roleRepositoryData.findByRoleName(nameRole).get().getId());
 
-            //}
 
         }
         return userRepositoryData.findById(id).get();

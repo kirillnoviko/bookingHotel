@@ -1,20 +1,17 @@
 package booking.hotel.service;
 
-
-import booking.hotel.aspect.LoggingAspect;
-import booking.hotel.domain.Order;
-import booking.hotel.domain.StatusName;
-import booking.hotel.exception.BookingRoomException;
-import booking.hotel.exception.NoSuchEntityException;
-import booking.hotel.repository.dataspring.OrderRepositoryData;
 import lombok.RequiredArgsConstructor;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import booking.hotel.domain.Order;
+import booking.hotel.domain.StatusName;
+import booking.hotel.exception.BookingRoomException;
+import booking.hotel.exception.NoSuchEntityException;
+import booking.hotel.repository.dataspring.OrderRepositoryData;
 import static booking.hotel.domain.StatusName.CANCELED;
 
 

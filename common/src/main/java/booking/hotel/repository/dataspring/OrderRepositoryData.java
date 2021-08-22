@@ -1,19 +1,13 @@
 package booking.hotel.repository.dataspring;
 
 import booking.hotel.domain.Order;
-import booking.hotel.domain.Room;
 import booking.hotel.domain.StatusName;
-import booking.hotel.domain.User;
 import booking.hotel.repository.OrderRepository;
 import booking.hotel.repository.RoomRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;

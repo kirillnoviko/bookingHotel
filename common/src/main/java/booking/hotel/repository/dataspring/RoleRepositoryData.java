@@ -1,8 +1,6 @@
 package booking.hotel.repository.dataspring;
 
-import booking.hotel.domain.Comfort;
 import booking.hotel.domain.Role;
-import booking.hotel.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

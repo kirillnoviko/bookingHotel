@@ -1,14 +1,13 @@
 package booking.hotel.service;
 
-
-import booking.hotel.domain.Role;
-import booking.hotel.domain.User;
-import booking.hotel.repository.dataspring.RoleRepositoryData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import booking.hotel.domain.Role;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
 
 import java.sql.SQLException;
 

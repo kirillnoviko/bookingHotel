@@ -3,30 +3,35 @@ package booking.hotel.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
+
 
 @Entity
 @Table(name = "orders")
 @Data
 @NoArgsConstructor
-/*@EqualsAndHashCode(exclude = {
-        "roles"
-})*/
-/*
 @EqualsAndHashCode(exclude = {
-        "room","user"
+        "room","user","roles"
 })
-*/
-
 public class Order {
 
     @Id

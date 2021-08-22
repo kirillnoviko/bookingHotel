@@ -1,16 +1,13 @@
 package booking.hotel.repository.dataspring;
 
 import booking.hotel.domain.Order;
-import booking.hotel.domain.Role;
 import booking.hotel.domain.User;
-import booking.hotel.repository.RoomRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import org.springframework.data.repository.query.Param;
-import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

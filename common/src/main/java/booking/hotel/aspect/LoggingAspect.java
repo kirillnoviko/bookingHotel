@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
     private static final Logger log = Logger.getLogger(LoggingAspect.class);
 
-
-    //@Pointcut("@annotation(org.springframework.stereotype.Service)")
     @Pointcut("execution(* booking.hotel.*.*.*(..))")
     public void aroundRepositoryPointcut() {
 

@@ -1,12 +1,5 @@
 package booking.hotel.repository.impl;
 
-
-import booking.hotel.domain.*;
-
-import booking.hotel.domain.Order;
-import booking.hotel.repository.RoomRepository;
-
-import booking.hotel.util.EntityForSearchRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,9 +7,29 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Subquery;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.JoinType;
 import java.sql.Timestamp;
-import java.util.*;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import booking.hotel.domain.Order;
+import booking.hotel.domain.Order_;
+import booking.hotel.domain.Room;
+import booking.hotel.domain.Room_;
+import booking.hotel.domain.Comfort;
+import booking.hotel.domain.Comfort_;
+import booking.hotel.domain.GeneralInfoRoom_;
+import booking.hotel.repository.RoomRepository;
+import booking.hotel.util.EntityForSearchRoom;
 
 @Repository
 @RequiredArgsConstructor
