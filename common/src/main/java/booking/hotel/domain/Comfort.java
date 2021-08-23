@@ -37,7 +37,7 @@ public class Comfort {
     @Column(name = "name_comfort")
     private String nameComfort;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "comforts_rooms",
             joinColumns = @JoinColumn(name = "id_comfort"),
             inverseJoinColumns = @JoinColumn(name = "id_room")

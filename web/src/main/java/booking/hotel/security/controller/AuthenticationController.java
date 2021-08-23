@@ -1,12 +1,6 @@
 package booking.hotel.security.controller;
 
-import booking.hotel.domain.Key;
-import booking.hotel.domain.User;
-import booking.hotel.repository.dataspring.UserRepositoryData;
-import booking.hotel.repository.dataspring.UuidKeyRepository;
-import booking.hotel.security.requests.AuthRequest;
-import booking.hotel.security.requests.AuthResponse;
-import booking.hotel.util.TokenUtils;
+
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +12,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import booking.hotel.domain.Key;
+import booking.hotel.domain.User;
+import booking.hotel.repository.dataspring.UserRepositoryData;
+import booking.hotel.repository.dataspring.UuidKeyRepository;
+import booking.hotel.security.requests.AuthRequest;
+import booking.hotel.security.requests.AuthResponse;
+import booking.hotel.util.TokenUtils;
 
 @RestController
 @RequestMapping("/authentication")

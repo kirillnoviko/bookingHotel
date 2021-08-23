@@ -1,13 +1,15 @@
 package booking.hotel.converter;
 
-import booking.hotel.exception.NoParamsException;
-import booking.hotel.util.EntityForSearchRoom;
-import booking.hotel.request.RoomSearchRequest;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import booking.hotel.exception.NoParamsException;
+import booking.hotel.util.EntityForSearchRoom;
+import booking.hotel.request.RoomSearchRequest;
+
+
 
 public class RoomSearchRequestConverter extends  EntityConverter <RoomSearchRequest, EntityForSearchRoom>{
     @Override

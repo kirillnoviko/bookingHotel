@@ -1,7 +1,6 @@
 package booking.hotel.security.filter;
 
-import booking.hotel.util.CustomHeaders;
-import booking.hotel.util.TokenUtils;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +15,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+
+import booking.hotel.util.CustomHeaders;
+import booking.hotel.util.TokenUtils;
 
 @RequiredArgsConstructor
 public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFilter {

@@ -1,9 +1,6 @@
 package booking.hotel.security.service;
 
-import booking.hotel.domain.Role;
-import booking.hotel.domain.User;
-import booking.hotel.repository.dataspring.RoleRepositoryData;
-import booking.hotel.repository.dataspring.UserRepositoryData;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import booking.hotel.domain.Role;
+import booking.hotel.domain.User;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
+import booking.hotel.repository.dataspring.UserRepositoryData;
 
 @Service
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package booking.hotel.util;
 
-import booking.hotel.repository.dataspring.UserRepositoryData;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.Collection;
+
+import booking.hotel.repository.dataspring.UserRepositoryData;
 
 @Service
 @RequiredArgsConstructor

@@ -1,19 +1,13 @@
 package booking.hotel.converter;
 
-import booking.hotel.domain.Order;
-import booking.hotel.domain.Role;
-import booking.hotel.exception.NoSuchEntityException;
-import booking.hotel.repository.dataspring.OrderRepositoryData;
-import booking.hotel.repository.dataspring.RoleRepositoryData;
-import booking.hotel.repository.dataspring.RoomRepositoryData;
-import booking.hotel.request.OrderChangeRequest;
-import booking.hotel.request.OrderCreateRequest;
-import booking.hotel.request.RoleChangeRequest;
+
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
+import booking.hotel.domain.Order;
+import booking.hotel.exception.NoSuchEntityException;
+import booking.hotel.repository.dataspring.OrderRepositoryData;
+import booking.hotel.repository.dataspring.RoomRepositoryData;
+import booking.hotel.request.OrderChangeRequest;
 import static booking.hotel.domain.StatusName.*;
 
 

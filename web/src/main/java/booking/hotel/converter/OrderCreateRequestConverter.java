@@ -1,13 +1,14 @@
 package booking.hotel.converter;
 
-import booking.hotel.domain.Order;
-import booking.hotel.repository.dataspring.RoleRepositoryData;
-import booking.hotel.repository.dataspring.RoomRepositoryData;
-import booking.hotel.request.OrderCreateRequest;
+
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.Date;
+
+import booking.hotel.domain.Order;
+import booking.hotel.repository.dataspring.RoomRepositoryData;
+import booking.hotel.request.OrderCreateRequest;
 
 import static booking.hotel.domain.StatusName.BOOKED;
 

@@ -56,11 +56,11 @@ public class Room {
     @Column (name = "is_deleted")
     private boolean deleted;
 
-    @ManyToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("room")
     private Set<Comfort> comforts = Collections.emptySet();
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Order> orders = Collections.emptySet();
 

@@ -1,10 +1,12 @@
 package booking.hotel.security.service;
 
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import booking.hotel.domain.User;
 import booking.hotel.exception.NoSuchEntityException;
 import booking.hotel.repository.dataspring.UserRepositoryData;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

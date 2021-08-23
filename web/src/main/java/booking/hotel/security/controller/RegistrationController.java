@@ -1,12 +1,5 @@
 package booking.hotel.security.controller;
-import booking.hotel.exception.NoSuchEntityException;
-import booking.hotel.repository.dataspring.RoleRepositoryData;
-import booking.hotel.request.UserCreateRequest;
-import booking.hotel.domain.User;
-import booking.hotel.repository.dataspring.UserRepositoryData;
-import booking.hotel.security.service.ValidationNewUser;
-import booking.hotel.security.service.ValidationRoles;
-import booking.hotel.service.UserService;
+
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +17,13 @@ import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
+
+import booking.hotel.exception.NoSuchEntityException;
+import booking.hotel.request.UserCreateRequest;
+import booking.hotel.domain.User;
+import booking.hotel.repository.dataspring.UserRepositoryData;
+import booking.hotel.security.service.ValidationNewUser;
+import booking.hotel.service.UserService;
 
 @RestController
 @RequestMapping("/registration")
@@ -51,7 +51,6 @@ public class RegistrationController {
 
                 MimeMessage mail = mailSender.createMimeMessage();
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mail, true);
-                //messageHelper.setTo("kiril.novikov.22222@gmail.com");
                 messageHelper.setTo(newUser.getGmail());
                 messageHelper.setSubject("Booking hotel");
                 messageHelper.setText("registration confirmation code: " + code , true);
@@ -73,23 +72,6 @@ public class RegistrationController {
     }
 
 
-    @RequestMapping(value="/mail",method=RequestMethod.GET)
-    public ModelAndView sendEmailToReference(HttpServletRequest request, HttpSession session) {
-
-        try {
-
-            MimeMessage mail = mailSender.createMimeMessage();
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mail, true);
-            messageHelper.setTo("kiril.novikov.22222@gmail.com");
-            messageHelper.setSubject("Booking hotel");
-            messageHelper.setText("registration confirmation code: " + UUID.randomUUID().toString() , true);
-            mailSender.send(mail);
-
-        } catch (MailException | MessagingException e) {
-            throw new NoSuchEntityException("error send registration message");
-        }
-        return null;
-    }
 
 
 

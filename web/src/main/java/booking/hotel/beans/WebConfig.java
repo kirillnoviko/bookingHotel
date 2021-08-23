@@ -1,15 +1,24 @@
 package booking.hotel.beans;
 
-import booking.hotel.converter.*;
-import booking.hotel.repository.dataspring.OrderRepositoryData;
-import booking.hotel.repository.dataspring.RoleRepositoryData;
-import booking.hotel.repository.dataspring.RoomRepositoryData;
-import booking.hotel.repository.dataspring.UserRepositoryData;
-import booking.hotel.request.OrderChangeRequest;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import booking.hotel.converter.UserCreateRequestConverter;
+import booking.hotel.converter.OrderCreateRequestConverter;
+import booking.hotel.converter.RoleCreateRequestConverter;
+import booking.hotel.converter.RoleEditRequestConverter;
+import booking.hotel.converter.UserEditRequestConverter;
+import booking.hotel.converter.OrderEditRequestConverter;
+import booking.hotel.converter.OrderSearchRequestConverter;
+import booking.hotel.converter.RoomSearchRequestConverter;
+import booking.hotel.repository.dataspring.OrderRepositoryData;
+import booking.hotel.repository.dataspring.RoleRepositoryData;
+import booking.hotel.repository.dataspring.RoomRepositoryData;
+import booking.hotel.repository.dataspring.UserRepositoryData;
+
 
 @Configuration
 @RequiredArgsConstructor

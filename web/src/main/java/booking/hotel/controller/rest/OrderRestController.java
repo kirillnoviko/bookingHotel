@@ -1,30 +1,35 @@
 package booking.hotel.controller.rest;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import springfox.documentation.annotations.ApiIgnore;
 
-import booking.hotel.controller.exception.ErrorMessage;
+import java.security.Principal;
+import java.util.List;
+
 import booking.hotel.domain.Order;
 import booking.hotel.domain.StatusName;
-import booking.hotel.repository.OrderRepository;
 import booking.hotel.repository.dataspring.OrderRepositoryData;
 import booking.hotel.repository.dataspring.UserRepositoryData;
 import booking.hotel.request.OrderChangeRequest;
 import booking.hotel.request.OrderCreateRequest;
 import booking.hotel.request.OrderSearchRequest;
 import booking.hotel.service.OrderService;
-import booking.hotel.service.RoomService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
-import java.security.Principal;
-import java.util.List;
 
 @RestController
-@RequestMapping("/rest/orders")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderRestController  {
 
@@ -34,6 +39,9 @@ public class OrderRestController  {
     public final ConversionService conversionService;
 
     @ApiOperation(value = "show all orders")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     @GetMapping("/admin/")
     public List<Order> findAll(){
         return orderRepository.findAll();
@@ -102,7 +110,7 @@ public class OrderRestController  {
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PutMapping ()
-    public Order update(@ApiIgnore Principal principal, @RequestBody OrderChangeRequest request){
+    public Order update(@RequestBody OrderChangeRequest request){
 
         Order order=conversionService.convert(request, Order.class);
 
@@ -113,6 +121,7 @@ public class OrderRestController  {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "idOrder", dataType = "string", paramType = "query", value = "idOrder for Order"),
             @ApiImplicitParam(name = "statusName", dataType = "string", paramType = "query", value = "statusName for update Order "),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PutMapping ("/admin")
     public Order updateStatusName(@RequestParam Long idOrder,@RequestParam StatusName statusName){

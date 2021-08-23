@@ -1,12 +1,9 @@
 package booking.hotel.converter;
 
 
-import booking.hotel.domain.Role;
-import booking.hotel.domain.User;
+import booking.hotel.domain.Role;;
 import booking.hotel.repository.dataspring.RoleRepositoryData;
-import booking.hotel.repository.dataspring.UserRepositoryData;
 import booking.hotel.request.RoleChangeRequest;
-import booking.hotel.request.UserChangeRequest;
 import org.springframework.stereotype.Component;
 
 @Component

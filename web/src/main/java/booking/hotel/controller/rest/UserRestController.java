@@ -1,40 +1,45 @@
 package booking.hotel.controller.rest;
 
-import booking.hotel.beans.SecurityConfig;
-import booking.hotel.domain.Order;
-import booking.hotel.domain.User;
-import booking.hotel.repository.dataspring.UserRepositoryData;
-
-import booking.hotel.request.UserChangeRequest;
-import booking.hotel.request.UserCreateRequest;
-import booking.hotel.service.UserService;
-import booking.hotel.util.PrincipalUtils;
-import io.swagger.annotations.*;
-
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
 import java.util.List;
 
+import booking.hotel.domain.Order;
+import booking.hotel.domain.User;
+import booking.hotel.repository.dataspring.UserRepositoryData;
+import booking.hotel.request.UserChangeRequest;
+import booking.hotel.request.UserCreateRequest;
+import booking.hotel.service.UserService;
 
 @RestController
-@RequestMapping("/rest/users")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserRestController {
 
     private final UserRepositoryData userRepositoryData;
     private final UserService userService;
-    private final SecurityConfig securityConfig;
-    private final PrincipalUtils principalUtils;
-    private final SecurityConfig config;
 
     public final ConversionService conversionService;
 
 
     @ApiOperation(value = "show all users ")
+    @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     @GetMapping
     public List<User> findAll() {
         System.out.println("In rest controller");
@@ -42,6 +47,7 @@ public class UserRestController {
     }
 
     @ApiOperation(value = "find user by id")
+    @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     @GetMapping("/{idUser}")
     public User findOne(@PathVariable("idUser") Long id) {
 
@@ -51,33 +57,20 @@ public class UserRestController {
 
     @ApiOperation(value = "show all orders user ")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for deleted Room"),
-
+           @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @GetMapping("/orders")
-    public List<Order> showOrders(@RequestParam("idUser") Long id) {
+    public List<Order> showOrders(@ApiIgnore Principal principal) {
 
-       User user = userRepositoryData.findById(id).get();
+       User user = userRepositoryData.findByGmail(principal.getName()).get();
         return userRepositoryData.showAllOrderUser(user);
 
     }
 
-
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
-    })
-    @GetMapping("/search")
-    public User findUser(@ApiIgnore Principal principal){
-        String username = principalUtils.getUsername(principal);
-        return userRepositoryData.findByGmail(username).get();
-    }
-
-
-
-
     @ApiOperation(value = "deleted user by id")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for deleted Room"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
 
     })
     @DeleteMapping()
@@ -99,10 +92,14 @@ public class UserRestController {
 
     }
 
+
     @ApiOperation(value = "update User ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successfully!"),
             @ApiResponse(code = 500, message = "Internal server error ")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PostMapping("/update")
     public User updateUser( @RequestBody UserChangeRequest request) {
@@ -115,6 +112,7 @@ public class UserRestController {
     @ApiOperation(value = "added roles for  User ")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for deleted Room"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
 
     })
     @PostMapping("/admin/roles")
@@ -125,6 +123,7 @@ public class UserRestController {
     @ApiOperation(value = "delete role for  User ")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "idUser", dataType = "string", paramType = "query", value = "ID for deleted Room"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
 
     })
     @DeleteMapping("/admin/role")
@@ -133,31 +132,13 @@ public class UserRestController {
     }
 
     @ApiOperation(value = "find all Users by Role ")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     @GetMapping("/admin/users/{idRole}")
     public List<User> findAllUsersByRole(@PathVariable Long idRole){
         return  userRepositoryData.findAllUsersByRole(idRole);
     }
 
-
-
-
-
-  /*  @ApiOperation(value = "Generate auto users in system")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "usersCount", dataType = "string", paramType = "path",
-                    value = "Count of generated users", required = true, defaultValue = "100")
-    })
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Users was successfully created!"),
-            @ApiResponse(code = 500, message = "Internal server error! https://stackoverflow.com/questions/37405244/how-to-change-the-response-status-code-for-successful-operation-in-swagger")
-    })
-    @PostMapping("/generate/{usersCount}")
-    public List<User> generateUsers(@PathVariable("usersCount") Integer count) {
-        throw new RuntimeException("Haha!");
-//        List<User> generateUsers = userGenerator.generate(count);
-//        userRepository.batchInsert(generateUsers);
-//
-//        return userRepository.findAll();
-    }*/
 
 }

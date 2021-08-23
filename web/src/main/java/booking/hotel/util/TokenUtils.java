@@ -1,10 +1,9 @@
 package booking.hotel.util;
 
-import booking.hotel.beans.JwtConfig;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.TextCodec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 import static io.jsonwebtoken.Claims.SUBJECT;
 import static java.util.Calendar.MILLISECOND;
 
+import booking.hotel.beans.JwtConfig;
 
 @Component
 @RequiredArgsConstructor
