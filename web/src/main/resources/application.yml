@@ -1,5 +1,8 @@
 spring:
-
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   flyway:
     enabled: true
     ignore-missing-migrations: true
@@ -23,8 +26,8 @@ spring:
 
     host: smtp.gmail.com
     port: 587
-    username: kiril.novikov.22222@gmail.com
-    password:
+    username: hotel.booking.by.kirill@gmail.com
+    password: Qwe12345.,
     protocol: smtp
     tls: true
     properties:
@@ -43,4 +46,13 @@ security:
 jwtconfig:
   secret: secret
   expiration: 600000
+
+
+amazon:
+  serverURL: test
+  awsAccessKeyId: test
+  awsSecretKey: test
+  folder: test
+  bucket: test
+  region: test
 

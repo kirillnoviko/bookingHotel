@@ -28,7 +28,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {
-        "roles","orders"
+        "roles","orders", "photos"
 })
 public class User {
 
@@ -79,6 +79,9 @@ public class User {
     @JsonManagedReference
     private Set<Order> orders = Collections.emptySet();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Set<UserPhoto> photos = Collections.emptySet();
 
     @Override
     public String toString() {

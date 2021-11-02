@@ -7,6 +7,9 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,4 +38,18 @@ public class ApplicationBeans {
                 .weakKeys()
                 .recordStats();
     }
+
+    @Bean
+    public S3Client s3Client(AwsS3Config amazonConfiguration) {
+        return S3Client
+                .builder()
+                .region(Region.of(amazonConfiguration.getRegion()))
+                .credentialsProvider(() ->
+                        AwsBasicCredentials.create(
+                                amazonConfiguration.getAwsAccessKeyId(),
+                                amazonConfiguration.getAwsSecretKey()
+                        ))
+                .build();
+    }
+
 }

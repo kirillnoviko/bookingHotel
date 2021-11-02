@@ -11,4 +11,4 @@ spring:
 
 jwtconfig:
   secret: secret
-  expiration: 600
+  expiration: 600000
