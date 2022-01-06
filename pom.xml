@@ -19,7 +19,7 @@
         <artifactId>finalprojectbookinghotel</artifactId>
         <version>1.0.20210401213700</version>
 
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
 
     <properties>
         <log4j>1.2.17</log4j>
